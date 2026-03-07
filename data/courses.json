@@ -6,12 +6,17 @@
     "examDate": "2026-06-08",
     "totalChapters": 13,
     "completedChapters": 0,
-    "hasMidterm": true,
-    "midtermDate": "2026-03-23",
-    "midtermChapters": 5,
-    "midtermCompleted": false,
     "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
-    "color": "from-blue-500 to-cyan-400"
+    "color": "from-blue-500 to-cyan-400",
+    "midterms": [
+      {
+        "id": "f4b463b9-e1eb-4e41-852b-bd12e66c6f3e",
+        "name": "Midterm",
+        "date": "2026-03-23",
+        "chapters": 5,
+        "completed": false
+      }
+    ]
   },
   {
     "name": "Theoritical computer science",
@@ -23,7 +28,16 @@
     "hasMidterm": false,
     "midtermCompleted": false,
     "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
-    "color": "from-violet-500 to-purple-400"
+    "color": "from-violet-500 to-purple-400",
+    "midterms": [
+      {
+        "id": "d6636287-a2dd-4169-a06f-a8b75d3bd2ba",
+        "name": "Midterm 1",
+        "date": "2026-03-19",
+        "chapters": 5,
+        "completed": false
+      }
+    ]
   },
   {
     "name": "Analysis 1",
