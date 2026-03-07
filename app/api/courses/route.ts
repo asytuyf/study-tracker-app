@@ -1,45 +1,98 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Redis } from "@upstash/redis";
-import { Course } from "@/app/types";
+import { getSupabase } from "@/lib/supabase";
 
-const redis = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
-
-const COURSES_KEY = "courses";
+// Force dynamic rendering (don't try to pre-render at build time)
+export const dynamic = "force-dynamic";
 
 // GET all courses
 export async function GET() {
     try {
-        const courses = await redis.get<Course[]>(COURSES_KEY);
-        return NextResponse.json(courses || []);
+        const { data, error } = await getSupabase()
+            .from("courses")
+            .select("*")
+            .order("created_at", { ascending: true });
+
+        if (error) throw error;
+
+        // Transform from DB format to app format
+        const courses = data.map((row) => ({
+            id: row.id,
+            name: row.name,
+            examDate: row.exam_date,
+            totalChapters: row.total_chapters,
+            completedChapters: row.completed_chapters,
+            color: row.color,
+            courseType: row.course_type,
+            startDate: row.start_date,
+            hasMidterm: row.has_midterm,
+            midtermDate: row.midterm_date,
+            midtermChapters: row.midterm_chapters,
+            midtermCompleted: row.midterm_completed,
+            deliverables: row.deliverables || [],
+        }));
+
+        return NextResponse.json(courses);
     } catch (error) {
         console.error("Failed to fetch courses:", error);
         return NextResponse.json([], { status: 500 });
     }
 }
 
-// POST - add a new course or replace all courses
+// POST - add a new course
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
-        // If body is an array, replace all courses
+        // If body is an array, replace all courses (sync from client)
         if (Array.isArray(body)) {
-            await redis.set(COURSES_KEY, body);
+            // Delete all existing and insert new
+            await getSupabase().from("courses").delete().neq("id", "00000000-0000-0000-0000-000000000000");
+
+            if (body.length > 0) {
+                const rows = body.map((course) => ({
+                    id: course.id,
+                    name: course.name,
+                    exam_date: course.examDate,
+                    total_chapters: course.totalChapters,
+                    completed_chapters: course.completedChapters,
+                    color: course.color,
+                    course_type: course.courseType,
+                    start_date: course.startDate,
+                    has_midterm: course.hasMidterm,
+                    midterm_date: course.midtermDate,
+                    midterm_chapters: course.midtermChapters,
+                    midterm_completed: course.midtermCompleted,
+                    deliverables: course.deliverables || [],
+                }));
+
+                const { error } = await getSupabase().from("courses").insert(rows);
+                if (error) throw error;
+            }
+
             return NextResponse.json(body);
         }
 
-        // Otherwise, add a single course
-        const courses = await redis.get<Course[]>(COURSES_KEY) || [];
-        const newCourse: Course = {
-            ...body,
-            id: crypto.randomUUID(),
+        // Single course insert
+        const row = {
+            id: body.id || crypto.randomUUID(),
+            name: body.name,
+            exam_date: body.examDate,
+            total_chapters: body.totalChapters,
+            completed_chapters: body.completedChapters || 0,
+            color: body.color,
+            course_type: body.courseType,
+            start_date: body.startDate,
+            has_midterm: body.hasMidterm,
+            midterm_date: body.midtermDate,
+            midterm_chapters: body.midtermChapters,
+            midterm_completed: body.midtermCompleted,
+            deliverables: body.deliverables || [],
         };
-        courses.push(newCourse);
-        await redis.set(COURSES_KEY, courses);
-        return NextResponse.json(newCourse, { status: 201 });
+
+        const { data, error } = await getSupabase().from("courses").insert(row).select().single();
+        if (error) throw error;
+
+        return NextResponse.json(data, { status: 201 });
     } catch (error) {
         console.error("Failed to add course:", error);
         return NextResponse.json({ error: "Failed to add course" }, { status: 500 });
@@ -56,16 +109,30 @@ export async function PUT(request: NextRequest) {
             return NextResponse.json({ error: "Course ID required" }, { status: 400 });
         }
 
-        const courses = await redis.get<Course[]>(COURSES_KEY) || [];
-        const index = courses.findIndex((c) => c.id === id);
+        const row: Record<string, unknown> = {};
+        if (updates.name !== undefined) row.name = updates.name;
+        if (updates.examDate !== undefined) row.exam_date = updates.examDate;
+        if (updates.totalChapters !== undefined) row.total_chapters = updates.totalChapters;
+        if (updates.completedChapters !== undefined) row.completed_chapters = updates.completedChapters;
+        if (updates.color !== undefined) row.color = updates.color;
+        if (updates.courseType !== undefined) row.course_type = updates.courseType;
+        if (updates.startDate !== undefined) row.start_date = updates.startDate;
+        if (updates.hasMidterm !== undefined) row.has_midterm = updates.hasMidterm;
+        if (updates.midtermDate !== undefined) row.midterm_date = updates.midtermDate;
+        if (updates.midtermChapters !== undefined) row.midterm_chapters = updates.midtermChapters;
+        if (updates.midtermCompleted !== undefined) row.midterm_completed = updates.midtermCompleted;
+        if (updates.deliverables !== undefined) row.deliverables = updates.deliverables;
 
-        if (index === -1) {
-            return NextResponse.json({ error: "Course not found" }, { status: 404 });
-        }
+        const { data, error } = await getSupabase()
+            .from("courses")
+            .update(row)
+            .eq("id", id)
+            .select()
+            .single();
 
-        courses[index] = { ...courses[index], ...updates };
-        await redis.set(COURSES_KEY, courses);
-        return NextResponse.json(courses[index]);
+        if (error) throw error;
+
+        return NextResponse.json(data);
     } catch (error) {
         console.error("Failed to update course:", error);
         return NextResponse.json({ error: "Failed to update course" }, { status: 500 });
@@ -82,14 +149,9 @@ export async function DELETE(request: NextRequest) {
             return NextResponse.json({ error: "Course ID required" }, { status: 400 });
         }
 
-        const courses = await redis.get<Course[]>(COURSES_KEY) || [];
-        const filtered = courses.filter((c) => c.id !== id);
+        const { error } = await getSupabase().from("courses").delete().eq("id", id);
+        if (error) throw error;
 
-        if (filtered.length === courses.length) {
-            return NextResponse.json({ error: "Course not found" }, { status: 404 });
-        }
-
-        await redis.set(COURSES_KEY, filtered);
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error("Failed to delete course:", error);
