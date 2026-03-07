@@ -12,5 +12,17 @@
     "midtermCompleted": false,
     "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
     "color": "from-blue-500 to-cyan-400"
+  },
+  {
+    "name": "Theoritical computer science",
+    "courseType": "current",
+    "startDate": "2026-02-19",
+    "examDate": "2026-06-08",
+    "totalChapters": 9,
+    "completedChapters": 0,
+    "hasMidterm": false,
+    "midtermCompleted": false,
+    "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
+    "color": "from-violet-500 to-purple-400"
   }
 ]
