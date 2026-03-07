@@ -48,6 +48,7 @@ export default function CourseCard({
         : formatDaysUntil(daysToExam, "Final");
 
     const progressPercent = Math.min((course.completedChapters / target) * 100, 100);
+    const expectedPercent = target > 0 ? Math.min((expected / target) * 100, 100) : 0;
 
     const isComplete = course.completedChapters >= course.totalChapters;
     const isUrgent = focus.type === "midterm" && focus.milestone
@@ -137,8 +138,16 @@ export default function CourseCard({
                 <div className="space-y-3 mb-4">
                     <div>
                         <div className="h-1.5 bg-zinc-900 rounded-full overflow-hidden relative border border-white/5">
+                            {/* Expected Strip (background) */}
+                            {!isComplete && expectedPercent > 0 && (
+                                <div
+                                    className="absolute inset-y-0 left-0 bg-white/10 transition-all duration-700"
+                                    style={{ width: `${Math.min(expectedPercent, 100)}%` }}
+                                />
+                            )}
+                            {/* Actual Progress (foreground) */}
                             <div
-                                className={`h-full transition-all duration-700 ${isComplete
+                                className={`h-full relative transition-all duration-700 ${isComplete
                                     ? "bg-emerald-500"
                                     : status === "ahead"
                                         ? "bg-blue-500"
