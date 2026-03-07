@@ -158,8 +158,8 @@ export default function Home() {
           <p className="text-xs text-blue-400/60 font-black uppercase tracking-[0.3em] mb-4">
             {getTodayLabel()}
           </p>
-          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter italic">
-            TRACKER<span className="text-blue-500 not-italic">.</span>
+          <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight">
+            Study<span className="text-blue-500">Tracker</span>
           </h1>
           <div className="h-1.5 w-12 bg-blue-500 mx-auto mt-6 rounded-full" />
 
@@ -171,8 +171,8 @@ export default function Home() {
               <button
                 onClick={() => setIsDevAdminEnabled(!isDevAdminEnabled)}
                 className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border backdrop-blur-md ${isDevAdminEnabled
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
-                    : "bg-zinc-900 text-zinc-500 border-zinc-800"
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                  : "bg-zinc-900 text-zinc-500 border-zinc-800"
                   }`}
               >
                 Admin Mode: {isDevAdminEnabled ? "Active" : "Disabled"}
