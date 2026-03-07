@@ -64,7 +64,9 @@ export default function CourseCard({
         <div
             className={`h-full rounded-2xl p-6 animate-fade-in transition-all duration-300 relative overflow-hidden group border border-white/10 backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.05] shadow-2xl ${isComplete
                 ? "ring-1 ring-emerald-500/20"
-                : "ring-1 ring-white/5"
+                : focus.type === "midterm"
+                    ? "ring-1 ring-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.1)]"
+                    : "ring-1 ring-white/5"
                 }`}
             style={{ animationDelay: `${index * 80}ms` }}
         >
@@ -112,16 +114,16 @@ export default function CourseCard({
 
                 {/* Stats Grid - Compact */}
                 <div className="grid grid-cols-2 gap-2 mb-4">
-                    <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
-                        <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Progress</p>
+                    <div className={`rounded-lg p-2 flex flex-col items-center justify-center border ${focus.type === "midterm" ? "bg-amber-500/10 border-amber-500/20" : "bg-zinc-950/40 border-white/5"}`}>
+                        <p className={`text-[9px] uppercase font-bold tracking-widest mb-0.5 ${focus.type === "midterm" ? "text-amber-300/60" : "text-zinc-500"}`}>Progress</p>
                         <p className="text-sm font-bold text-white leading-none">
                             {course.completedChapters}<span className="text-zinc-500 text-[10px]">/{target}</span>
                         </p>
                     </div>
-                    <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
-                        <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Expected</p>
+                    <div className={`rounded-lg p-2 flex flex-col items-center justify-center border ${focus.type === "midterm" ? "bg-amber-500/10 border-amber-500/20" : "bg-zinc-950/40 border-white/5"}`}>
+                        <p className={`text-[9px] uppercase font-bold tracking-widest mb-0.5 ${focus.type === "midterm" ? "text-amber-300/60" : "text-zinc-500"}`}>Expected</p>
                         <div className="flex flex-col items-center">
-                            <p className={`text-sm font-bold leading-none ${status === "behind" ? "text-red-400" : "text-emerald-400"}`}>
+                            <p className={`text-sm font-bold leading-none ${status === "behind" ? "text-red-400" : focus.type === "midterm" ? "text-amber-400" : "text-emerald-400"}`}>
                                 {expected}
                             </p>
                             {status === "behind" && !isComplete && (
@@ -204,6 +206,6 @@ export default function CourseCard({
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
