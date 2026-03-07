@@ -1,3 +1,10 @@
+export interface Deliverable {
+  id: string;
+  name: string;
+  completed: boolean;
+  dueDate?: string; // optional deadline
+}
+
 export interface Course {
   id: string;
   name: string;
@@ -19,11 +26,7 @@ export interface Course {
   midtermCompleted?: boolean;
 
   // For tracking specific deliverables (Problem sets, assignments)
-  deliverables?: {
-    id: string;
-    name: string;
-    completed: boolean;
-  }[];
+  deliverables?: Deliverable[];
 }
 
-export type CourseStatus = 'ahead' | 'on-track' | 'behind';
+export type CourseStatus = "ahead" | "on-track" | "behind";
