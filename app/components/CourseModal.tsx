@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Course } from "../types";
+import { Course, Milestone } from "../types";
 
 interface CourseModalProps {
     course: Course | null;
@@ -21,13 +21,27 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
         course?.completedChapters?.toString() || "0"
     );
 
-    const [hasMidterm, setHasMidterm] = useState(course?.hasMidterm || false);
-    const [midtermDate, setMidtermDate] = useState(course?.midtermDate || "");
-    const [midtermChapters, setMidtermChapters] = useState(
-        course?.midtermChapters?.toString() || ""
-    );
-    const [midtermCompleted, setMidtermCompleted] = useState(course?.midtermCompleted || false);
+    const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
     const [description, setDescription] = useState(course?.description || "");
+
+    const handleAddMidterm = () => {
+        const newMidterm: Milestone = {
+            id: crypto.randomUUID(),
+            name: `Midterm ${midterms.length + 1}`,
+            date: "",
+            chapters: 0,
+            completed: false,
+        };
+        setMidterms([...midterms, newMidterm]);
+    };
+
+    const handleUpdateMidterm = (id: string, updates: Partial<Milestone>) => {
+        setMidterms(midterms.map(m => m.id === id ? { ...m, ...updates } : m));
+    };
+
+    const handleRemoveMidterm = (id: string) => {
+        setMidterms(midterms.filter(m => m.id !== id));
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,11 +52,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             examDate,
             totalChapters: parseInt(totalChapters),
             completedChapters: parseInt(completedChapters) || 0,
-            hasMidterm: courseType === "current" ? hasMidterm : false,
-            midtermDate: courseType === "current" && hasMidterm ? midtermDate : undefined,
-            midtermChapters:
-                courseType === "current" && hasMidterm ? parseInt(midtermChapters) || undefined : undefined,
-            midtermCompleted: courseType === "current" ? midtermCompleted : false,
+            midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
         });
     };
@@ -167,57 +177,69 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
 
                     {/* Midterm section — current courses only */}
                     {courseType === "current" && (
-                        <div className="border-t border-zinc-800 pt-5">
-                            <label className="flex items-center gap-3 cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    checked={hasMidterm}
-                                    onChange={(e) => setHasMidterm(e.target.checked)}
-                                    className="w-5 h-5 rounded bg-zinc-800 border-zinc-600 text-blue-500 focus:ring-blue-500 focus:ring-offset-0"
-                                />
-                                <span className="text-white font-medium">This course has a midterm</span>
-                            </label>
+                        <div className="border-t border-zinc-800 pt-5 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <label className="text-white font-medium">Midterm Milestones</label>
+                                <button
+                                    type="button"
+                                    onClick={handleAddMidterm}
+                                    className="px-3 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-bold hover:bg-blue-500/20 transition-all"
+                                >
+                                    + ADD MIDTERM
+                                </button>
+                            </div>
 
-                            {hasMidterm && (
-                                <div className="mt-4 p-4 rounded-xl bg-amber-950/20 border border-amber-800/30 space-y-4">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm text-amber-300/80 mb-2">Midterm Date</label>
-                                            <input
-                                                type="date"
-                                                value={midtermDate}
-                                                onChange={(e) => setMidtermDate(e.target.value)}
-                                                className="w-full px-4 py-3 bg-zinc-800 border border-amber-700/50 rounded-xl text-white focus:outline-none focus:border-amber-500 transition-colors"
-                                                required={hasMidterm}
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm text-amber-300/80 mb-2">Chapters Covered</label>
-                                            <input
-                                                type="number"
-                                                value={midtermChapters}
-                                                onChange={(e) => setMidtermChapters(e.target.value)}
-                                                placeholder="e.g., 6"
-                                                min="1"
-                                                className="w-full px-4 py-3 bg-zinc-800 border border-amber-700/50 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500 transition-colors"
-                                                required={hasMidterm}
-                                            />
+                            {midterms.length === 0 && (
+                                <p className="text-xs text-zinc-500 italic">No midterms added for this course.</p>
+                            )}
+
+                            <div className="space-y-3">
+                                {midterms.map((midterm, index) => (
+                                    <div key={midterm.id} className="p-4 rounded-xl bg-zinc-950/40 border border-white/5 space-y-3 relative group/midterm">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleRemoveMidterm(midterm.id)}
+                                            className="absolute top-2 right-2 p-1 text-zinc-600 hover:text-red-400 opacity-0 group-hover/midterm:opacity-100 transition-all"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="col-span-2">
+                                                <input
+                                                    type="text"
+                                                    value={midterm.name}
+                                                    onChange={(e) => handleUpdateMidterm(midterm.id, { name: e.target.value })}
+                                                    placeholder="Midterm Name"
+                                                    className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white text-xs focus:outline-none focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] text-zinc-500 uppercase font-black mb-1">Date</label>
+                                                <input
+                                                    type="date"
+                                                    value={midterm.date}
+                                                    onChange={(e) => handleUpdateMidterm(midterm.id, { date: e.target.value })}
+                                                    className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white text-xs focus:outline-none focus:border-blue-500"
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] text-zinc-500 uppercase font-black mb-1">Chapters</label>
+                                                <input
+                                                    type="number"
+                                                    value={midterm.chapters}
+                                                    onChange={(e) => handleUpdateMidterm(midterm.id, { chapters: parseInt(e.target.value) || 0 })}
+                                                    className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white text-xs focus:outline-none focus:border-blue-500"
+                                                    required
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-
-                                    {course && (
-                                        <label className="flex items-center gap-3 cursor-pointer">
-                                            <input
-                                                type="checkbox"
-                                                checked={midtermCompleted}
-                                                onChange={(e) => setMidtermCompleted(e.target.checked)}
-                                                className="w-5 h-5 rounded bg-zinc-800 border-zinc-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
-                                            />
-                                            <span className="text-zinc-300">Midterm already completed</span>
-                                        </label>
-                                    )}
-                                </div>
-                            )}
+                                ))}
+                            </div>
                         </div>
                     )}
 

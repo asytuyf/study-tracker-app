@@ -5,6 +5,14 @@ export interface Deliverable {
   dueDate?: string; // optional deadline
 }
 
+export interface Milestone {
+  id: string;
+  name: string;
+  date: string;
+  chapters: number;
+  completed: boolean;
+}
+
 export interface Course {
   id: string;
   name: string;
@@ -19,11 +27,8 @@ export interface Course {
   // Start date (for both current and self-study to track pace)
   startDate?: string;
 
-  // Only for current courses (attending lectures)
-  hasMidterm?: boolean;
-  midtermDate?: string;
-  midtermChapters?: number;
-  midtermCompleted?: boolean;
+  // Midterm milestones (multiple supported)
+  midterms?: Milestone[];
 
   // For tracking specific deliverables (Problem sets, assignments)
   deliverables?: Deliverable[];

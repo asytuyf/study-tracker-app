@@ -267,8 +267,8 @@ export default function Home() {
           return (
             <ProgressModal
               course={course}
-              onSave={(progress, midtermDone) => {
-                handleUpdateProgress(modal.courseId, progress, midtermDone);
+              onSave={(progress, milestoneId, milestoneDone) => {
+                handleUpdateProgress(modal.courseId, progress, milestoneId, milestoneDone);
                 closeModal();
               }}
               onClose={closeModal}

@@ -6,14 +6,16 @@ import { getCurrentFocus } from "../hooks/useCourses";
 
 interface ProgressModalProps {
     course: Course;
-    onSave: (progress: number, midtermDone?: boolean) => void;
+    onSave: (progress: number, milestoneId?: string, milestoneDone?: boolean) => void;
     onClose: () => void;
 }
 
 export default function ProgressModal({ course, onSave, onClose }: ProgressModalProps) {
-    const [progress, setProgress] = useState(course.completedChapters);
-    const [midtermDone, setMidtermDone] = useState(course.midtermCompleted || false);
     const focus = getCurrentFocus(course);
+    const initialMidtermDone = focus.type === "midterm" ? focus.milestone?.completed : false;
+
+    const [progress, setProgress] = useState(course.completedChapters);
+    const [midtermDone, setMidtermDone] = useState(initialMidtermDone || false);
 
     const progressPercent = (progress / course.totalChapters) * 100;
 
@@ -62,15 +64,15 @@ export default function ProgressModal({ course, onSave, onClose }: ProgressModal
                     />
                     <div className="flex justify-between text-sm text-zinc-500 mt-2">
                         <span>0</span>
-                        {focus === "midterm" && course.midtermChapters && (
-                            <span className="text-amber-500/70">Midterm: {course.midtermChapters}</span>
+                        {focus.type === "midterm" && focus.milestone && (
+                            <span className="text-amber-500/70">{focus.milestone.name}: {focus.milestone.chapters}</span>
                         )}
                         <span>{course.totalChapters}</span>
                     </div>
                 </div>
 
                 {/* Midterm checkbox */}
-                {course.courseType === "current" && course.hasMidterm && !course.midtermCompleted && (
+                {focus.type === "midterm" && focus.milestone && (
                     <div className="mb-6 p-4 rounded-xl bg-amber-950/20 border border-amber-800/30">
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input
@@ -79,7 +81,7 @@ export default function ProgressModal({ course, onSave, onClose }: ProgressModal
                                 onChange={(e) => setMidtermDone(e.target.checked)}
                                 className="w-5 h-5 rounded bg-zinc-800 border-zinc-600 text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0"
                             />
-                            <span className="text-amber-200">I completed the midterm ✓</span>
+                            <span className="text-amber-200">I completed {focus.milestone.name} ✓</span>
                         </label>
                     </div>
                 )}
@@ -92,7 +94,7 @@ export default function ProgressModal({ course, onSave, onClose }: ProgressModal
                         Cancel
                     </button>
                     <button
-                        onClick={() => onSave(progress, midtermDone)}
+                        onClick={() => onSave(progress, focus.milestone?.id, midtermDone)}
                         className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-medium transition-all"
                     >
                         Save

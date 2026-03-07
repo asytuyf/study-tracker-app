@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Course, CourseStatus } from "../types";
+import { Course, CourseStatus, Milestone } from "../types";
 
 export const COLORS = [
     "from-blue-500 to-cyan-400",
@@ -46,14 +46,17 @@ export function formatDaysUntil(days: number, label: string): string {
 
 // ─── Course logic helpers ────────────────────────────────────────────────────
 
-export function getCurrentFocus(course: Course): "midterm" | "final" {
-    if (course.courseType !== "current") return "final";
-    if (!course.hasMidterm || !course.midtermDate) return "final";
-    if (course.midtermCompleted) return "final";
+export function getCurrentFocus(course: Course): { type: "midterm" | "final"; milestone?: Milestone } {
+    if (course.courseType !== "current") return { type: "final" };
+    if (!course.midterms || course.midterms.length === 0) return { type: "final" };
 
-    const daysToMidterm = getDaysUntil(course.midtermDate);
-    if (daysToMidterm < 0) return "final";
-    return "midterm";
+    // Find the first milestone that is NOT completed and NOT in the past
+    // Or if it is in the past but NOT completed, it's still the focus
+    const activeMidterm = course.midterms.find(m => !m.completed);
+
+    if (!activeMidterm) return { type: "final" };
+
+    return { type: "midterm", milestone: activeMidterm };
 }
 
 export function getExpectedChapter(course: Course): number {
@@ -62,8 +65,8 @@ export function getExpectedChapter(course: Course): number {
         const weeks = getWeeksSinceStart(course.startDate);
         const focus = getCurrentFocus(course);
 
-        if (focus === "midterm" && course.midtermChapters) {
-            return Math.min(weeks, course.midtermChapters);
+        if (focus.type === "midterm" && focus.milestone) {
+            return Math.min(weeks, focus.milestone.chapters);
         }
         return Math.min(weeks, course.totalChapters);
     }
@@ -109,8 +112,8 @@ export function getCurrentChaptersPerWeek(course: Course): number {
 export function getTargetChapters(course: Course): number {
     if (course.courseType === "current") {
         const focus = getCurrentFocus(course);
-        if (focus === "midterm" && course.midtermChapters) {
-            return course.midtermChapters;
+        if (focus.type === "midterm" && focus.milestone) {
+            return focus.milestone.chapters;
         }
     }
     return course.totalChapters;
@@ -159,7 +162,22 @@ export function useCourses() {
             .then((res) => res.json())
             .then((data) => {
                 if (Array.isArray(data)) {
-                    setCourses(data);
+                    // Migration: Convert legacy single midterm to midterms array
+                    const migrated = data.map((course: any) => {
+                        if (course.hasMidterm && course.midtermDate && !course.midterms) {
+                            const milestone: Milestone = {
+                                id: crypto.randomUUID(),
+                                name: "Midterm",
+                                date: course.midtermDate,
+                                chapters: course.midtermChapters || 0,
+                                completed: course.midtermCompleted || false
+                            };
+                            const { hasMidterm, midtermDate, midtermChapters, midtermCompleted, ...rest } = course;
+                            return { ...rest, midterms: [milestone] };
+                        }
+                        return course;
+                    });
+                    setCourses(migrated);
                 }
             })
             .catch((err) => {
@@ -246,17 +264,24 @@ export function useCourses() {
     }, [updateCourses]);
 
     const handleUpdateProgress = useCallback(
-        (id: string, newProgress: number, midtermDone?: boolean) => {
+        (id: string, newProgress: number, milestoneId?: string, milestoneDone?: boolean) => {
             updateCourses((prev) =>
-                prev.map((c) =>
-                    c.id === id
-                        ? {
-                            ...c,
-                            completedChapters: newProgress,
-                            midtermCompleted: midtermDone ?? c.midtermCompleted,
-                        }
-                        : c
-                )
+                prev.map((c) => {
+                    if (c.id !== id) return c;
+
+                    let nextMidterms = c.midterms;
+                    if (milestoneId) {
+                        nextMidterms = c.midterms?.map(m =>
+                            m.id === milestoneId ? { ...m, completed: milestoneDone ?? m.completed } : m
+                        );
+                    }
+
+                    return {
+                        ...c,
+                        completedChapters: newProgress,
+                        midterms: nextMidterms,
+                    };
+                })
             );
         },
         [updateCourses]
@@ -333,11 +358,11 @@ export function useCourses() {
                 const aFocus = getCurrentFocus(a);
                 const bFocus = getCurrentFocus(b);
 
-                if (aFocus === "midterm" && bFocus === "final") return -1;
-                if (aFocus === "final" && bFocus === "midterm") return 1;
+                if (aFocus.type === "midterm" && bFocus.type === "final") return -1;
+                if (aFocus.type === "final" && bFocus.type === "midterm") return 1;
 
-                const aDate = aFocus === "midterm" ? a.midtermDate! : a.examDate;
-                const bDate = bFocus === "midterm" ? b.midtermDate! : b.examDate;
+                const aDate = aFocus.type === "midterm" ? aFocus.milestone!.date : a.examDate;
+                const bDate = bFocus.type === "midterm" ? bFocus.milestone!.date : b.examDate;
 
                 return getDaysUntil(aDate) - getDaysUntil(bDate);
             }),

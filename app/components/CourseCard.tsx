@@ -33,7 +33,6 @@ export default function CourseCard({
     onQuickUpdate,
     isAdmin = false,
 }: CourseCardProps) {
-    const status = getStatus(course);
     const focus = getCurrentFocus(course);
     const behind = getBehindAmount(course);
     const target = getTargetChapters(course);
@@ -43,20 +42,23 @@ export default function CourseCard({
     const isSelfStudy = course.courseType === "self-study";
     const weeksIn = isCurrent && course.startDate ? getWeeksSinceStart(course.startDate) : null;
 
-    const relevantDate = focus === "midterm" ? course.midtermDate! : course.examDate;
-    const daysLeft = getDaysUntil(relevantDate);
+    const daysToExam = getDaysUntil(course.examDate);
+    const dateLabel = focus.type === "midterm" && focus.milestone
+        ? formatDaysUntil(getDaysUntil(focus.milestone.date), focus.milestone.name)
+        : formatDaysUntil(daysToExam, "Final");
 
     const progressPercent = Math.min((course.completedChapters / target) * 100, 100);
-    const expectedPercent = target > 0 ? Math.min((expected / target) * 100, 100) : 0;
 
     const isComplete = course.completedChapters >= course.totalChapters;
-    const isUrgent = !isComplete && daysLeft >= 0 && daysLeft <= 7;
+    const isUrgent = focus.type === "midterm" && focus.milestone
+        ? getDaysUntil(focus.milestone.date) <= 7 && getDaysUntil(focus.milestone.date) >= 0
+        : daysToExam <= 7 && daysToExam >= 0;
+
+    const status = getStatus(course);
+
     const plannedRate = isSelfStudy ? getPlannedChaptersPerWeek(course) : null;
     const currentRate = isSelfStudy ? getCurrentChaptersPerWeek(course) : null;
     const rateEscalated = plannedRate !== null && currentRate !== null && currentRate > plannedRate + 0.1;
-
-    const focusLabel = focus === "midterm" ? "Mid" : "Final";
-    const dateLabel = formatDaysUntil(daysLeft, focusLabel);
 
     return (
         <div
