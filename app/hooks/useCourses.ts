@@ -38,7 +38,7 @@ export function getDaysUntil(dateStr: string): number {
 
 /** Human-friendly countdown: "Tomorrow", "in 3 days", "Today!", "3 days ago" */
 export function formatDaysUntil(days: number, label: string): string {
-    if (days === 0) return `${label} is Today! 🔥`;
+    if (days === 0) return `${label} is Today!`;
     if (days === 1) return `${label} Tomorrow`;
     if (days === -1) return `${label} was Yesterday`;
     if (days > 0) return `${label} in ${days}d`;
@@ -47,25 +47,16 @@ export function formatDaysUntil(days: number, label: string): string {
 
 // ─── Course logic helpers ────────────────────────────────────────────────────
 
-/**
- * Determine the current exam focus for a course.
- * Auto-advances to "final" if the midterm date has already passed.
- */
 export function getCurrentFocus(course: Course): "midterm" | "final" {
     if (course.courseType !== "current") return "final";
     if (!course.hasMidterm || !course.midtermDate) return "final";
     if (course.midtermCompleted) return "final";
 
     const daysToMidterm = getDaysUntil(course.midtermDate);
-    // Auto-advance: if midterm date passed, switch focus to final
     if (daysToMidterm < 0) return "final";
     return "midterm";
 }
 
-/**
- * Expected number of chapters completed by today based on pace.
- * Fixed: guards against missing startDate (restores fallback for old courses).
- */
 export function getExpectedChapter(course: Course): number {
     if (course.courseType === "current") {
         if (!course.startDate) return 0;
@@ -88,13 +79,9 @@ export function getExpectedChapter(course: Course): number {
             if (now >= end) return course.totalChapters;
 
             const progressRatio = (now - start) / (end - start);
-            // Use floor so we don't over-report — "should be AT LEAST X"
             return Math.floor(progressRatio * course.totalChapters);
         }
 
-        // ── Fallback for old courses without startDate ──────────────────────
-        // Work backwards from exam date: estimate how many weeks have elapsed
-        // based on total-chapters as a proxy for total-weeks needed.
         const weeksLeft = getWeeksUntilExam(course.examDate);
         const totalWeeksNeeded = Math.ceil(course.totalChapters);
         const weeksPassed = totalWeeksNeeded - weeksLeft;
@@ -104,11 +91,6 @@ export function getExpectedChapter(course: Course): number {
     return 0;
 }
 
-
-/**
- * The ORIGINAL planned rate — fixed from the day the course was added.
- * totalChapters / totalWeeks(start → exam). This never changes.
- */
 export function getPlannedChaptersPerWeek(course: Course): number {
     if (!course.startDate) return 0;
     const start = new Date(course.startDate).getTime();
@@ -118,11 +100,6 @@ export function getPlannedChaptersPerWeek(course: Course): number {
     return Math.round((course.totalChapters / totalWeeks) * 10) / 10;
 }
 
-/**
- * The CURRENT needed rate — how many chapters/week you NOW need to
- * finish in time, given remaining chapters and remaining weeks.
- * This climbs when you fall behind and cannot be used to determine status.
- */
 export function getCurrentChaptersPerWeek(course: Course): number {
     const remaining = course.totalChapters - course.completedChapters;
     const weeksLeft = getWeeksUntilExam(course.examDate);
@@ -130,7 +107,6 @@ export function getCurrentChaptersPerWeek(course: Course): number {
     return Math.round((remaining / weeksLeft) * 10) / 10;
 }
 
-/** Target chapters for current exam focus (midterm vs final) */
 export function getTargetChapters(course: Course): number {
     if (course.courseType === "current") {
         const focus = getCurrentFocus(course);
@@ -141,10 +117,6 @@ export function getTargetChapters(course: Course): number {
     return course.totalChapters;
 }
 
-/**
- * Status: ahead / on-track / behind.
- * Uses a 0.5-chapter buffer so minor variance doesn't flag as "behind".
- */
 export function getStatus(course: Course): CourseStatus {
     const expected = getExpectedChapter(course);
     const diff = course.completedChapters - expected;
@@ -159,6 +131,40 @@ export function getBehindAmount(course: Course): number {
     return Math.max(0, Math.ceil(expected - course.completedChapters));
 }
 
+// ─── API helpers ──────────────────────────────────────────────────────────────
+
+async function fetchCourses(): Promise<Course[]> {
+    try {
+        const res = await fetch("/api/courses");
+        if (!res.ok) throw new Error("Failed to fetch");
+        return await res.json();
+    } catch {
+        // Fallback to localStorage if API fails
+        const saved = localStorage.getItem("examCoursesV3");
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch {
+                return [];
+            }
+        }
+        return [];
+    }
+}
+
+async function saveCourses(courses: Course[]): Promise<void> {
+    try {
+        await fetch("/api/courses", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(courses),
+        });
+    } catch {
+        // Fallback to localStorage if API fails
+        localStorage.setItem("examCoursesV3", JSON.stringify(courses));
+    }
+}
+
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
 export function useCourses() {
@@ -167,20 +173,13 @@ export function useCourses() {
 
     useEffect(() => {
         setMounted(true);
-        const saved = localStorage.getItem("examCoursesV3");
-        if (saved) {
-            try {
-                setCourses(JSON.parse(saved));
-            } catch {
-                // corrupted data — start fresh
-                setCourses([]);
-            }
-        }
+        fetchCourses().then(setCourses);
     }, []);
 
+    // Sync to API/storage whenever courses change
     useEffect(() => {
-        if (mounted) {
-            localStorage.setItem("examCoursesV3", JSON.stringify(courses));
+        if (mounted && courses.length >= 0) {
+            saveCourses(courses);
         }
     }, [courses, mounted]);
 
@@ -297,7 +296,6 @@ export function useCourses() {
                 const aFocus = getCurrentFocus(a);
                 const bFocus = getCurrentFocus(b);
 
-                // Midterm-focused courses first
                 if (aFocus === "midterm" && bFocus === "final") return -1;
                 if (aFocus === "final" && bFocus === "midterm") return 1;
 

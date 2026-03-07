@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useSession } from "next-auth/react";
 import { Course } from "./types";
 import { useCourses } from "./hooks/useCourses";
 import CourseCard from "./components/CourseCard";
@@ -8,6 +9,7 @@ import CourseModal from "./components/CourseModal";
 import ProgressModal from "./components/ProgressModal";
 import DeliverablesModal from "./components/DeliverablesModal";
 import BubbleCluster from "./components/BubbleCluster";
+import AdminButton from "./components/AdminButton";
 
 // Today's date formatted nicely
 function getTodayLabel() {
@@ -25,10 +27,12 @@ type ModalState =
   | { type: "tasks"; courseId: string };
 
 export default function Home() {
+  const { data: session } = useSession();
+  const isAdmin = !!session;
+
   const {
     courses,
     mounted,
-    behindCourses,
     sortedCourses,
     overallProgress,
     handleAddCourse,
@@ -112,9 +116,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Status banner removed for a cleaner, less stressful look */}
-
-
           {/* Course cards */}
           <div className="space-y-4">
             {sortedCourses.map((course, index) => (
@@ -122,33 +123,24 @@ export default function Home() {
                 key={course.id}
                 course={course}
                 index={index}
-                onUpdate={() => openProgress(course.id)}
+                onUpdate={isAdmin ? () => openProgress(course.id) : undefined}
                 onTasks={() => openTasks(course.id)}
-                onEdit={() => openEdit(course)}
-                onDelete={() => {
+                onEdit={isAdmin ? () => openEdit(course) : undefined}
+                onDelete={isAdmin ? () => {
                   if (confirm(`Delete "${course.name}"? This can't be undone.`)) {
                     handleDeleteCourse(course.id);
                   }
-                }}
-                onQuickUpdate={(delta) => handleQuickUpdate(course.id, delta)}
+                } : undefined}
+                onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
+                isAdmin={isAdmin}
               />
             ))}
           </div>
 
-          {/* Add Course button */}
-          <button
-            onClick={openAdd}
-            className="w-full p-4 mt-6 rounded-2xl glass border border-dashed border-zinc-700/50 hover:border-blue-500/50 hover:bg-blue-500/5 transition-all duration-300 group"
-          >
-            <div className="flex items-center justify-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
-                <svg className="w-4 h-4 text-zinc-400 group-hover:text-blue-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-              <span className="text-sm font-medium text-zinc-400 group-hover:text-white transition-colors">Add New Course</span>
-            </div>
-          </button>
+          {/* Admin Button - shows login or add course depending on auth state */}
+          <div className="mt-6">
+            <AdminButton onAddCourse={openAdd} />
+          </div>
 
           {/* Empty state */}
           {courses.length === 0 && (
@@ -160,14 +152,10 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-semibold text-zinc-300 mb-2">No courses yet</h3>
               <p className="text-zinc-500 mb-6 max-w-xs mx-auto">
-                Add your first course above to start tracking your study progress.
+                {isAdmin
+                  ? "Add your first course above to start tracking your study progress."
+                  : "Login as admin to add courses and start tracking."}
               </p>
-              <button
-                onClick={openAdd}
-                className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-medium transition-all"
-              >
-                Add your first course
-              </button>
             </div>
           )}
         </div>
@@ -209,10 +197,11 @@ export default function Home() {
           return (
             <DeliverablesModal
               course={course}
-              onToggle={(id) => handleToggleDeliverable(modal.courseId, id)}
-              onAdd={(name, dueDate) => handleAddDeliverable(modal.courseId, name, dueDate)}
-              onDelete={(id) => handleDeleteDeliverable(modal.courseId, id)}
+              onToggle={isAdmin ? (id) => handleToggleDeliverable(modal.courseId, id) : () => {}}
+              onAdd={isAdmin ? (name, dueDate) => handleAddDeliverable(modal.courseId, name, dueDate) : () => {}}
+              onDelete={isAdmin ? (id) => handleDeleteDeliverable(modal.courseId, id) : () => {}}
               onClose={closeModal}
+              isAdmin={isAdmin}
             />
           );
         })()}
