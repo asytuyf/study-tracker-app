@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "name": "Linear Algebra 2",
+    "courseType": "current",
+    "startDate": "2026-02-16",
+    "examDate": "2026-06-08",
+    "totalChapters": 13,
+    "completedChapters": 0,
+    "hasMidterm": true,
+    "midtermDate": "2026-03-23",
+    "midtermChapters": 5,
+    "midtermCompleted": false,
+    "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
+    "color": "from-blue-500 to-cyan-400"
+  }
+]
