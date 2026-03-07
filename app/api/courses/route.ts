@@ -1,160 +1,132 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabase } from "@/lib/supabase";
 
-// Force dynamic rendering (don't try to pre-render at build time)
+// GitHub API configuration
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_REPO = process.env.GITHUB_REPO; // format: owner/repo
+const FILE_PATH = "data/courses.json";
+const BRANCH = "main";
+
+// Force dynamic rendering
 export const dynamic = "force-dynamic";
+
+async function getFileFromGitHub(): Promise<{ content: string; sha: string } | null> {
+    if (!GITHUB_TOKEN || !GITHUB_REPO) {
+        return null;
+    }
+
+    try {
+        const response = await fetch(
+            `https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}?ref=${BRANCH}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${GITHUB_TOKEN}`,
+                    Accept: "application/vnd.github.v3+json",
+                },
+                cache: "no-store",
+            }
+        );
+
+        if (!response.ok) {
+            console.error("GitHub fetch failed:", response.status);
+            return null;
+        }
+
+        const data = await response.json();
+        const content = Buffer.from(data.content, "base64").toString("utf-8");
+        return { content, sha: data.sha };
+    } catch (error) {
+        console.error("Failed to fetch from GitHub:", error);
+        return null;
+    }
+}
+
+async function saveFileToGitHub(content: string, sha: string): Promise<boolean> {
+    if (!GITHUB_TOKEN || !GITHUB_REPO) {
+        return false;
+    }
+
+    try {
+        const response = await fetch(
+            `https://api.github.com/repos/${GITHUB_REPO}/contents/${FILE_PATH}`,
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: `Bearer ${GITHUB_TOKEN}`,
+                    Accept: "application/vnd.github.v3+json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    message: "Update courses data",
+                    content: Buffer.from(content).toString("base64"),
+                    sha: sha,
+                    branch: BRANCH,
+                }),
+            }
+        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            console.error("GitHub save failed:", error);
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Failed to save to GitHub:", error);
+        return false;
+    }
+}
 
 // GET all courses
 export async function GET() {
+    const file = await getFileFromGitHub();
+
+    if (!file) {
+        // Return empty array if GitHub not configured or fetch failed
+        return NextResponse.json([]);
+    }
+
     try {
-        const { data, error } = await getSupabase()
-            .from("courses")
-            .select("*")
-            .order("created_at", { ascending: true });
-
-        if (error) throw error;
-
-        // Transform from DB format to app format
-        const courses = data.map((row) => ({
-            id: row.id,
-            name: row.name,
-            examDate: row.exam_date,
-            totalChapters: row.total_chapters,
-            completedChapters: row.completed_chapters,
-            color: row.color,
-            courseType: row.course_type,
-            startDate: row.start_date,
-            hasMidterm: row.has_midterm,
-            midtermDate: row.midterm_date,
-            midtermChapters: row.midterm_chapters,
-            midtermCompleted: row.midterm_completed,
-            deliverables: row.deliverables || [],
-        }));
-
+        const courses = JSON.parse(file.content);
         return NextResponse.json(courses);
-    } catch (error) {
-        console.error("Failed to fetch courses:", error);
-        return NextResponse.json([], { status: 500 });
+    } catch {
+        return NextResponse.json([]);
     }
 }
 
-// POST - add a new course
+// POST - save all courses (replaces entire file)
 export async function POST(request: NextRequest) {
     try {
-        const body = await request.json();
+        const courses = await request.json();
 
-        // If body is an array, replace all courses (sync from client)
-        if (Array.isArray(body)) {
-            // Delete all existing and insert new
-            await getSupabase().from("courses").delete().neq("id", "00000000-0000-0000-0000-000000000000");
-
-            if (body.length > 0) {
-                const rows = body.map((course) => ({
-                    id: course.id,
-                    name: course.name,
-                    exam_date: course.examDate,
-                    total_chapters: course.totalChapters,
-                    completed_chapters: course.completedChapters,
-                    color: course.color,
-                    course_type: course.courseType,
-                    start_date: course.startDate,
-                    has_midterm: course.hasMidterm,
-                    midterm_date: course.midtermDate,
-                    midterm_chapters: course.midtermChapters,
-                    midterm_completed: course.midtermCompleted,
-                    deliverables: course.deliverables || [],
-                }));
-
-                const { error } = await getSupabase().from("courses").insert(rows);
-                if (error) throw error;
-            }
-
-            return NextResponse.json(body);
+        // Get current file to get SHA
+        const file = await getFileFromGitHub();
+        if (!file) {
+            return NextResponse.json(
+                { error: "GitHub not configured or unavailable" },
+                { status: 500 }
+            );
         }
 
-        // Single course insert
-        const row = {
-            id: body.id || crypto.randomUUID(),
-            name: body.name,
-            exam_date: body.examDate,
-            total_chapters: body.totalChapters,
-            completed_chapters: body.completedChapters || 0,
-            color: body.color,
-            course_type: body.courseType,
-            start_date: body.startDate,
-            has_midterm: body.hasMidterm,
-            midterm_date: body.midtermDate,
-            midterm_chapters: body.midtermChapters,
-            midterm_completed: body.midtermCompleted,
-            deliverables: body.deliverables || [],
-        };
+        // Save to GitHub
+        const success = await saveFileToGitHub(
+            JSON.stringify(courses, null, 2),
+            file.sha
+        );
 
-        const { data, error } = await getSupabase().from("courses").insert(row).select().single();
-        if (error) throw error;
-
-        return NextResponse.json(data, { status: 201 });
-    } catch (error) {
-        console.error("Failed to add course:", error);
-        return NextResponse.json({ error: "Failed to add course" }, { status: 500 });
-    }
-}
-
-// PUT - update a course
-export async function PUT(request: NextRequest) {
-    try {
-        const body = await request.json();
-        const { id, ...updates } = body;
-
-        if (!id) {
-            return NextResponse.json({ error: "Course ID required" }, { status: 400 });
+        if (!success) {
+            return NextResponse.json(
+                { error: "Failed to save to GitHub" },
+                { status: 500 }
+            );
         }
-
-        const row: Record<string, unknown> = {};
-        if (updates.name !== undefined) row.name = updates.name;
-        if (updates.examDate !== undefined) row.exam_date = updates.examDate;
-        if (updates.totalChapters !== undefined) row.total_chapters = updates.totalChapters;
-        if (updates.completedChapters !== undefined) row.completed_chapters = updates.completedChapters;
-        if (updates.color !== undefined) row.color = updates.color;
-        if (updates.courseType !== undefined) row.course_type = updates.courseType;
-        if (updates.startDate !== undefined) row.start_date = updates.startDate;
-        if (updates.hasMidterm !== undefined) row.has_midterm = updates.hasMidterm;
-        if (updates.midtermDate !== undefined) row.midterm_date = updates.midtermDate;
-        if (updates.midtermChapters !== undefined) row.midterm_chapters = updates.midtermChapters;
-        if (updates.midtermCompleted !== undefined) row.midterm_completed = updates.midtermCompleted;
-        if (updates.deliverables !== undefined) row.deliverables = updates.deliverables;
-
-        const { data, error } = await getSupabase()
-            .from("courses")
-            .update(row)
-            .eq("id", id)
-            .select()
-            .single();
-
-        if (error) throw error;
-
-        return NextResponse.json(data);
-    } catch (error) {
-        console.error("Failed to update course:", error);
-        return NextResponse.json({ error: "Failed to update course" }, { status: 500 });
-    }
-}
-
-// DELETE - remove a course
-export async function DELETE(request: NextRequest) {
-    try {
-        const { searchParams } = new URL(request.url);
-        const id = searchParams.get("id");
-
-        if (!id) {
-            return NextResponse.json({ error: "Course ID required" }, { status: 400 });
-        }
-
-        const { error } = await getSupabase().from("courses").delete().eq("id", id);
-        if (error) throw error;
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error("Failed to delete course:", error);
-        return NextResponse.json({ error: "Failed to delete course" }, { status: 500 });
+        console.error("Failed to save courses:", error);
+        return NextResponse.json(
+            { error: "Failed to save courses" },
+            { status: 500 }
+        );
     }
 }

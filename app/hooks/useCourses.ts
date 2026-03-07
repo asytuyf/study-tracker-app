@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { Course, CourseStatus } from "../types";
 
 export const COLORS = [
@@ -36,7 +36,6 @@ export function getDaysUntil(dateStr: string): number {
     return Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-/** Human-friendly countdown: "Tomorrow", "in 3 days", "Today!", "3 days ago" */
 export function formatDaysUntil(days: number, label: string): string {
     if (days === 0) return `${label} is Today!`;
     if (days === 1) return `${label} Tomorrow`;
@@ -131,57 +130,95 @@ export function getBehindAmount(course: Course): number {
     return Math.max(0, Math.ceil(expected - course.completedChapters));
 }
 
-// ─── API helpers ──────────────────────────────────────────────────────────────
+// ─── Save status type ─────────────────────────────────────────────────────────
 
-async function fetchCourses(): Promise<Course[]> {
-    try {
-        const res = await fetch("/api/courses");
-        if (!res.ok) throw new Error("Failed to fetch");
-        return await res.json();
-    } catch {
-        // Fallback to localStorage if API fails
-        const saved = localStorage.getItem("examCoursesV3");
-        if (saved) {
-            try {
-                return JSON.parse(saved);
-            } catch {
-                return [];
-            }
-        }
-        return [];
-    }
-}
-
-async function saveCourses(courses: Course[]): Promise<void> {
-    try {
-        await fetch("/api/courses", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(courses),
-        });
-    } catch {
-        // Fallback to localStorage if API fails
-        localStorage.setItem("examCoursesV3", JSON.stringify(courses));
-    }
-}
+export type SaveStatus = "saved" | "saving" | "pending" | "error";
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
+
+const DEBOUNCE_MS = 3000; // Wait 3 seconds after last change before saving
 
 export function useCourses() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [mounted, setMounted] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<SaveStatus>("saved");
 
+    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const coursesRef = useRef<Course[]>(courses);
+
+    // Keep ref in sync
+    useEffect(() => {
+        coursesRef.current = courses;
+    }, [courses]);
+
+    // Fetch courses on mount
     useEffect(() => {
         setMounted(true);
-        fetchCourses().then(setCourses);
+
+        fetch("/api/courses")
+            .then((res) => res.json())
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    setCourses(data);
+                }
+            })
+            .catch((err) => {
+                console.error("Failed to load courses:", err);
+                // Try localStorage as fallback
+                const saved = localStorage.getItem("examCoursesV3");
+                if (saved) {
+                    try {
+                        setCourses(JSON.parse(saved));
+                    } catch {
+                        // ignore
+                    }
+                }
+            });
     }, []);
 
-    // Sync to API/storage whenever courses change
-    useEffect(() => {
-        if (mounted && courses.length >= 0) {
-            saveCourses(courses);
+    // Debounced save function
+    const scheduleSave = useCallback(() => {
+        // Clear existing timeout
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current);
         }
-    }, [courses, mounted]);
+
+        setSaveStatus("pending");
+
+        // Schedule new save
+        saveTimeoutRef.current = setTimeout(async () => {
+            setSaveStatus("saving");
+
+            try {
+                // Also save to localStorage as backup
+                localStorage.setItem("examCoursesV3", JSON.stringify(coursesRef.current));
+
+                const res = await fetch("/api/courses", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(coursesRef.current),
+                });
+
+                if (res.ok) {
+                    setSaveStatus("saved");
+                } else {
+                    setSaveStatus("error");
+                }
+            } catch (err) {
+                console.error("Failed to save:", err);
+                setSaveStatus("error");
+            }
+        }, DEBOUNCE_MS);
+    }, []);
+
+    // Wrapper to update courses and trigger save
+    const updateCourses = useCallback((updater: (prev: Course[]) => Course[]) => {
+        setCourses((prev) => {
+            const next = updater(prev);
+            return next;
+        });
+        scheduleSave();
+    }, [scheduleSave]);
 
     const handleAddCourse = useCallback(
         (data: Omit<Course, "id" | "color">) => {
@@ -190,27 +227,27 @@ export function useCourses() {
                 id: crypto.randomUUID(),
                 color: COLORS[courses.length % COLORS.length],
             };
-            setCourses((prev) => [...prev, newCourse]);
+            updateCourses((prev) => [...prev, newCourse]);
         },
-        [courses.length]
+        [courses.length, updateCourses]
     );
 
     const handleEditCourse = useCallback(
         (id: string, data: Omit<Course, "id" | "color">) => {
-            setCourses((prev) =>
+            updateCourses((prev) =>
                 prev.map((c) => (c.id === id ? { ...c, ...data } : c))
             );
         },
-        []
+        [updateCourses]
     );
 
     const handleDeleteCourse = useCallback((id: string) => {
-        setCourses((prev) => prev.filter((c) => c.id !== id));
-    }, []);
+        updateCourses((prev) => prev.filter((c) => c.id !== id));
+    }, [updateCourses]);
 
     const handleUpdateProgress = useCallback(
         (id: string, newProgress: number, midtermDone?: boolean) => {
-            setCourses((prev) =>
+            updateCourses((prev) =>
                 prev.map((c) =>
                     c.id === id
                         ? {
@@ -222,22 +259,22 @@ export function useCourses() {
                 )
             );
         },
-        []
+        [updateCourses]
     );
 
     const handleQuickUpdate = useCallback((id: string, delta: number) => {
-        setCourses((prev) =>
+        updateCourses((prev) =>
             prev.map((c) => {
                 if (c.id !== id) return c;
                 const next = Math.max(0, Math.min(c.totalChapters, c.completedChapters + delta));
                 return { ...c, completedChapters: next };
             })
         );
-    }, []);
+    }, [updateCourses]);
 
     const handleToggleDeliverable = useCallback(
         (courseId: string, deliverableId: string) => {
-            setCourses((prev) =>
+            updateCourses((prev) =>
                 prev.map((c) => {
                     if (c.id !== courseId) return c;
                     return {
@@ -249,12 +286,12 @@ export function useCourses() {
                 })
             );
         },
-        []
+        [updateCourses]
     );
 
     const handleAddDeliverable = useCallback(
         (courseId: string, name: string, dueDate?: string) => {
-            setCourses((prev) =>
+            updateCourses((prev) =>
                 prev.map((c) => {
                     if (c.id !== courseId) return c;
                     const newDeliverable = {
@@ -267,12 +304,12 @@ export function useCourses() {
                 })
             );
         },
-        []
+        [updateCourses]
     );
 
     const handleDeleteDeliverable = useCallback(
         (courseId: string, deliverableId: string) => {
-            setCourses((prev) =>
+            updateCourses((prev) =>
                 prev.map((c) => {
                     if (c.id !== courseId) return c;
                     return {
@@ -282,7 +319,7 @@ export function useCourses() {
                 })
             );
         },
-        []
+        [updateCourses]
     );
 
     const behindCourses = useMemo(
@@ -317,6 +354,7 @@ export function useCourses() {
     return {
         courses,
         mounted,
+        saveStatus,
         behindCourses,
         sortedCourses,
         overallProgress,

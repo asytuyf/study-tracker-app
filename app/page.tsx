@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { Course } from "./types";
-import { useCourses } from "./hooks/useCourses";
+import { useCourses, SaveStatus } from "./hooks/useCourses";
 import CourseCard from "./components/CourseCard";
 import CourseModal from "./components/CourseModal";
 import ProgressModal from "./components/ProgressModal";
@@ -20,6 +20,41 @@ function getTodayLabel() {
   });
 }
 
+// Save status indicator component
+function SaveIndicator({ status }: { status: SaveStatus }) {
+  if (status === "saved") {
+    return (
+      <div className="flex items-center gap-2 text-emerald-400 text-xs">
+        <div className="w-2 h-2 rounded-full bg-emerald-400" />
+        Saved
+      </div>
+    );
+  }
+  if (status === "saving") {
+    return (
+      <div className="flex items-center gap-2 text-blue-400 text-xs">
+        <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+        Saving...
+      </div>
+    );
+  }
+  if (status === "pending") {
+    return (
+      <div className="flex items-center gap-2 text-amber-400 text-xs">
+        <div className="w-2 h-2 rounded-full bg-amber-400" />
+        Pending...
+      </div>
+    );
+  }
+  // error
+  return (
+    <div className="flex items-center gap-2 text-red-400 text-xs">
+      <div className="w-2 h-2 rounded-full bg-red-400" />
+      Error saving
+    </div>
+  );
+}
+
 type ModalState =
   | { type: "none" }
   | { type: "addEdit"; course: Course | null }
@@ -33,6 +68,7 @@ export default function Home() {
   const {
     courses,
     mounted,
+    saveStatus,
     sortedCourses,
     overallProgress,
     handleAddCourse,
@@ -83,10 +119,9 @@ export default function Home() {
       <BubbleCluster side="left" />
       <BubbleCluster side="right" />
 
-
       {/* All content sits above the background */}
       <div className="relative z-10">
-        {/* ── Header: Clean & Elegant ── */}
+        {/* ── Header ── */}
         <div className="relative max-w-4xl mx-auto px-6 pt-16 pb-12 text-center">
           <p className="text-xs text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">
             {getTodayLabel()}
@@ -95,6 +130,13 @@ export default function Home() {
             Study<span className="text-blue-500">Tracker</span>
           </h1>
           <div className="h-1 w-20 bg-blue-500/30 mx-auto mt-6 rounded-full" />
+
+          {/* Save status indicator */}
+          {isAdmin && (
+            <div className="mt-4 flex justify-center">
+              <SaveIndicator status={saveStatus} />
+            </div>
+          )}
         </div>
 
         <div className="max-w-4xl mx-auto px-6">
