@@ -36,5 +36,17 @@
     "midtermCompleted": false,
     "id": "9b5f2488-a5ae-437e-9878-46a6464f89b7",
     "color": "from-sky-500 to-blue-400"
+  },
+  {
+    "name": "Discrete mathematics 2",
+    "courseType": "self-study",
+    "startDate": "2026-02-16",
+    "examDate": "2026-06-08",
+    "totalChapters": 12,
+    "completedChapters": 0,
+    "hasMidterm": false,
+    "midtermCompleted": false,
+    "id": "e1105728-ad9a-4b8d-8764-3a438724e26c",
+    "color": "from-indigo-500 to-violet-400"
   }
 ]
