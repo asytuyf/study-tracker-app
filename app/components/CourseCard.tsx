@@ -137,27 +137,37 @@ export default function CourseCard({
                 {/* Progress bar and rate */}
                 <div className="space-y-3 mb-4">
                     <div>
-                        <div className="h-1.5 bg-zinc-900 rounded-full overflow-hidden relative border border-white/5">
-                            {/* Expected Strip (background) */}
-                            {!isComplete && expectedPercent > 0 && (
-                                <div
-                                    className="absolute inset-y-0 left-0 bg-white/10 transition-all duration-700"
-                                    style={{ width: `${Math.min(expectedPercent, 100)}%` }}
-                                />
-                            )}
-                            {/* Actual Progress (foreground) */}
+                        <div className="flex justify-between text-[10px] text-zinc-500 mb-1.5">
+                            <span className="uppercase font-bold tracking-wider">Progress</span>
+                            <span className="font-medium">{Math.round(progressPercent)}%</span>
+                        </div>
+                        <div className="h-3 bg-zinc-800 rounded-full overflow-visible relative">
+                            {/* Colored progress fill */}
                             <div
-                                className={`h-full relative transition-all duration-700 ${isComplete
-                                    ? "bg-emerald-500"
+                                className={`h-full rounded-full transition-all duration-500 ${isComplete
+                                    ? "bg-gradient-to-r from-emerald-500 to-green-400"
                                     : status === "ahead"
-                                        ? "bg-blue-500"
+                                        ? "bg-gradient-to-r from-blue-500 to-cyan-400"
                                         : status === "on-track"
-                                            ? "bg-emerald-500"
-                                            : "bg-red-500"
+                                            ? "bg-gradient-to-r from-emerald-500 to-green-400"
+                                            : "bg-gradient-to-r from-red-500 to-orange-400"
                                     }`}
                                 style={{ width: `${progressPercent}%` }}
                             />
+                            {/* White expected marker line */}
+                            {!isComplete && expectedPercent > 0 && (
+                                <div
+                                    className="absolute top-1/2 -translate-y-1/2 w-0.5 h-5 bg-white/70 rounded-full"
+                                    style={{ left: `${Math.min(expectedPercent, 99)}%` }}
+                                    title={`Should be at chapter ${expected}`}
+                                />
+                            )}
                         </div>
+                        {!isComplete && (
+                            <p className="text-[9px] text-zinc-600 mt-1">
+                                │ = ch.{expected} · {focus.type === "midterm" && focus.milestone ? focus.milestone.name : "Final"}
+                            </p>
+                        )}
                     </div>
 
                     {isSelfStudy && plannedRate !== null && currentRate !== null && (
