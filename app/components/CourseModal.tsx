@@ -27,6 +27,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
         course?.midtermChapters?.toString() || ""
     );
     const [midtermCompleted, setMidtermCompleted] = useState(course?.midtermCompleted || false);
+    const [description, setDescription] = useState(course?.description || "");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -42,6 +43,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             midtermChapters:
                 courseType === "current" && hasMidterm ? parseInt(midtermChapters) || undefined : undefined,
             midtermCompleted: courseType === "current" ? midtermCompleted : false,
+            description: description.trim() || undefined,
         });
     };
 
@@ -87,8 +89,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                 type="button"
                                 onClick={() => setCourseType("current")}
                                 className={`p-4 rounded-xl border text-center transition-all ${courseType === "current"
-                                        ? "border-blue-500 bg-blue-500/20 text-blue-300"
-                                        : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
+                                    ? "border-blue-500 bg-blue-500/20 text-blue-300"
+                                    : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
                                     }`}
                             >
                                 <p className="font-medium">📅 Semester</p>
@@ -98,8 +100,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                 type="button"
                                 onClick={() => setCourseType("self-study")}
                                 className={`p-4 rounded-xl border text-center transition-all ${courseType === "self-study"
-                                        ? "border-purple-500 bg-purple-500/20 text-purple-300"
-                                        : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
+                                    ? "border-purple-500 bg-purple-500/20 text-purple-300"
+                                    : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
                                     }`}
                             >
                                 <p className="font-medium">⚡ Flexible</p>
@@ -218,6 +220,17 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             )}
                         </div>
                     )}
+
+                    {/* Description / Notes */}
+                    <div className="border-t border-zinc-800 pt-5">
+                        <label className="block text-sm text-zinc-400 mb-2">Description / Exam Notes</label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="e.g., Open book, focus on chapter 4, etc."
+                            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors h-24 resize-none"
+                        />
+                    </div>
 
                     {/* Buttons */}
                     <div className="flex gap-3 pt-2">

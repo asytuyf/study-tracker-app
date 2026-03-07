@@ -63,6 +63,16 @@ export default function DeliverablesModal({
                     </button>
                 </div>
 
+                {/* Course Description */}
+                {course.description && (
+                    <div className="mb-6 p-4 rounded-xl bg-white/[0.03] border border-white/5">
+                        <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-1.5">Exam Notes / Info</p>
+                        <p className="text-zinc-300 text-sm leading-relaxed italic">
+                            "{course.description}"
+                        </p>
+                    </div>
+                )}
+
                 {/* Progress strip */}
                 {totalCount > 0 && (
                     <div className="mb-5">
@@ -104,10 +114,10 @@ export default function DeliverablesModal({
                                     onClick={() => isAdmin && onToggle(task.id)}
                                     disabled={!isAdmin}
                                     className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${task.completed
-                                            ? "bg-emerald-500 border-emerald-500 text-white"
-                                            : isAdmin
-                                                ? "border-zinc-600 hover:border-zinc-400 cursor-pointer"
-                                                : "border-zinc-600 cursor-default"
+                                        ? "bg-emerald-500 border-emerald-500 text-white"
+                                        : isAdmin
+                                            ? "border-zinc-600 hover:border-zinc-400 cursor-pointer"
+                                            : "border-zinc-600 cursor-default"
                                         }`}
                                 >
                                     {task.completed && (
@@ -125,12 +135,12 @@ export default function DeliverablesModal({
                                     {task.dueDate && (
                                         <span
                                             className={`text-xs ${task.completed
-                                                    ? "text-zinc-600"
-                                                    : isOverdue
-                                                        ? "text-red-400"
-                                                        : isDueSoon
-                                                            ? "text-amber-400"
-                                                            : "text-zinc-500"
+                                                ? "text-zinc-600"
+                                                : isOverdue
+                                                    ? "text-red-400"
+                                                    : isDueSoon
+                                                        ? "text-amber-400"
+                                                        : "text-zinc-500"
                                                 }`}
                                         >
                                             {task.completed

@@ -27,6 +27,9 @@ export interface Course {
 
   // For tracking specific deliverables (Problem sets, assignments)
   deliverables?: Deliverable[];
+
+  // Exam notes or description
+  description?: string;
 }
 
 export type CourseStatus = "ahead" | "on-track" | "behind";

@@ -82,7 +82,19 @@ export async function GET() {
     const file = await getFileFromGitHub();
 
     if (!file) {
-        // Return empty array if GitHub not configured or fetch failed
+        // Fallback to local file in development
+        if (process.env.NODE_ENV === "development") {
+            try {
+                const fs = await import("fs/promises");
+                const path = await import("path");
+                const localPath = path.join(process.cwd(), FILE_PATH);
+                const localData = await fs.readFile(localPath, "utf-8");
+                return NextResponse.json(JSON.parse(localData));
+            } catch (error) {
+                console.warn("Local fallback failed:", error);
+                return NextResponse.json([]);
+            }
+        }
         return NextResponse.json([]);
     }
 
@@ -102,6 +114,18 @@ export async function POST(request: NextRequest) {
         // Get current file to get SHA
         const file = await getFileFromGitHub();
         if (!file) {
+            // Fallback to local file in development
+            if (process.env.NODE_ENV === "development") {
+                try {
+                    const fs = await import("fs/promises");
+                    const path = await import("path");
+                    const localPath = path.join(process.cwd(), FILE_PATH);
+                    await fs.writeFile(localPath, JSON.stringify(courses, null, 2));
+                    return NextResponse.json({ success: true, local: true });
+                } catch (error) {
+                    console.error("Local save failed:", error);
+                }
+            }
             return NextResponse.json(
                 { error: "GitHub not configured or unavailable" },
                 { status: 500 }

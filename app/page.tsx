@@ -10,6 +10,38 @@ import ProgressModal from "./components/ProgressModal";
 import DeliverablesModal from "./components/DeliverablesModal";
 import BubbleCluster from "./components/BubbleCluster";
 import AdminButton from "./components/AdminButton";
+import styled from "styled-components";
+
+const CardsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Only blur siblings when a card is hovered */
+  &:has(.card:hover) .card:not(:hover) {
+    filter: blur(4px);
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+
+  /* The specifically hovered card stays sharp and pops out */
+  .card:hover {
+    filter: none;
+    opacity: 1;
+    transform: scale(1.02);
+    z-index: 10;
+  }
+
+  /* Smooth transition for every child */
+  .card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
+  }
+`;
 
 // Today's date formatted nicely
 function getTodayLabel() {
@@ -24,15 +56,15 @@ function getTodayLabel() {
 function SaveIndicator({ status }: { status: SaveStatus }) {
   if (status === "saved") {
     return (
-      <div className="flex items-center gap-2 text-emerald-400 text-xs">
-        <div className="w-2 h-2 rounded-full bg-emerald-400" />
-        Saved
+      <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold tracking-widest uppercase">
+        <div className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+        Synced
       </div>
     );
   }
   if (status === "saving") {
     return (
-      <div className="flex items-center gap-2 text-blue-400 text-xs">
+      <div className="flex items-center gap-2 text-blue-400 text-xs font-bold tracking-widest uppercase">
         <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
         Saving...
       </div>
@@ -40,17 +72,17 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
   }
   if (status === "pending") {
     return (
-      <div className="flex items-center gap-2 text-amber-400 text-xs">
+      <div className="flex items-center gap-2 text-amber-400 text-xs font-bold tracking-widest uppercase">
         <div className="w-2 h-2 rounded-full bg-amber-400" />
-        Pending...
+        Pending
       </div>
     );
   }
   // error
   return (
-    <div className="flex items-center gap-2 text-red-400 text-xs">
+    <div className="flex items-center gap-2 text-red-400 text-xs font-bold tracking-widest uppercase">
       <div className="w-2 h-2 rounded-full bg-red-400" />
-      Error saving
+      Error
     </div>
   );
 }
@@ -63,7 +95,10 @@ type ModalState =
 
 export default function Home() {
   const { data: session } = useSession();
-  const isAdmin = !!session;
+  const [isDevAdminEnabled, setIsDevAdminEnabled] = useState(true);
+
+  // Admin logic: true if session exists OR (in dev mode AND toggle is on)
+  const isAdmin = !!session || (process.env.NODE_ENV === "development" && isDevAdminEnabled);
 
   const {
     courses,
@@ -111,92 +146,100 @@ export default function Home() {
   const flexCount = courses.filter((c) => c.courseType === "self-study").length;
 
   return (
-    <div className="min-h-screen pb-24 bg-[#0f1117] relative">
-      {/* Fixed circuit grid background */}
+    <div className="min-h-screen pb-24 bg-[#09090b] relative">
       <div className="circuit-background" />
 
-      {/* Floating bubbles — left and right, only on wide screens */}
       <BubbleCluster side="left" />
       <BubbleCluster side="right" />
 
-      {/* All content sits above the background */}
       <div className="relative z-10">
         {/* ── Header ── */}
         <div className="relative max-w-4xl mx-auto px-6 pt-16 pb-12 text-center">
-          <p className="text-xs text-blue-400 font-bold uppercase tracking-[0.2em] mb-3">
+          <p className="text-xs text-blue-400/60 font-black uppercase tracking-[0.3em] mb-4">
             {getTodayLabel()}
           </p>
-          <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight">
-            Study<span className="text-blue-500">Tracker</span>
+          <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter italic">
+            TRACKER<span className="text-blue-500 not-italic">.</span>
           </h1>
-          <div className="h-1 w-20 bg-blue-500/30 mx-auto mt-6 rounded-full" />
+          <div className="h-1.5 w-12 bg-blue-500 mx-auto mt-6 rounded-full" />
 
-          {/* Save status indicator */}
-          {isAdmin && (
-            <div className="mt-4 flex justify-center">
-              <SaveIndicator status={saveStatus} />
-            </div>
-          )}
+          {/* Save status indicator & Dev Admin Toggle */}
+          <div className="mt-8 flex flex-col items-center gap-4">
+            {isAdmin && <SaveIndicator status={saveStatus} />}
+
+            {process.env.NODE_ENV === "development" && !session && (
+              <button
+                onClick={() => setIsDevAdminEnabled(!isDevAdminEnabled)}
+                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border backdrop-blur-md ${isDevAdminEnabled
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                    : "bg-zinc-900 text-zinc-500 border-zinc-800"
+                  }`}
+              >
+                Admin Mode: {isDevAdminEnabled ? "Active" : "Disabled"}
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="max-w-4xl mx-auto px-6">
           {/* Quick Stats Grid */}
           {courses.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-              <div className="glass rounded-2xl p-4 text-center">
-                <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Semester</p>
-                <p className="text-2xl font-black text-white">{currentCount}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div className="glass rounded-3xl p-6 text-center border border-white/5 bg-white/[0.02]">
+                <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-2">Semester</p>
+                <p className="text-3xl font-black text-white">{currentCount}</p>
               </div>
-              <div className="glass rounded-2xl p-4 text-center">
-                <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Flexible</p>
-                <p className="text-2xl font-black text-white">{flexCount}</p>
+              <div className="glass rounded-3xl p-6 text-center border border-white/5 bg-white/[0.02]">
+                <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-2">Flexible</p>
+                <p className="text-3xl font-black text-white">{flexCount}</p>
               </div>
-              <div className="glass rounded-2xl p-4 text-center">
-                <p className="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Overall</p>
-                <p className="text-2xl font-black text-blue-400">{overallProgress}%</p>
+              <div className="glass rounded-3xl p-6 text-center border border-white/5 bg-white/[0.02] ring-1 ring-blue-500/20">
+                <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-2 text-blue-400/80">Goal Progress</p>
+                <p className="text-3xl font-black text-blue-400">{overallProgress}%</p>
               </div>
             </div>
           )}
 
-          {/* Course cards */}
-          <div className="space-y-4">
+          {/* Course cards grid with hover-blur effect */}
+          <CardsGrid>
             {sortedCourses.map((course, index) => (
-              <CourseCard
-                key={course.id}
-                course={course}
-                index={index}
-                onUpdate={isAdmin ? () => openProgress(course.id) : undefined}
-                onTasks={() => openTasks(course.id)}
-                onEdit={isAdmin ? () => openEdit(course) : undefined}
-                onDelete={isAdmin ? () => {
-                  if (confirm(`Delete "${course.name}"? This can't be undone.`)) {
-                    handleDeleteCourse(course.id);
-                  }
-                } : undefined}
-                onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
-                isAdmin={isAdmin}
-              />
+              <div className="card" key={course.id}>
+                <CourseCard
+                  course={course}
+                  index={index}
+                  onUpdate={isAdmin ? () => openProgress(course.id) : undefined}
+                  onTasks={() => openTasks(course.id)}
+                  onEdit={isAdmin ? () => openEdit(course) : undefined}
+                  onDelete={isAdmin ? () => {
+                    if (confirm(`Delete "${course.name}"? This can't be undone.`)) {
+                      handleDeleteCourse(course.id);
+                    }
+                  } : undefined}
+                  onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
+                  isAdmin={isAdmin}
+                />
+              </div>
             ))}
-          </div>
+          </CardsGrid>
 
-          {/* Admin Button - shows login or add course depending on auth state */}
-          <div className="mt-6">
+          {/* Admin Button */}
+          <div className="mt-8">
             <AdminButton onAddCourse={openAdd} />
           </div>
 
           {/* Empty state */}
           {courses.length === 0 && (
-            <div className="text-center py-16 animate-fade-in">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-zinc-800/50 flex items-center justify-center">
-                <svg className="w-10 h-10 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            <div className="text-center py-20 animate-fade-in glass rounded-[2.5rem] border border-dashed border-white/10 mt-8">
+              <div className="w-24 h-24 mx-auto mb-8 rounded-3xl bg-zinc-800/30 flex items-center justify-center border border-white/5">
+                <svg className="w-12 h-12 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-zinc-300 mb-2">No courses yet</h3>
-              <p className="text-zinc-500 mb-6 max-w-xs mx-auto">
+              <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight uppercase">Ready to start?</h3>
+              <p className="text-zinc-500 mb-8 max-w-xs mx-auto text-sm font-medium">
                 {isAdmin
-                  ? "Add your first course above to start tracking your study progress."
-                  : "Login as admin to add courses and start tracking."}
+                  ? "Initialize your study deck by adding your first course."
+                  : "Please sign in as an administrator to populate your dashboard."}
               </p>
             </div>
           )}
@@ -239,9 +282,9 @@ export default function Home() {
           return (
             <DeliverablesModal
               course={course}
-              onToggle={isAdmin ? (id) => handleToggleDeliverable(modal.courseId, id) : () => {}}
-              onAdd={isAdmin ? (name, dueDate) => handleAddDeliverable(modal.courseId, name, dueDate) : () => {}}
-              onDelete={isAdmin ? (id) => handleDeleteDeliverable(modal.courseId, id) : () => {}}
+              onToggle={isAdmin ? (id) => handleToggleDeliverable(modal.courseId, id) : () => { }}
+              onAdd={isAdmin ? (name, dueDate) => handleAddDeliverable(modal.courseId, name, dueDate) : () => { }}
+              onDelete={isAdmin ? (id) => handleDeleteDeliverable(modal.courseId, id) : () => { }}
               onClose={closeModal}
               isAdmin={isAdmin}
             />
