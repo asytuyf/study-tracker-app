@@ -24,5 +24,17 @@
     "midtermCompleted": false,
     "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
     "color": "from-violet-500 to-purple-400"
+  },
+  {
+    "name": "Analysis 1",
+    "courseType": "self-study",
+    "startDate": "2026-02-16",
+    "examDate": "2026-06-17",
+    "totalChapters": 14,
+    "completedChapters": 0,
+    "hasMidterm": false,
+    "midtermCompleted": false,
+    "id": "9b5f2488-a5ae-437e-9878-46a6464f89b7",
+    "color": "from-sky-500 to-blue-400"
   }
 ]
