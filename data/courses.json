@@ -30,7 +30,8 @@
     "midtermCompleted": false,
     "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
     "color": "from-violet-500 to-purple-400",
-    "midterms": []
+    "midterms": [],
+    "notionLink": "https://www.notion.so/Theoretical-computer-science-30cedf02476080278f7ff786d3a30077"
   },
   {
     "name": "Analysis 1",
