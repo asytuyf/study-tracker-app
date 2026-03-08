@@ -23,6 +23,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
 
     const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
     const [description, setDescription] = useState(course?.description || "");
+    const [notionLink, setNotionLink] = useState(course?.notionLink || "");
 
     const handleAddMidterm = () => {
         const newMidterm: Milestone = {
@@ -54,6 +55,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             completedChapters: parseInt(completedChapters) || 0,
             midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
+            notionLink: notionLink.trim() || undefined,
         });
     };
 
@@ -252,6 +254,29 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             placeholder="e.g., Open book, focus on chapter 4, etc."
                             className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors h-24 resize-none"
                         />
+                    </div>
+
+                    {/* Notion Link */}
+                    <div>
+                        <label className="block text-sm text-zinc-400 mb-2">
+                            Notion Page Link
+                            <span className="text-zinc-600 text-xs ml-2">(optional)</span>
+                        </label>
+                        <div className="relative">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500">
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.166V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.22.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.513.28-.886.747-.933zM2.877.466L16.793.013c1.682-.14 2.101.093 2.801.606l3.876 2.707c.467.327.607.746.607 1.26v17.317c0 1.027-.373 1.635-1.682 1.728l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.107C1.053 1.08 1.426.56 2.877.466z"/>
+                                </svg>
+                            </div>
+                            <input
+                                type="url"
+                                value={notionLink}
+                                onChange={(e) => setNotionLink(e.target.value)}
+                                placeholder="https://notion.so/your-course-page"
+                                className="w-full pl-10 pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
+                            />
+                        </div>
+                        <p className="text-xs text-zinc-600 mt-2">Link to your Notion page with notes and resources</p>
                     </div>
 
                     {/* Buttons */}

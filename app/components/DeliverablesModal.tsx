@@ -65,12 +65,35 @@ export default function DeliverablesModal({
 
                 {/* Course Description */}
                 {course.description && (
-                    <div className="mb-6 p-4 rounded-xl bg-white/[0.03] border border-white/5">
+                    <div className="mb-4 p-4 rounded-xl bg-white/[0.03] border border-white/5">
                         <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-1.5">Exam Notes / Info</p>
                         <p className="text-zinc-300 text-sm leading-relaxed italic">
                             "{course.description}"
                         </p>
                     </div>
+                )}
+
+                {/* Notion Link */}
+                {course.notionLink && (
+                    <a
+                        href={course.notionLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mb-6 flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-zinc-800/80 to-zinc-900/80 border border-white/10 hover:border-white/20 transition-all group"
+                    >
+                        <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/15 transition-colors">
+                            <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.166V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.22.186c-.093-.186 0-.653.327-.746l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.513.28-.886.747-.933zM2.877.466L16.793.013c1.682-.14 2.101.093 2.801.606l3.876 2.707c.467.327.607.746.607 1.26v17.317c0 1.027-.373 1.635-1.682 1.728l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.107C1.053 1.08 1.426.56 2.877.466z"/>
+                            </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-white font-semibold text-sm">Open Notes in Notion</p>
+                            <p className="text-zinc-500 text-xs truncate">View slides, summaries & resources</p>
+                        </div>
+                        <svg className="w-5 h-5 text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                    </a>
                 )}
 
                 {/* Progress strip */}

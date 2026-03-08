@@ -2,7 +2,7 @@ export interface Deliverable {
   id: string;
   name: string;
   completed: boolean;
-  dueDate?: string; // optional deadline
+  dueDate?: string;
 }
 
 export interface Milestone {
@@ -11,6 +11,14 @@ export interface Milestone {
   date: string;
   chapters: number;
   completed: boolean;
+}
+
+export interface ChapterNote {
+  id: string;
+  chapterNumber: number;
+  title: string;
+  content: string; // Markdown with LaTeX ($...$ and $$...$$)
+  lastUpdated: string;
 }
 
 export interface Course {
@@ -24,17 +32,31 @@ export interface Course {
   // Course type
   courseType: "current" | "self-study";
 
-  // Start date (for both current and self-study to track pace)
+  // Start date
   startDate?: string;
 
-  // Midterm milestones (multiple supported)
+  // Midterm milestones
   midterms?: Milestone[];
 
-  // For tracking specific deliverables (Problem sets, assignments)
+  // Deliverables (Problem sets, assignments)
   deliverables?: Deliverable[];
 
-  // Exam notes or description
+  // Description
   description?: string;
+
+  // NEW: Notes per chapter
+  notes?: ChapterNote[];
+
+  // NEW: PDF links (Google Cloud Storage or any URL)
+  pdfLinks?: {
+    id: string;
+    name: string; // e.g., "Chapter 1 Slides", "Exercise Sheet 1"
+    url: string;
+    type: "slides" | "exercises" | "solutions" | "other";
+  }[];
+
+  // Notion page link for notes and resources
+  notionLink?: string;
 }
 
 export type CourseStatus = "ahead" | "on-track" | "behind";
