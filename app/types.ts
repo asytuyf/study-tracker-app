@@ -55,6 +55,9 @@ export interface Course {
     type: "slides" | "exercises" | "solutions" | "other";
   }[];
 
+  // NotebookLM link for AI-powered study chat
+  notebookLMLink?: string;
+
   // Notion page link for notes and resources
   notionLink?: string;
 }

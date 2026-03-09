@@ -14,32 +14,32 @@ import styled from "styled-components";
 
 const CardsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
 
   @media (min-width: 640px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
   }
 
-  /* Only blur siblings when a card is hovered */
-  &:has(.card:hover) .card:not(:hover) {
-    filter: blur(4px);
-    opacity: 0.5;
-    transform: scale(0.98);
+  /* Simple popup effect on hover - works in all browsers */
+  .card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 100%;
   }
 
-  /* The specifically hovered card stays sharp and pops out */
   .card:hover {
-    filter: none;
-    opacity: 1;
-    transform: scale(1.02);
+    transform: scale(1.03);
     z-index: 10;
   }
 
-  /* Smooth transition for every child */
-  .card {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    height: 100%;
+  /* Subtle dim effect for non-hovered cards */
+  .card:not(:hover) {
+    opacity: 0.85;
+  }
+
+  &:hover .card:not(:hover) {
+    opacity: 0.6;
+    transform: scale(0.98);
   }
 `;
 

@@ -23,6 +23,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
 
     const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
     const [description, setDescription] = useState(course?.description || "");
+    const [notebookLMLink, setNotebookLMLink] = useState(course?.notebookLMLink || "");
     const [notionLink, setNotionLink] = useState(course?.notionLink || "");
 
     const handleAddMidterm = () => {
@@ -55,6 +56,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             completedChapters: parseInt(completedChapters) || 0,
             midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
+            notebookLMLink: notebookLMLink.trim() || undefined,
             notionLink: notionLink.trim() || undefined,
         });
     };
@@ -88,7 +90,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="e.g., Linear Algebra"
-                            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
+                            className="w-full px-3 sm:px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base"
                             required
                         />
                     </div>
@@ -252,38 +254,62 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             placeholder="e.g., Open book, focus on chapter 4, etc."
-                            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors h-24 resize-none"
+                            className="w-full px-3 sm:px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors h-24 resize-none text-sm sm:text-base"
                         />
                     </div>
 
-                    {/* NotebookLM Link */}
-                    <div>
-                        <label className="block text-sm text-zinc-400 mb-2">
-                            NotebookLM Link
-                            <span className="text-zinc-600 text-xs ml-2">(optional)</span>
-                        </label>
-                        <div className="relative">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 3L14.5 8.5L20 9.5L16 14L17 20L12 17L7 20L8 14L4 9.5L9.5 8.5L12 3Z" fill="url(#sparkle-input)" />
-                                    <defs>
-                                        <linearGradient id="sparkle-input" x1="4" y1="3" x2="20" y2="20" gradientUnits="userSpaceOnUse">
-                                            <stop stopColor="#EC4899"/>
-                                            <stop offset="0.5" stopColor="#A855F7"/>
-                                            <stop offset="1" stopColor="#3B82F6"/>
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
+                    {/* Links Section */}
+                    <div className="space-y-4">
+                        {/* NotebookLM Link */}
+                        <div className="overflow-hidden">
+                            <label className="block text-sm text-zinc-400 mb-2">
+                                NotebookLM Link
+                                <span className="text-zinc-600 text-xs ml-2">(optional)</span>
+                            </label>
+                            <div className="relative">
+                                <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2">
+                                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                                        <path d="M12 3L14.5 8.5L20 9.5L16 14L17 20L12 17L7 20L8 14L4 9.5L9.5 8.5L12 3Z" fill="url(#sparkle-input)" />
+                                        <defs>
+                                            <linearGradient id="sparkle-input" x1="4" y1="3" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+                                                <stop stopColor="#EC4899"/>
+                                                <stop offset="0.5" stopColor="#A855F7"/>
+                                                <stop offset="1" stopColor="#3B82F6"/>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
+                                <input
+                                    type="url"
+                                    value={notebookLMLink}
+                                    onChange={(e) => setNotebookLMLink(e.target.value)}
+                                    placeholder="notebooklm.google.com/..."
+                                    className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 transition-colors text-sm"
+                                />
                             </div>
-                            <input
-                                type="url"
-                                value={notionLink}
-                                onChange={(e) => setNotionLink(e.target.value)}
-                                placeholder="https://notebooklm.google.com/notebook/..."
-                                className="w-full pl-10 pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500 transition-colors"
-                            />
                         </div>
-                        <p className="text-xs text-zinc-600 mt-2">Link to your NotebookLM for AI-powered notes</p>
+
+                        {/* Notion Link */}
+                        <div className="overflow-hidden">
+                            <label className="block text-sm text-zinc-400 mb-2">
+                                Notion Link
+                                <span className="text-zinc-600 text-xs ml-2">(optional)</span>
+                            </label>
+                            <div className="relative">
+                                <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded flex items-center justify-center">
+                                    <svg className="w-3 h-3" viewBox="0 0 100 100" fill="none">
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M25.92 19.523c-5.247 0.353 -6.437 0.433 -9.417 -1.99L8.927 11.507c-0.77 -0.78 -0.383 -1.753 1.557 -1.947l53.193 -3.887c4.467 -0.39 6.793 1.167 8.54 2.527l9.123 6.61c0.39 0.197 1.36 1.36 0.193 1.36l-54.933 3.307 -0.68 0.047zM19.803 88.3V30.367c0 -2.53 0.777 -3.697 3.103 -3.893L86 22.78c2.14 -0.193 3.107 1.167 3.107 3.693v57.547c0 2.53 -0.39 4.67 -3.883 4.863l-60.377 3.5c-3.493 0.193 -5.043 -0.97 -5.043 -4.083zm59.6 -54.827c0.387 1.75 0 3.5 -1.75 3.7l-2.91 0.577v42.773c-2.527 1.36 -4.853 2.137 -6.797 2.137 -3.107 0 -3.883 -0.973 -6.21 -3.887l-19.03 -29.94v28.967l6.02 1.363s0 3.5 -4.857 3.5l-13.39 0.777c-0.39 -0.78 0 -2.723 1.357 -3.11l3.497 -0.97v-38.3L30.48 40.667c-0.39 -1.75 0.58 -4.277 3.3 -4.473l14.367 -0.967 19.8 30.327v-26.83l-5.047 -0.58c-0.39 -2.143 1.163 -3.7 3.103 -3.89l13.4 -0.78z" fill="#000"/>
+                                    </svg>
+                                </div>
+                                <input
+                                    type="url"
+                                    value={notionLink}
+                                    onChange={(e) => setNotionLink(e.target.value)}
+                                    placeholder="notion.so/..."
+                                    className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors text-sm"
+                                />
+                            </div>
+                        </div>
                     </div>
 
                     {/* Buttons */}
