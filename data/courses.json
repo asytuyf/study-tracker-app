@@ -15,9 +15,17 @@
         "date": "2026-03-23",
         "chapters": 5,
         "completed": false
+      },
+      {
+        "id": "60cabfe2-069e-4edc-9613-9aa856f0a9ca",
+        "name": "Midterm 2",
+        "date": "2026-04-20",
+        "chapters": 8,
+        "completed": false
       }
     ],
-    "notionLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed"
+    "notionLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed",
+    "description": "- You are allowed to bring with you up to 8 sheets of paper (at most size A4) of handwritten notes to consult during the exam.\n- Office hours with Cara HOBOHM\n- Ask about the comment for leaving calculations in the draft?"
   },
   {
     "name": "Theoritical computer science",
