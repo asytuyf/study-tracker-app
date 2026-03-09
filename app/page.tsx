@@ -14,11 +14,11 @@ import styled from "styled-components";
 
 const CardsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
 
   @media (min-width: 640px) {
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   /* Simple popup effect on hover - works in all browsers */
@@ -28,17 +28,12 @@ const CardsGrid = styled.div`
   }
 
   .card:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
     z-index: 10;
   }
 
-  /* Subtle dim effect for non-hovered cards */
-  .card:not(:hover) {
-    opacity: 0.85;
-  }
-
   &:hover .card:not(:hover) {
-    opacity: 0.6;
+    opacity: 0.7;
     transform: scale(0.98);
   }
 `;

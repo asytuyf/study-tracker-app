@@ -125,7 +125,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                     </div>
 
                     {/* Dates */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="block text-sm text-zinc-400 mb-2">
                                 {courseType === "current" ? "Semester Start" : "Start Date"}
@@ -134,7 +134,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                 type="date"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
-                                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-blue-500 transition-colors"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500 transition-colors [color-scheme:dark]"
                                 required
                             />
                         </div>
@@ -146,14 +146,14 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                 type="date"
                                 value={examDate}
                                 onChange={(e) => setExamDate(e.target.value)}
-                                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-blue-500 transition-colors"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500 transition-colors [color-scheme:dark]"
                                 required
                             />
                         </div>
                     </div>
 
                     {/* Chapters */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="block text-sm text-zinc-400 mb-2">Total Chapters</label>
                             <input
@@ -162,18 +162,18 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                 onChange={(e) => setTotalChapters(e.target.value)}
                                 placeholder="e.g., 12"
                                 min="1"
-                                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-sm text-zinc-400 mb-2">Completed So Far</label>
+                            <label className="block text-sm text-zinc-400 mb-2">Completed</label>
                             <input
                                 type="number"
                                 value={completedChapters}
                                 onChange={(e) => setCompletedChapters(e.target.value)}
                                 min="0"
-                                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-blue-500 transition-colors"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
                                 required
                             />
                         </div>
