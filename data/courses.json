@@ -10,13 +10,6 @@
     "color": "from-blue-500 to-cyan-400",
     "midterms": [
       {
-        "id": "f4b463b9-e1eb-4e41-852b-bd12e66c6f3e",
-        "name": "Midterm",
-        "date": "2026-03-23",
-        "chapters": 4,
-        "completed": false
-      },
-      {
         "id": "60cabfe2-069e-4edc-9613-9aa856f0a9ca",
         "name": "Midterm 2",
         "date": "2026-04-20",
