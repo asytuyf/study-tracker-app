@@ -32,7 +32,15 @@
     "midtermCompleted": false,
     "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
     "color": "from-violet-500 to-purple-400",
-    "midterms": [],
+    "midterms": [
+      {
+        "id": "f47caa1b-08b5-41cf-bc19-3cea4cadae16",
+        "name": "Midterm 1 (12pm 4.340)",
+        "date": "2026-04-14",
+        "chapters": 6,
+        "completed": false
+      }
+    ],
     "notionLink": "https://www.notion.so/Theoretical-computer-science-30cedf02476080278f7ff786d3a30077",
     "description": "I need a 9.1 with my old homework grades and don't forget to add a note with the year so they count your homework : 22-23"
   },
