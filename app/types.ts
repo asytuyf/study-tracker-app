@@ -3,6 +3,15 @@ export interface Deliverable {
   name: string;
   completed: boolean;
   dueDate?: string;
+  category?: "implementation" | "scientific"; // For projects
+}
+
+export interface WeeklyPlanTask {
+  id: string;
+  text: string;
+  done: boolean;
+  courseId?: string; // optional link to a course/project
+  weekDate: string;  // ISO Monday of the week
 }
 
 export interface Milestone {

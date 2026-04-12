@@ -45,11 +45,11 @@ interface CurrentPlanProps {
 }
 
 export default function CurrentPlan({ courses, onEditCourse }: CurrentPlanProps) {
-    const behindItems = courses.filter(c => getStatus(c) === "behind");
+    const behindItems = courses.filter((c: Course) => getStatus(c) === "behind");
 
     const urgentTasks: { courseName: string; task: Deliverable; color: string }[] = [];
-    courses.forEach(c => {
-        c.deliverables?.forEach(d => {
+    courses.forEach((c: Course) => {
+        c.deliverables?.forEach((d: Deliverable) => {
             if (!d.completed && d.dueDate) {
                 const days = getDaysUntil(d.dueDate);
                 if (days <= 7) {
@@ -60,7 +60,7 @@ export default function CurrentPlan({ courses, onEditCourse }: CurrentPlanProps)
     });
 
     // Sort urgent tasks by due date
-    urgentTasks.sort((a, b) => getDaysUntil(a.task.dueDate!) - getDaysUntil(b.task.dueDate!));
+    urgentTasks.sort((a: any, b: any) => getDaysUntil(a.task.dueDate!) - getDaysUntil(b.task.dueDate!));
 
     if (behindItems.length === 0 && urgentTasks.length === 0) {
         return null;
@@ -78,7 +78,7 @@ export default function CurrentPlan({ courses, onEditCourse }: CurrentPlanProps)
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {behindItems.slice(0, 2).map(course => (
+                {behindItems.slice(0, 2).map((course: Course) => (
                     <PriorityCard
                         key={course.id}
                         $gradient={course.color}
@@ -96,7 +96,7 @@ export default function CurrentPlan({ courses, onEditCourse }: CurrentPlanProps)
                     </PriorityCard>
                 ))}
 
-                {urgentTasks.slice(0, 2).map((item, idx) => (
+                {urgentTasks.slice(0, 2).map((item: any, idx: number) => (
                     <PriorityCard key={idx} $gradient={item.color}>
                         <p className="text-[10px] font-black uppercase tracking-widest text-amber-400 mb-2 flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Course, CourseStatus, Milestone } from "../types";
+import { Course, CourseStatus, Milestone, WeeklyPlanTask } from "../types";
 
 export const COLORS = [
     "from-blue-500 to-cyan-400",
@@ -143,16 +143,22 @@ const DEBOUNCE_MS = 3000; // Wait 3 seconds after last change before saving
 
 export function useCourses() {
     const [courses, setCourses] = useState<Course[]>([]);
+    const [planTasks, setPlanTasks] = useState<WeeklyPlanTask[]>([]);
     const [mounted, setMounted] = useState(false);
     const [saveStatus, setSaveStatus] = useState<SaveStatus>("saved");
 
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const coursesRef = useRef<Course[]>(courses);
+    const planTasksRef = useRef<WeeklyPlanTask[]>(planTasks);
 
-    // Keep ref in sync
+    // Keep refs in sync
     useEffect(() => {
         coursesRef.current = courses;
     }, [courses]);
+
+    useEffect(() => {
+        planTasksRef.current = planTasks;
+    }, [planTasks]);
 
     // Fetch courses on mount
     useEffect(() => {
@@ -161,53 +167,45 @@ export function useCourses() {
         fetch("/api/courses")
             .then((res) => res.json())
             .then((data) => {
-                if (Array.isArray(data)) {
-                    // Migration: Convert legacy single midterm to midterms array
-                    const migrated = data.map((course: any) => {
-                        let updated: Course = { ...course };
-                        if (!updated.itemType) updated.itemType = "course";
-                        if (!updated.weeklyLogs) updated.weeklyLogs = [];
-                        if (!updated.chapterSchedule) updated.chapterSchedule = [];
+                // Support both old array format and new object format { courses, planTasks }
+                const rawCourses: any[] = Array.isArray(data) ? data : (data.courses || []);
+                const rawPlanTasks: WeeklyPlanTask[] = Array.isArray(data) ? [] : (data.planTasks || []);
 
-                        if (course.hasMidterm && course.midtermDate && !course.midterms) {
-                            const milestone: Milestone = {
-                                id: crypto.randomUUID(),
-                                name: "Midterm",
-                                date: course.midtermDate,
-                                chapters: course.midtermChapters || 0,
-                                completed: course.midtermCompleted || false
-                            };
-                            const { hasMidterm, midtermDate, midtermChapters, midtermCompleted, ...rest } = updated as any;
-                            updated = { ...rest, midterms: [milestone] };
-                        }
-                        return updated;
-                    });
-                    if (migrated.length === 0) {
-                        // Add default BSP 6 project if empty
-                        migrated.push({
-                            id: "bsp6-project",
-                            name: "BSP 6 Project",
-                            examDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-                            totalChapters: 1, // Projects usually use hours
-                            completedChapters: 0,
-                            color: COLORS[0],
-                            itemType: "project",
-                            courseType: "current",
-                            weeklyHourGoal: 10,
-                            weeklyLogs: [],
-                            chapterSchedule: []
-                        });
+                const migrated = rawCourses.map((course: any) => {
+                    let updated: Course = { ...course };
+                    if (!updated.itemType) updated.itemType = "course";
+                    if (!updated.weeklyLogs) updated.weeklyLogs = [];
+                    if (!updated.chapterSchedule) updated.chapterSchedule = [];
+
+                    if (course.hasMidterm && course.midtermDate && !course.midterms) {
+                        const milestone: Milestone = {
+                            id: crypto.randomUUID(),
+                            name: "Midterm",
+                            date: course.midtermDate,
+                            chapters: course.midtermChapters || 0,
+                            completed: course.midtermCompleted || false
+                        };
+                        const { hasMidterm, midtermDate, midtermChapters, midtermCompleted, ...rest } = updated as any;
+                        updated = { ...rest, midterms: [milestone] };
                     }
-                    setCourses(migrated);
-                }
+                    return updated;
+                });
+
+                setCourses(migrated);
+                setPlanTasks(rawPlanTasks);
             })
             .catch((err) => {
                 console.error("Failed to load courses:", err);
-                // Try localStorage as fallback
                 const saved = localStorage.getItem("examCoursesV3");
                 if (saved) {
                     try {
-                        setCourses(JSON.parse(saved));
+                        const parsed = JSON.parse(saved);
+                        if (Array.isArray(parsed)) {
+                            setCourses(parsed);
+                        } else {
+                            setCourses(parsed.courses || []);
+                            setPlanTasks(parsed.planTasks || []);
+                        }
                     } catch {
                         // ignore
                     }
@@ -229,13 +227,13 @@ export function useCourses() {
             setSaveStatus("saving");
 
             try {
-                // Also save to localStorage as backup
-                localStorage.setItem("examCoursesV3", JSON.stringify(coursesRef.current));
+                const payload = { courses: coursesRef.current, planTasks: planTasksRef.current };
+                localStorage.setItem("examCoursesV3", JSON.stringify(payload));
 
                 const res = await fetch("/api/courses", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(coursesRef.current),
+                    body: JSON.stringify(payload),
                 });
 
                 if (res.ok) {
@@ -250,10 +248,19 @@ export function useCourses() {
         }, DEBOUNCE_MS);
     }, []);
 
-    // Wrapper to update courses and trigger save
+    // Wrappers to update data and trigger save
     const updateCourses = useCallback((updater: (prev: Course[]) => Course[]) => {
         setCourses((prev: Course[]) => {
             const next = updater(prev);
+            return next;
+        });
+        scheduleSave();
+    }, [scheduleSave]);
+
+    const updatePlanTasks = useCallback((updater: (prev: WeeklyPlanTask[]) => WeeklyPlanTask[]) => {
+        setPlanTasks((prev: WeeklyPlanTask[]) => {
+            const next = updater(prev);
+            planTasksRef.current = next;
             return next;
         });
         scheduleSave();
@@ -336,7 +343,7 @@ export function useCourses() {
     );
 
     const handleAddDeliverable = useCallback(
-        (courseId: string, name: string, dueDate?: string) => {
+        (courseId: string, name: string, dueDate?: string, category?: "implementation" | "scientific") => {
             updateCourses((prev: Course[]) =>
                 prev.map((c: Course) => {
                     if (c.id !== courseId) return c;
@@ -345,6 +352,7 @@ export function useCourses() {
                         name,
                         completed: false,
                         dueDate,
+                        category,
                     };
                     return { ...c, deliverables: [...(c.deliverables || []), newDeliverable] };
                 })
@@ -402,6 +410,29 @@ export function useCourses() {
         [updateCourses]
     );
 
+    // ─── Weekly Plan Task handlers ────────────────────────────────────────────
+
+    const handleAddPlanTask = useCallback((text: string, weekDate: string, courseId?: string) => {
+        const task: WeeklyPlanTask = {
+            id: crypto.randomUUID(),
+            text: text.trim(),
+            done: false,
+            courseId,
+            weekDate,
+        };
+        updatePlanTasks((prev: WeeklyPlanTask[]) => [...prev, task]);
+    }, [updatePlanTasks]);
+
+    const handleTogglePlanTask = useCallback((id: string) => {
+        updatePlanTasks((prev: WeeklyPlanTask[]) =>
+            prev.map((t: WeeklyPlanTask) => t.id === id ? { ...t, done: !t.done } : t)
+        );
+    }, [updatePlanTasks]);
+
+    const handleDeletePlanTask = useCallback((id: string) => {
+        updatePlanTasks((prev: WeeklyPlanTask[]) => prev.filter((t: WeeklyPlanTask) => t.id !== id));
+    }, [updatePlanTasks]);
+
     const behindCourses = useMemo(
         () => courses.filter((c: Course) => getStatus(c) === "behind"),
         [courses]
@@ -433,6 +464,7 @@ export function useCourses() {
 
     return {
         courses,
+        planTasks,
         mounted,
         saveStatus,
         behindCourses,
@@ -448,5 +480,8 @@ export function useCourses() {
         handleToggleDeliverable,
         handleAddDeliverable,
         handleDeleteDeliverable,
+        handleAddPlanTask,
+        handleTogglePlanTask,
+        handleDeletePlanTask,
     };
 }

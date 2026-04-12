@@ -50,10 +50,10 @@ interface WeeklyAnalysisProps {
 export default function WeeklyAnalysis({ courses }: WeeklyAnalysisProps) {
     const currentWeek = useMemo(() => getMonday(new Date()), []);
 
-    const projectsWithGoals = courses.filter(c => c.itemType === "project" || (c.weeklyHourGoal && c.weeklyHourGoal > 0));
+    const projectsWithGoals = courses.filter((c: Course) => c.itemType === "project" || (c.weeklyHourGoal && c.weeklyHourGoal > 0));
 
-    const stats = projectsWithGoals.map(p => {
-        const log = p.weeklyLogs?.find(l => l.date === currentWeek);
+    const stats = projectsWithGoals.map((p: Course) => {
+        const log = (p.weeklyLogs || []).find((l: any) => l.date === currentWeek);
         const hours = log?.hours || 0;
         const goal = p.weeklyHourGoal || 10;
         const percent = (hours / goal) * 100;
@@ -68,7 +68,7 @@ export default function WeeklyAnalysis({ courses }: WeeklyAnalysisProps) {
 
     if (projectsWithGoals.length === 0) return null;
 
-    const totalHours = stats.reduce((acc, s) => acc + s.hours, 0);
+    const totalHours = stats.reduce((acc: number, s: any) => acc + s.hours, 0);
 
     return (
         <AnalysisWrapper>
@@ -86,7 +86,7 @@ export default function WeeklyAnalysis({ courses }: WeeklyAnalysisProps) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {stats.map((s, idx) => (
+                {stats.map((s: any, idx: number) => (
                     <div key={idx}>
                         <div className="flex justify-between items-end mb-1">
                             <div>

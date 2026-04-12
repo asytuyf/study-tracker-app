@@ -1,44 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import { Course } from "./types";
-import { useCourses, SaveStatus } from "./hooks/useCourses";
+import { useCourses, SaveStatus, getDaysUntil } from "./hooks/useCourses";
 import CourseCard from "./components/CourseCard";
 import CourseModal from "./components/CourseModal";
 import ProgressModal from "./components/ProgressModal";
 import DeliverablesModal from "./components/DeliverablesModal";
 import BubbleCluster from "./components/BubbleCluster";
 import AdminButton from "./components/AdminButton";
-import CurrentPlan from "./components/CurrentPlan";
 import WeeklyAnalysis from "./components/WeeklyAnalysis";
-import styled from "styled-components";
-
-const CardsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(1, minmax(0, 1fr));
-  gap: 1.5rem;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* Simple popup effect on hover - works in all browsers */
-  .card {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    height: 100%;
-  }
-
-  .card:hover {
-    transform: scale(1.02);
-    z-index: 10;
-  }
-
-  &:hover .card:not(:hover) {
-    opacity: 0.7;
-    transform: scale(0.98);
-  }
-`;
+import Link from "next/link";
 
 // Today's date formatted nicely
 function getTodayLabel() {
@@ -47,6 +20,16 @@ function getTodayLabel() {
     month: "long",
     day: "numeric",
   });
+}
+
+function getCurrentWeekMonday(): string {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(d);
+  monday.setDate(diff);
+  monday.setHours(0, 0, 0, 0);
+  return monday.toISOString().split("T")[0];
 }
 
 // Save status indicator component
@@ -75,7 +58,6 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
       </div>
     );
   }
-  // error
   return (
     <div className="flex items-center gap-2 text-red-400 text-xs font-bold tracking-widest uppercase">
       <div className="w-2 h-2 rounded-full bg-red-400" />
@@ -92,17 +74,14 @@ type ModalState =
 
 export default function Home() {
   const { data: session } = useSession();
-  const [isDevAdminEnabled, setIsDevAdminEnabled] = useState(true);
-
-  // Admin logic: true if session exists OR (in dev mode AND toggle is on)
-  const isAdmin = !!session || (process.env.NODE_ENV === "development" && isDevAdminEnabled);
+  const isAdmin = !!session;
 
   const {
     courses,
+    planTasks,
     mounted,
     saveStatus,
     sortedCourses,
-    overallProgress,
     handleAddCourse,
     handleEditCourse,
     handleDeleteCourse,
@@ -116,22 +95,18 @@ export default function Home() {
   } = useCourses();
 
   const [modal, setModal] = useState<ModalState>({ type: "none" });
-
   const closeModal = useCallback(() => setModal({ type: "none" }), []);
-
   const openAdd = useCallback(() => setModal({ type: "addEdit", course: null }), []);
-  const openEdit = useCallback(
-    (course: Course) => setModal({ type: "addEdit", course }),
-    []
-  );
-  const openProgress = useCallback(
-    (courseId: string) => setModal({ type: "progress", courseId }),
-    []
-  );
-  const openTasks = useCallback(
-    (courseId: string) => setModal({ type: "tasks", courseId }),
-    []
-  );
+  const openEdit = useCallback((course: Course) => setModal({ type: "addEdit", course }), []);
+  const openProgress = useCallback((courseId: string) => setModal({ type: "progress", courseId }), []);
+  const openTasks = useCallback((courseId: string) => setModal({ type: "tasks", courseId }), []);
+
+  // Current week for plan task count
+  const currentWeek = useMemo(() => getCurrentWeekMonday(), []);
+  const weekTasksDone = useMemo(() =>
+    planTasks.filter(t => t.weekDate === currentWeek && t.done).length, [planTasks, currentWeek]);
+  const weekTasksTotal = useMemo(() =>
+    planTasks.filter(t => t.weekDate === currentWeek).length, [planTasks, currentWeek]);
 
   if (!mounted) {
     return (
@@ -141,13 +116,9 @@ export default function Home() {
     );
   }
 
-  const currentCount = courses.filter((c) => c.courseType === "current").length;
-  const flexCount = courses.filter((c) => c.courseType === "self-study").length;
-
   return (
     <div className="min-h-screen pb-24 bg-[#09090b] relative">
       <div className="circuit-background" />
-
       <BubbleCluster side="left" />
       <BubbleCluster side="right" />
 
@@ -162,74 +133,26 @@ export default function Home() {
           </h1>
           <div className="h-1.5 w-12 bg-blue-500 mx-auto mt-6 rounded-full" />
 
-          {/* Save status indicator & Dev Admin Toggle */}
-          <div className="mt-8 flex flex-col items-center gap-4">
+          {/* Save status */}
+          <div className="mt-8 flex flex-col items-center gap-3">
             {isAdmin && <SaveIndicator status={saveStatus} />}
-
-            {process.env.NODE_ENV === "development" && !session && (
-              <button
-                onClick={() => setIsDevAdminEnabled(!isDevAdminEnabled)}
-                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border backdrop-blur-md ${isDevAdminEnabled
-                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
-                  : "bg-zinc-900 text-zinc-500 border-zinc-800"
-                  }`}
-              >
-                Admin Mode: {isDevAdminEnabled ? "Active" : "Disabled"}
-              </button>
-            )}
           </div>
         </div>
 
         <div className="max-w-4xl mx-auto px-6">
-          {/* 1. CURRENT FOCUS / PLAN WIDGET */}
-          <div className="mb-12">
-            <CurrentPlan
-              courses={courses}
-              onEditCourse={(c: Course) => {
-                setModal({ type: "addEdit", course: c });
-              }}
-            />
-          </div>
 
-          {/* 2. STATS OVERVIEW & WEEKLY ANALYSIS */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            <div className="lg:col-span-1 space-y-8">
-              {/* Summary Card */}
-              <div className="p-8 rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-xl shadow-2xl relative overflow-hidden group hover:bg-white/[0.04] transition-all duration-500">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl -mr-16 -mt-16 group-hover:bg-blue-500/20 transition-all duration-500" />
-                <h2 className="text-zinc-500 text-xs font-black uppercase tracking-[0.2em] mb-6">Overview</h2>
-                <div className="grid gap-6">
-                  <div>
-                    <p className="text-4xl font-black text-white tracking-tighter mb-1">{courses.length}</p>
-                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Active Items</p>
-                  </div>
-                  <div className="h-px bg-white/5" />
-                  <div>
-                    <p className="text-4xl font-black text-blue-400 tracking-tighter mb-1">
-                      {courses.filter(c => c.itemType === "project").length}
-                    </p>
-                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Projects</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-2">
-              <WeeklyAnalysis courses={courses} />
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+          {/* ── Courses ── */}
+          <div className="mb-6 flex items-center justify-between">
             <div>
-              <h2 className="text-4xl font-black text-white tracking-tight mb-2">My Deck</h2>
-              <p className="text-zinc-500 font-medium">Track your academic progress and project milestones.</p>
+              <h2 className="text-2xl font-black text-white tracking-tight">Courses & Projects</h2>
+              <p className="text-zinc-600 text-sm mt-0.5">Your active academic deck</p>
             </div>
           </div>
 
-          {/* Course cards grid with hover-blur effect */}
-          <CardsGrid>
+          {/* Course cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             {sortedCourses.map((course, index) => (
-              <div className="card" key={course.id}>
+              <div key={course.id}>
                 <CourseCard
                   course={course}
                   index={index}
@@ -243,41 +166,96 @@ export default function Home() {
                   } : undefined}
                   onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
                   onToggleChapter={handleToggleChapter}
-                  onLogHours={(id, hours) => {
-                    const d = new Date();
-                    const day = d.getDay();
-                    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-                    const monday = new Date(d.setDate(diff));
-                    monday.setHours(0, 0, 0, 0);
-                    handleLogHours(id, monday.toISOString().split("T")[0], hours);
+                  onLogHours={(id, hoursToAdd) => {
+                    const mondayStr = getCurrentWeekMonday();
+                    const log = (course.weeklyLogs || []).find(l => l.date === mondayStr);
+                    const current = log?.hours || 0;
+                    const next = hoursToAdd === 0 ? 0 : current + hoursToAdd;
+                    handleLogHours(id, mondayStr, next);
                   }}
                   isAdmin={isAdmin}
                 />
               </div>
             ))}
-          </CardsGrid>
+          </div>
 
-          {/* Admin Button */}
-          <div className="mt-8">
+          {/* Admin add button */}
+          <div className="mb-3">
             <AdminButton onAddCourse={openAdd} />
           </div>
 
           {/* Empty state */}
           {courses.length === 0 && (
-            <div className="text-center py-20 animate-fade-in glass rounded-[2.5rem] border border-dashed border-white/10 mt-8">
-              <div className="w-24 h-24 mx-auto mb-8 rounded-3xl bg-zinc-800/30 flex items-center justify-center border border-white/5">
-                <svg className="w-12 h-12 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight uppercase">Ready to start?</h3>
-              <p className="text-zinc-500 mb-8 max-w-xs mx-auto text-sm font-medium">
-                {isAdmin
-                  ? "Initialize your study deck by adding your first course."
-                  : "Please sign in as an administrator to populate your dashboard."}
+            <div className="text-center py-16 animate-fade-in rounded-3xl border border-dashed border-white/10 mb-10">
+              <h3 className="text-xl font-black text-white mb-2 italic uppercase">Ready to start?</h3>
+              <p className="text-zinc-500 text-sm">
+                {isAdmin ? "Add your first course or project above." : "Sign in to populate your dashboard."}
               </p>
             </div>
           )}
+
+          {/* ── Separator ── */}
+          <div className="flex items-center gap-4 my-12">
+            <div className="flex-1 h-px bg-white/5" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-700">Overview</span>
+            <div className="flex-1 h-px bg-white/5" />
+          </div>
+
+          {/* ── Dashboard Overview ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+            {/* Weekly Plan card */}
+            <Link href="/plan" className="group p-6 rounded-3xl bg-white/[0.02] border border-white/8 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-300">
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4 group-hover:text-blue-400 transition-colors">This Week</p>
+              <p className="text-4xl font-black text-white mb-1">
+                {weekTasksDone}<span className="text-zinc-600 text-xl font-bold">/{weekTasksTotal}</span>
+              </p>
+              <p className="text-xs text-zinc-600 mb-4">tasks complete</p>
+              {weekTasksTotal > 0 && (
+                <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-700"
+                    style={{ width: `${(weekTasksDone / weekTasksTotal) * 100}%` }}
+                  />
+                </div>
+              )}
+              <p className="text-[10px] text-blue-500 font-bold mt-3 group-hover:gap-2 transition-all">Open plan →</p>
+            </Link>
+
+            {/* Courses count */}
+            <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/8">
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4">Courses</p>
+              <p className="text-4xl font-black text-white mb-1">
+                {courses.filter((c: Course) => c.itemType !== "project").length}
+              </p>
+              <p className="text-xs text-zinc-600">being tracked</p>
+              <div className="mt-4 flex items-center gap-3">
+                <span className="text-xs text-zinc-700">
+                  {courses.filter((c: Course) => c.itemType === "project").length} project{courses.filter((c: Course) => c.itemType === "project").length !== 1 ? "s" : ""}
+                </span>
+              </div>
+            </div>
+
+            {/* Upcoming deadlines */}
+            <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/8">
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4">Next Deadline</p>
+              {(() => {
+                const upcoming = [...courses]
+                  .filter((c: Course) => c.examDate)
+                  .sort((a: Course, b: Course) => getDaysUntil(a.examDate) - getDaysUntil(b.examDate))[0];
+                if (!upcoming) return <p className="text-zinc-600 text-sm">Nothing scheduled</p>;
+                const days = getDaysUntil(upcoming.examDate);
+                return (
+                  <>
+                    <p className="text-4xl font-black text-white mb-1">{days}d</p>
+                    <p className="text-xs text-zinc-600 truncate">{upcoming.name}</p>
+                  </>
+                );
+              })()}
+            </div>
+          </div>
+
+          {/* Weekly hours analysis */}
+          <WeeklyAnalysis courses={courses} />
         </div>
 
         {/* Modals */}
@@ -318,7 +296,7 @@ export default function Home() {
             <DeliverablesModal
               course={course}
               onToggle={isAdmin ? (id) => handleToggleDeliverable(modal.courseId, id) : () => { }}
-              onAdd={isAdmin ? (name, dueDate) => handleAddDeliverable(modal.courseId, name, dueDate) : () => { }}
+              onAdd={isAdmin ? (name, dueDate, category) => handleAddDeliverable(modal.courseId, name, dueDate, category) : () => { }}
               onDelete={isAdmin ? (id) => handleDeleteDeliverable(modal.courseId, id) : () => { }}
               onClose={closeModal}
               isAdmin={isAdmin}

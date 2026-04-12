@@ -52,7 +52,7 @@ interface ChapterGridProps {
 }
 
 export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridProps) {
-    const chapters = Array.from({ length: course.totalChapters }, (_, i) => i + 1);
+    const chapters = Array.from({ length: course.totalChapters }, (_: any, i: number) => i + 1);
 
     return (
         <div className="mt-6">
@@ -66,7 +66,7 @@ export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridPr
             </div>
 
             <GridContainer>
-                {chapters.map((num) => (
+                {chapters.map((num: number) => (
                     <ChapterBox
                         key={num}
                         $done={num <= course.completedChapters}
@@ -89,7 +89,7 @@ export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridPr
                                 <div className="h-[1px] flex-1 bg-white/5" />
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {sched.chapters.map(ch => (
+                                {sched.chapters.map((ch: number) => (
                                     <button
                                         key={ch}
                                         onClick={() => isAdmin && onToggle(ch)}
