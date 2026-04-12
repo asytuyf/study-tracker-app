@@ -47,12 +47,12 @@ export default function PlanPage() {
     const [newTaskCourseId, setNewTaskCourseId] = useState<string>("");
     const [selectedWeek, setSelectedWeek] = useState(currentWeek);
 
-    // Build list of available weeks (current + past 4)
+    // Build list of available weeks: current + 4 future
     const weeks: string[] = useMemo(() => {
         const result: string[] = [];
         for (let i = 0; i < 5; i++) {
-            const d = new Date(currentWeek + "T00:00:00");
-            d.setDate(d.getDate() - i * 7);
+            const d = new Date(currentWeek + "T12:00:00"); // noon to avoid any DST edge cases
+            d.setDate(d.getDate() + i * 7);
             result.push(getMonday(d));
         }
         return result;

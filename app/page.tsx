@@ -174,10 +174,12 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Admin add button */}
-          <div className="mb-3">
-            <AdminButton onAddCourse={openAdd} />
-          </div>
+          {/* Admin add button — only when logged in */}
+          {isAdmin && (
+            <div className="mb-3">
+              <AdminButton onAddCourse={openAdd} />
+            </div>
+          )}
 
           {/* Empty state */}
           {courses.length === 0 && (
@@ -199,12 +201,12 @@ export default function Home() {
           {/* ── Dashboard Overview ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
             {/* Weekly Plan card */}
-            <Link href="/plan" className="group p-6 rounded-3xl bg-white/[0.02] border border-white/8 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-300">
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4 group-hover:text-blue-400 transition-colors">This Week</p>
+            <Link href="/plan" className="group p-6 rounded-3xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-300">
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4 group-hover:text-blue-400 transition-colors">This Week</p>
               <p className="text-4xl font-black text-white mb-1">
-                {weekTasksDone}<span className="text-zinc-600 text-xl font-bold">/{weekTasksTotal}</span>
+                {weekTasksDone}<span className="text-zinc-500 text-xl font-bold">/{weekTasksTotal}</span>
               </p>
-              <p className="text-xs text-zinc-600 mb-4">tasks complete</p>
+              <p className="text-xs text-zinc-500 mb-4">tasks complete</p>
               {weekTasksTotal > 0 && (
                 <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                   <div
@@ -217,14 +219,14 @@ export default function Home() {
             </Link>
 
             {/* Courses count */}
-            <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/8">
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4">Courses</p>
+            <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/10">
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4">Courses</p>
               <p className="text-4xl font-black text-white mb-1">
                 {courses.filter((c: Course) => c.itemType !== "project").length}
               </p>
-              <p className="text-xs text-zinc-600">being tracked</p>
+              <p className="text-xs text-zinc-500">being tracked</p>
               <div className="mt-4">
-                <span className="text-xs text-zinc-700">
+                <span className="text-xs text-zinc-600">
                   {courses.filter((c: Course) => c.itemType === "project").length} project{courses.filter((c: Course) => c.itemType === "project").length !== 1 ? "s" : ""}
                 </span>
               </div>

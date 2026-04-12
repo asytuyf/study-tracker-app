@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Course } from "../types";
 import {
     getCurrentFocus,
@@ -152,25 +152,10 @@ export default function CourseCard({
                             />
                         </div>
                         {isAdmin && (
-                            <div className="flex items-center gap-2 mt-3">
-                                <input
-                                    type="number"
-                                    min="0"
-                                    max="100"
-                                    step="0.5"
-                                    defaultValue={weeklyHours}
-                                    key={weeklyHours} // re-mount when external value changes
-                                    onBlur={(e) => {
-                                        const val = parseFloat(e.target.value);
-                                        if (!isNaN(val) && val >= 0) onLogHours?.(course.id, val);
-                                    }}
-                                    onKeyDown={(e) => {
-                                        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
-                                    }}
-                                    className="w-20 px-2 py-1 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm font-bold text-center focus:outline-none focus:border-amber-500 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                />
-                                <span className="text-zinc-600 text-[10px] font-bold">hrs this week</span>
-                            </div>
+                            <HoursInput
+                                value={weeklyHours}
+                                onSave={(val) => onLogHours?.(course.id, val)}
+                            />
                         )}
                     </div>
                 ) : (
@@ -312,5 +297,39 @@ export default function CourseCard({
                 </div>
             </div>
         </div >
+    );
+}
+
+// ── Controlled hours input ────────────────────────────────────────────────────
+
+function HoursInput({ value, onSave }: { value: number; onSave: (v: number) => void }) {
+    const [local, setLocal] = useState(String(value));
+
+    // Sync if parent pushes a new value (e.g. after save)
+    useEffect(() => {
+        setLocal(String(value));
+    }, [value]);
+
+    const commit = () => {
+        const parsed = parseFloat(local);
+        if (!isNaN(parsed) && parsed >= 0) onSave(parsed);
+        else setLocal(String(value)); // revert on bad input
+    };
+
+    return (
+        <div className="flex items-center gap-2 mt-3">
+            <input
+                type="number"
+                min="0"
+                max="100"
+                step="0.5"
+                value={local}
+                onChange={(e) => setLocal(e.target.value)}
+                onBlur={commit}
+                onKeyDown={(e) => { if (e.key === "Enter") commit(); }}
+                className="w-20 px-2 py-1 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm font-bold text-center focus:outline-none focus:border-amber-500 transition-colors"
+            />
+            <span className="text-zinc-600 text-[10px] font-bold">hrs this week</span>
+        </div>
     );
 }
