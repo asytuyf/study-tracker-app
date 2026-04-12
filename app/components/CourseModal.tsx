@@ -16,9 +16,18 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     );
     const [startDate, setStartDate] = useState(course?.startDate || "");
     const [examDate, setExamDate] = useState(course?.examDate || "");
+    const [itemType, setItemType] = useState<"course" | "project">(
+        course?.itemType || "course"
+    );
     const [totalChapters, setTotalChapters] = useState(course?.totalChapters?.toString() || "");
     const [completedChapters, setCompletedChapters] = useState(
         course?.completedChapters?.toString() || "0"
+    );
+    const [weeklyHourGoal, setWeeklyHourGoal] = useState(
+        course?.weeklyHourGoal?.toString() || "10"
+    );
+    const [chapterScheduleJson, setChapterScheduleJson] = useState(
+        course?.chapterSchedule ? JSON.stringify(course.chapterSchedule, null, 2) : ""
     );
 
     const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
@@ -47,13 +56,24 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        let chapterSchedule;
+        try {
+            chapterSchedule = chapterScheduleJson ? JSON.parse(chapterScheduleJson) : undefined;
+        } catch (e) {
+            alert("Invalid JSON for Chapter Schedule. Please check the format.");
+            return;
+        }
+
         onSave({
             name: name.trim(),
+            itemType,
             courseType,
             startDate,
             examDate,
-            totalChapters: parseInt(totalChapters),
+            totalChapters: parseInt(totalChapters) || 0,
             completedChapters: parseInt(completedChapters) || 0,
+            weeklyHourGoal: itemType === "project" ? parseInt(weeklyHourGoal) : undefined,
+            chapterSchedule,
             midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
             notebookLMLink: notebookLMLink.trim() || undefined,
@@ -95,31 +115,56 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                         />
                     </div>
 
+                    {/* Item type */}
+                    <div>
+                        <label className="block text-sm text-zinc-400 mb-2">Item Type</label>
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setItemType("course")}
+                                className={`p-4 rounded-xl border text-center transition-all ${itemType === "course"
+                                    ? "border-blue-500 bg-blue-500/20 text-blue-300"
+                                    : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
+                                    }`}
+                            >
+                                <p className="font-medium">📚 Course</p>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setItemType("project")}
+                                className={`p-4 rounded-xl border text-center transition-all ${itemType === "project"
+                                    ? "border-amber-500 bg-amber-500/20 text-amber-300"
+                                    : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
+                                    }`}
+                            >
+                                <p className="font-medium">🏗️ Project</p>
+                            </button>
+                        </div>
+                    </div>
+
                     {/* Course type */}
                     <div>
-                        <label className="block text-sm text-zinc-400 mb-2">Course Type</label>
+                        <label className="block text-sm text-zinc-400 mb-2">Category</label>
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 type="button"
                                 onClick={() => setCourseType("current")}
                                 className={`p-4 rounded-xl border text-center transition-all ${courseType === "current"
-                                    ? "border-blue-500 bg-blue-500/20 text-blue-300"
+                                    ? "border-blue-500 bg-blue-500/10 text-blue-400"
                                     : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
                                     }`}
                             >
                                 <p className="font-medium">📅 Semester</p>
-                                <p className="text-xs opacity-70 mt-1">Fixed lecture schedule</p>
                             </button>
                             <button
                                 type="button"
                                 onClick={() => setCourseType("self-study")}
                                 className={`p-4 rounded-xl border text-center transition-all ${courseType === "self-study"
-                                    ? "border-purple-500 bg-purple-500/20 text-purple-300"
+                                    ? "border-purple-500 bg-purple-500/10 text-purple-400"
                                     : "border-zinc-700 hover:border-zinc-600 text-zinc-400"
                                     }`}
                             >
                                 <p className="font-medium">⚡ Flexible</p>
-                                <p className="text-xs opacity-70 mt-1">Study at own pace</p>
                             </button>
                         </div>
                     </div>
@@ -163,7 +208,6 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                 placeholder="e.g., 12"
                                 min="1"
                                 className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
-                                required
                             />
                         </div>
                         <div>
@@ -174,9 +218,38 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                 onChange={(e) => setCompletedChapters(e.target.value)}
                                 min="0"
                                 className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Weekly Hour Goal (Project only) */}
+                    {itemType === "project" && (
+                        <div>
+                            <label className="block text-sm text-zinc-400 mb-2">Weekly Hour Goal</label>
+                            <input
+                                type="number"
+                                value={weeklyHourGoal}
+                                onChange={(e) => setWeeklyHourGoal(e.target.value)}
+                                placeholder="e.g., 10"
+                                min="1"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-amber-500 transition-colors"
                                 required
                             />
                         </div>
+                    )}
+
+                    {/* Chapter Schedule JSON */}
+                    <div>
+                        <label className="block text-sm text-zinc-400 mb-2">
+                            Chapter Schedule (JSON)
+                            <span className="text-zinc-600 text-[10px] ml-2 tracking-tight">[{'{"week": 1, "chapters": [1, 2]}', ...}]</span>
+                        </label>
+                        <textarea
+                            value={chapterScheduleJson}
+                            onChange={(e) => setChapterScheduleJson(e.target.value)}
+                            placeholder='[{"week": 1, "chapters": [1, 2]}]'
+                            className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-xs placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors h-24 font-mono resize-none"
+                        />
                     </div>
 
                     {/* Midterm section — current courses only */}
@@ -272,9 +345,9 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                         <path d="M12 3L14.5 8.5L20 9.5L16 14L17 20L12 17L7 20L8 14L4 9.5L9.5 8.5L12 3Z" fill="url(#sparkle-input)" />
                                         <defs>
                                             <linearGradient id="sparkle-input" x1="4" y1="3" x2="20" y2="20" gradientUnits="userSpaceOnUse">
-                                                <stop stopColor="#EC4899"/>
-                                                <stop offset="0.5" stopColor="#A855F7"/>
-                                                <stop offset="1" stopColor="#3B82F6"/>
+                                                <stop stopColor="#EC4899" />
+                                                <stop offset="0.5" stopColor="#A855F7" />
+                                                <stop offset="1" stopColor="#3B82F6" />
                                             </linearGradient>
                                         </defs>
                                     </svg>
@@ -298,7 +371,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             <div className="relative">
                                 <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded flex items-center justify-center">
                                     <svg className="w-3 h-3" viewBox="0 0 100 100" fill="none">
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M25.92 19.523c-5.247 0.353 -6.437 0.433 -9.417 -1.99L8.927 11.507c-0.77 -0.78 -0.383 -1.753 1.557 -1.947l53.193 -3.887c4.467 -0.39 6.793 1.167 8.54 2.527l9.123 6.61c0.39 0.197 1.36 1.36 0.193 1.36l-54.933 3.307 -0.68 0.047zM19.803 88.3V30.367c0 -2.53 0.777 -3.697 3.103 -3.893L86 22.78c2.14 -0.193 3.107 1.167 3.107 3.693v57.547c0 2.53 -0.39 4.67 -3.883 4.863l-60.377 3.5c-3.493 0.193 -5.043 -0.97 -5.043 -4.083zm59.6 -54.827c0.387 1.75 0 3.5 -1.75 3.7l-2.91 0.577v42.773c-2.527 1.36 -4.853 2.137 -6.797 2.137 -3.107 0 -3.883 -0.973 -6.21 -3.887l-19.03 -29.94v28.967l6.02 1.363s0 3.5 -4.857 3.5l-13.39 0.777c-0.39 -0.78 0 -2.723 1.357 -3.11l3.497 -0.97v-38.3L30.48 40.667c-0.39 -1.75 0.58 -4.277 3.3 -4.473l14.367 -0.967 19.8 30.327v-26.83l-5.047 -0.58c-0.39 -2.143 1.163 -3.7 3.103 -3.89l13.4 -0.78z" fill="#000"/>
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M25.92 19.523c-5.247 0.353 -6.437 0.433 -9.417 -1.99L8.927 11.507c-0.77 -0.78 -0.383 -1.753 1.557 -1.947l53.193 -3.887c4.467 -0.39 6.793 1.167 8.54 2.527l9.123 6.61c0.39 0.197 1.36 1.36 0.193 1.36l-54.933 3.307 -0.68 0.047zM19.803 88.3V30.367c0 -2.53 0.777 -3.697 3.103 -3.893L86 22.78c2.14 -0.193 3.107 1.167 3.107 3.693v57.547c0 2.53 -0.39 4.67 -3.883 4.863l-60.377 3.5c-3.493 0.193 -5.043 -0.97 -5.043 -4.083zm59.6 -54.827c0.387 1.75 0 3.5 -1.75 3.7l-2.91 0.577v42.773c-2.527 1.36 -4.853 2.137 -6.797 2.137 -3.107 0 -3.883 -0.973 -6.21 -3.887l-19.03 -29.94v28.967l6.02 1.363s0 3.5 -4.857 3.5l-13.39 0.777c-0.39 -0.78 0 -2.723 1.357 -3.11l3.497 -0.97v-38.3L30.48 40.667c-0.39 -1.75 0.58 -4.277 3.3 -4.473l14.367 -0.967 19.8 30.327v-26.83l-5.047 -0.58c-0.39 -2.143 1.163 -3.7 3.103 -3.89l13.4 -0.78z" fill="#000" />
                                     </svg>
                                 </div>
                                 <input

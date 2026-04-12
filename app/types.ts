@@ -21,6 +21,17 @@ export interface ChapterNote {
   lastUpdated: string;
 }
 
+export interface WeeklyLog {
+  id: string;
+  date: string; // ISO date of the Monday of that week
+  hours: number;
+}
+
+export interface ChapterSchedule {
+  week: number;
+  chapters: number[];
+}
+
 export interface Course {
   id: string;
   name: string;
@@ -29,8 +40,20 @@ export interface Course {
   completedChapters: number;
   color: string;
 
-  // Course type
+  // Study item type
+  itemType: "course" | "project";
+
+  // Course type (legacy/compatibility)
   courseType: "current" | "self-study";
+
+  // Weekly hourly goal for projects
+  weeklyHourGoal?: number;
+
+  // Logs for hourly work
+  weeklyLogs?: WeeklyLog[];
+
+  // Detailed schedule
+  chapterSchedule?: ChapterSchedule[];
 
   // Start date
   startDate?: string;

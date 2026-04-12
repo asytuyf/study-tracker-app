@@ -10,6 +10,8 @@ import ProgressModal from "./components/ProgressModal";
 import DeliverablesModal from "./components/DeliverablesModal";
 import BubbleCluster from "./components/BubbleCluster";
 import AdminButton from "./components/AdminButton";
+import CurrentPlan from "./components/CurrentPlan";
+import WeeklyAnalysis from "./components/WeeklyAnalysis";
 import styled from "styled-components";
 
 const CardsGrid = styled.div`
@@ -109,6 +111,8 @@ export default function Home() {
     handleToggleDeliverable,
     handleAddDeliverable,
     handleDeleteDeliverable,
+    handleToggleChapter,
+    handleLogHours,
   } = useCourses();
 
   const [modal, setModal] = useState<ModalState>({ type: "none" });
@@ -177,23 +181,50 @@ export default function Home() {
         </div>
 
         <div className="max-w-4xl mx-auto px-6">
-          {/* Quick Stats Grid */}
-          {courses.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="glass rounded-3xl p-6 text-center border border-white/5 bg-white/[0.02]">
-                <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-2">Semester</p>
-                <p className="text-3xl font-black text-white">{currentCount}</p>
-              </div>
-              <div className="glass rounded-3xl p-6 text-center border border-white/5 bg-white/[0.02]">
-                <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-2">Flexible</p>
-                <p className="text-3xl font-black text-white">{flexCount}</p>
-              </div>
-              <div className="glass rounded-3xl p-6 text-center border border-white/5 bg-white/[0.02] ring-1 ring-blue-500/20">
-                <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-2 text-blue-400/80">Goal Progress</p>
-                <p className="text-3xl font-black text-blue-400">{overallProgress}%</p>
+          {/* 1. CURRENT FOCUS / PLAN WIDGET */}
+          <div className="mb-12">
+            <CurrentPlan
+              courses={courses}
+              onEditCourse={(c) => {
+                setModal({ type: "addEdit", course: c });
+              }}
+            />
+          </div>
+
+          {/* 2. STATS OVERVIEW & WEEKLY ANALYSIS */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div className="lg:col-span-1 space-y-8">
+              {/* Summary Card */}
+              <div className="p-8 rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-xl shadow-2xl relative overflow-hidden group hover:bg-white/[0.04] transition-all duration-500">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl -mr-16 -mt-16 group-hover:bg-blue-500/20 transition-all duration-500" />
+                <h2 className="text-zinc-500 text-xs font-black uppercase tracking-[0.2em] mb-6">Overview</h2>
+                <div className="grid gap-6">
+                  <div>
+                    <p className="text-4xl font-black text-white tracking-tighter mb-1">{courses.length}</p>
+                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Active Items</p>
+                  </div>
+                  <div className="h-px bg-white/5" />
+                  <div>
+                    <p className="text-4xl font-black text-blue-400 tracking-tighter mb-1">
+                      {courses.filter(c => c.itemType === "project").length}
+                    </p>
+                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Projects</p>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
+
+            <div className="lg:col-span-2">
+              <WeeklyAnalysis courses={courses} />
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div>
+              <h2 className="text-4xl font-black text-white tracking-tight mb-2">My Deck</h2>
+              <p className="text-zinc-500 font-medium">Track your academic progress and project milestones.</p>
+            </div>
+          </div>
 
           {/* Course cards grid with hover-blur effect */}
           <CardsGrid>
@@ -211,6 +242,8 @@ export default function Home() {
                     }
                   } : undefined}
                   onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
+                  onToggleChapter={handleToggleChapter}
+                  onLogHours={handleLogHours}
                   isAdmin={isAdmin}
                 />
               </div>

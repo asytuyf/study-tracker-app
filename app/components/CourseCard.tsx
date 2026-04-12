@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Course } from "../types";
 import {
     getCurrentFocus,
@@ -11,6 +12,7 @@ import {
     getWeeksSinceStart,
     formatDaysUntil,
 } from "../hooks/useCourses";
+import ChapterGrid from "./ChapterGrid";
 
 interface CourseCardProps {
     course: Course;
@@ -20,6 +22,8 @@ interface CourseCardProps {
     onEdit?: () => void;
     onDelete?: () => void;
     onQuickUpdate?: (delta: number) => void;
+    onToggleChapter?: (id: string, num: number) => void;
+    onLogHours?: (id: string, hours: number) => void;
     isAdmin?: boolean;
 }
 
@@ -31,13 +35,18 @@ export default function CourseCard({
     onEdit,
     onDelete,
     onQuickUpdate,
+    onToggleChapter,
+    onLogHours,
     isAdmin = false,
 }: CourseCardProps) {
+    const [showGrid, setShowGrid] = useState(false);
+
     const focus = getCurrentFocus(course);
     const behind = getBehindAmount(course);
     const target = getTargetChapters(course);
     const expected = getExpectedChapter(course);
 
+    const isProject = course.itemType === "project";
     const isCurrent = course.courseType === "current";
     const isSelfStudy = course.courseType === "self-study";
     const weeksIn = isCurrent && course.startDate ? getWeeksSinceStart(course.startDate) : null;
@@ -45,7 +54,7 @@ export default function CourseCard({
     const daysToExam = getDaysUntil(course.examDate);
     const dateLabel = focus.type === "midterm" && focus.milestone
         ? formatDaysUntil(getDaysUntil(focus.milestone.date), focus.milestone.name)
-        : formatDaysUntil(daysToExam, "Final");
+        : formatDaysUntil(daysToExam, isProject ? "Deadline" : "Final");
 
     const progressPercent = Math.min((course.completedChapters / target) * 100, 100);
     const expectedPercent = target > 0 ? Math.min((expected / target) * 100, 100) : 0;
@@ -61,6 +70,17 @@ export default function CourseCard({
     const currentRate = isSelfStudy ? getCurrentChaptersPerWeek(course) : null;
     const rateEscalated = plannedRate !== null && currentRate !== null && currentRate > plannedRate + 0.1;
 
+    // Current week's hours for project
+    const currentWeekMonday = new Date();
+    const day = currentWeekMonday.getDay(),
+        diff = currentWeekMonday.getDate() - day + (day === 0 ? -6 : 1);
+    currentWeekMonday.setDate(diff);
+    currentWeekMonday.setHours(0, 0, 0, 0);
+    const mondayStr = currentWeekMonday.toISOString().split('T')[0];
+    const weeklyHours = course.weeklyLogs?.find(l => l.date === mondayStr)?.hours || 0;
+    const hourGoal = course.weeklyHourGoal || 10;
+    const hourPercent = (weeklyHours / hourGoal) * 100;
+
     return (
         <div
             className={`h-full rounded-2xl p-6 animate-fade-in transition-all duration-300 relative overflow-hidden group border border-white/10 backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.05] shadow-2xl ${isComplete
@@ -72,14 +92,18 @@ export default function CourseCard({
             <div className="relative z-10">
                 {/* Top row */}
                 <div className="flex justify-between items-center mb-3">
-                    <span
-                        className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${isCurrent
-                            ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                            : "bg-purple-500/10 text-purple-400 border border-purple-500/20"
-                            }`}
-                    >
-                        {isCurrent ? "Sem" : "Flex"}
-                    </span>
+                    <div className="flex gap-2">
+                        <span
+                            className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${isProject
+                                ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                                : isCurrent
+                                    ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                                    : "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                                }`}
+                        >
+                            {isProject ? "Project" : isCurrent ? "Sem" : "Flex"}
+                        </span>
+                    </div>
 
                     <div className="flex gap-1.5">
                         {isComplete && (
@@ -111,81 +135,127 @@ export default function CourseCard({
                     </div>
                 </div>
 
-                {/* Stats Grid - Compact */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                    <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
-                        <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Progress</p>
-                        <p className="text-sm font-bold text-white leading-none">
-                            {course.completedChapters}<span className="text-zinc-500 text-[10px]">/{target}</span>
-                        </p>
-                    </div>
-                    <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
-                        <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Expected</p>
-                        <div className="flex flex-col items-center">
-                            <p className={`text-sm font-bold leading-none ${status === "behind" ? "text-red-400" : "text-emerald-400"}`}>
-                                {expected}
-                            </p>
-                            {status === "behind" && !isComplete && (
-                                <p className="text-[8px] font-black text-red-500 mt-1 flex items-center gap-0.5 whitespace-nowrap">
-                                    ⚠️ {behind} BEHIND
-                                </p>
-                            )}
+                {isProject ? (
+                    <div className="mb-6">
+                        <div className="flex justify-between items-end mb-2">
+                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Weekly Goal</p>
+                            <p className="text-sm font-black text-white">{weeklyHours} <span className="text-zinc-500 text-[10px]">/ {hourGoal}h</span></p>
                         </div>
-                    </div>
-                </div>
-
-                {/* Progress bar and rate */}
-                <div className="space-y-3 mb-4">
-                    <div>
-                        <div className="flex justify-between text-[10px] text-zinc-500 mb-1.5">
-                            <span className="uppercase font-bold tracking-wider">Progress</span>
-                            <span className="font-medium">{Math.round(progressPercent)}%</span>
-                        </div>
-                        <div className="h-3 bg-zinc-800 rounded-full overflow-visible relative">
-                            {/* Colored progress fill */}
+                        <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
                             <div
-                                className={`h-full rounded-full transition-all duration-500 ${isComplete
-                                    ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                                    : status === "ahead"
-                                        ? "bg-gradient-to-r from-blue-500 to-cyan-400"
-                                        : status === "on-track"
-                                            ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                                            : "bg-gradient-to-r from-red-500 to-orange-400"
-                                    }`}
-                                style={{ width: `${progressPercent}%` }}
+                                className="h-full bg-amber-500 transition-all duration-700"
+                                style={{ width: `${Math.min(100, hourPercent)}%` }}
                             />
-                            {/* White expected marker line */}
-                            {!isComplete && expectedPercent > 0 && (
-                                <div
-                                    className="absolute top-1/2 -translate-y-1/2 w-0.5 h-5 bg-white/70 rounded-full"
-                                    style={{ left: `${Math.min(expectedPercent, 99)}%` }}
-                                    title={`Should be at chapter ${expected}`}
-                                />
-                            )}
                         </div>
-                        {!isComplete && (
-                            <p className="text-[9px] text-zinc-600 mt-1">
-                                │ = ch.{expected} · {focus.type === "midterm" && focus.milestone ? focus.milestone.name : "Final"}
-                            </p>
+                        {isAdmin && (
+                            <div className="flex gap-2 mt-3">
+                                {[1, 2, 5].map(h => (
+                                    <button
+                                        key={h}
+                                        onClick={() => onLogHours?.(course.id, weeklyHours + h)}
+                                        className="px-2 py-1 rounded-md bg-white/5 border border-white/5 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-white/10 transition-all"
+                                    >
+                                        +{h}h
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => onLogHours?.(course.id, 0)}
+                                    className="px-2 py-1 rounded-md bg-white/5 border border-white/5 text-[10px] font-bold text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all ml-auto"
+                                >
+                                    RESET
+                                </button>
+                            </div>
                         )}
                     </div>
-
-                    {isSelfStudy && plannedRate !== null && currentRate !== null && (
-                        <div className="flex justify-between items-center text-[10px]">
-                            <span className="text-zinc-500 uppercase font-bold tracking-tight">Rate Need</span>
-                            <div className="flex items-center gap-1.5">
-                                <span className={`font-bold ${rateEscalated ? "text-red-400" : "text-purple-400"}`}>
-                                    {currentRate}/wk
-                                </span>
-                                {rateEscalated && (
-                                    <span className="text-zinc-600 font-medium">
-                                        ({plannedRate})
-                                    </span>
-                                )}
+                ) : (
+                    <>
+                        {/* Stats Grid - Compact */}
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                            <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
+                                <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Progress</p>
+                                <p className="text-sm font-bold text-white leading-none">
+                                    {course.completedChapters}<span className="text-zinc-500 text-[10px]">/{target}</span>
+                                </p>
+                            </div>
+                            <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
+                                <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Expected</p>
+                                <div className="flex flex-col items-center">
+                                    <p className={`text-sm font-bold leading-none ${status === "behind" ? "text-red-400" : "text-emerald-400"}`}>
+                                        {expected}
+                                    </p>
+                                    {status === "behind" && !isComplete && (
+                                        <p className="text-[8px] font-black text-red-500 mt-1 flex items-center gap-0.5 whitespace-nowrap">
+                                            ⚠️ {behind} BEHIND
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    )}
-                </div>
+
+                        {/* Progress bar and rate */}
+                        <div className="space-y-3 mb-4">
+                            <div>
+                                <div className="flex justify-between text-[10px] text-zinc-500 mb-1.5">
+                                    <span className="uppercase font-bold tracking-wider">Progress</span>
+                                    <span className="font-medium">{Math.round(progressPercent)}%</span>
+                                </div>
+                                <div className="h-3 bg-zinc-800 rounded-full overflow-visible relative">
+                                    {/* Colored progress fill */}
+                                    <div
+                                        className={`h-full rounded-full transition-all duration-500 ${isComplete
+                                            ? "bg-gradient-to-r from-emerald-500 to-green-400"
+                                            : status === "ahead"
+                                                ? "bg-gradient-to-r from-blue-500 to-cyan-400"
+                                                : status === "on-track"
+                                                    ? "bg-gradient-to-r from-emerald-500 to-green-400"
+                                                    : "bg-gradient-to-r from-red-500 to-orange-400"
+                                            }`}
+                                        style={{ width: `${progressPercent}%` }}
+                                    />
+                                    {/* White expected marker line */}
+                                    {!isComplete && expectedPercent > 0 && (
+                                        <div
+                                            className="absolute top-1/2 -translate-y-1/2 w-0.5 h-5 bg-white/70 rounded-full"
+                                            style={{ left: `${Math.min(expectedPercent, 99)}%` }}
+                                            title={`Should be at chapter ${expected}`}
+                                        />
+                                    )}
+                                </div>
+                                {!isComplete && (
+                                    <p className="text-[9px] text-zinc-600 mt-1">
+                                        │ = ch.{expected} · {focus.type === "midterm" && focus.milestone ? focus.milestone.name : "Final"}
+                                    </p>
+                                )}
+                            </div>
+
+                            {isSelfStudy && plannedRate !== null && currentRate !== null && (
+                                <div className="flex justify-between items-center text-[10px]">
+                                    <span className="text-zinc-500 uppercase font-bold tracking-tight">Rate Need</span>
+                                    <div className="flex items-center gap-1.5">
+                                        <span className={`font-bold ${rateEscalated ? "text-red-400" : "text-purple-400"}`}>
+                                            {currentRate}/wk
+                                        </span>
+                                        {rateEscalated && (
+                                            <span className="text-zinc-600 font-medium">
+                                                ({plannedRate})
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                )}
+
+                {showGrid && !isProject && (
+                    <div className="mb-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <ChapterGrid
+                            course={course}
+                            onToggle={(num) => onToggleChapter?.(course.id, num)}
+                            isAdmin={isAdmin}
+                        />
+                    </div>
+                )}
 
                 {/* Actions */}
                 <div className="flex gap-1.5">
@@ -195,14 +265,16 @@ export default function CourseCard({
                                 onClick={onUpdate}
                                 className="flex-1 py-2 px-2 rounded-lg bg-white/5 hover:bg-white/10 text-white text-[11px] font-bold transition-all border border-white/10 text-center"
                             >
-                                UP
+                                {isProject ? "LOG" : "UP"}
                             </button>
-                            <button
-                                onClick={() => onQuickUpdate?.(+1)}
-                                className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-lg font-bold border border-white/5 flex items-center justify-center transition-all"
-                            >
-                                +
-                            </button>
+                            {!isProject && (
+                                <button
+                                    onClick={() => onQuickUpdate?.(+1)}
+                                    className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-lg font-bold border border-white/5 flex items-center justify-center transition-all"
+                                >
+                                    +
+                                </button>
+                            )}
                         </>
                     )}
                     <button
@@ -211,6 +283,16 @@ export default function CourseCard({
                     >
                         TASKS
                     </button>
+                    {!isProject && (
+                        <button
+                            onClick={() => setShowGrid(!showGrid)}
+                            className={`w-8 h-8 flex items-center justify-center rounded-lg transition-all border border-white/5 ${showGrid ? "bg-blue-500/20 text-blue-400" : "bg-white/5 text-zinc-500 hover:text-white"}`}
+                        >
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                        </button>
+                    )}
                     {isAdmin && (
                         <button
                             onClick={onEdit}

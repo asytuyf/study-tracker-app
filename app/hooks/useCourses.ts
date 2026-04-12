@@ -164,6 +164,11 @@ export function useCourses() {
                 if (Array.isArray(data)) {
                     // Migration: Convert legacy single midterm to midterms array
                     const migrated = data.map((course: any) => {
+                        let updated: Course = { ...course };
+                        if (!updated.itemType) updated.itemType = "course";
+                        if (!updated.weeklyLogs) updated.weeklyLogs = [];
+                        if (!updated.chapterSchedule) updated.chapterSchedule = [];
+
                         if (course.hasMidterm && course.midtermDate && !course.midterms) {
                             const milestone: Milestone = {
                                 id: crypto.randomUUID(),
@@ -172,11 +177,27 @@ export function useCourses() {
                                 chapters: course.midtermChapters || 0,
                                 completed: course.midtermCompleted || false
                             };
-                            const { hasMidterm, midtermDate, midtermChapters, midtermCompleted, ...rest } = course;
-                            return { ...rest, midterms: [milestone] };
+                            const { hasMidterm, midtermDate, midtermChapters, midtermCompleted, ...rest } = updated as any;
+                            updated = { ...rest, midterms: [milestone] };
                         }
-                        return course;
+                        return updated;
                     });
+                    if (migrated.length === 0) {
+                        // Add default BSP 6 project if empty
+                        migrated.push({
+                            id: "bsp6-project",
+                            name: "BSP 6 Project",
+                            examDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                            totalChapters: 1, // Projects usually use hours
+                            completedChapters: 0,
+                            color: COLORS[0],
+                            itemType: "project",
+                            courseType: "current",
+                            weeklyHourGoal: 10,
+                            weeklyLogs: [],
+                            chapterSchedule: []
+                        });
+                    }
                     setCourses(migrated);
                 }
             })
@@ -231,7 +252,7 @@ export function useCourses() {
 
     // Wrapper to update courses and trigger save
     const updateCourses = useCallback((updater: (prev: Course[]) => Course[]) => {
-        setCourses((prev) => {
+        setCourses((prev: Course[]) => {
             const next = updater(prev);
             return next;
         });
@@ -243,35 +264,35 @@ export function useCourses() {
             const newCourse: Course = {
                 ...data,
                 id: crypto.randomUUID(),
-                color: COLORS[courses.length % COLORS.length],
-            };
-            updateCourses((prev) => [...prev, newCourse]);
+                color: COLORS[coursesRef.current.length % COLORS.length],
+            } as Course;
+            updateCourses((prev: Course[]) => [...prev, newCourse]);
         },
-        [courses.length, updateCourses]
+        [updateCourses]
     );
 
     const handleEditCourse = useCallback(
         (id: string, data: Omit<Course, "id" | "color">) => {
-            updateCourses((prev) =>
-                prev.map((c) => (c.id === id ? { ...c, ...data } : c))
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => (c.id === id ? { ...c, ...data } : c))
             );
         },
         [updateCourses]
     );
 
     const handleDeleteCourse = useCallback((id: string) => {
-        updateCourses((prev) => prev.filter((c) => c.id !== id));
+        updateCourses((prev: Course[]) => prev.filter((c: Course) => c.id !== id));
     }, [updateCourses]);
 
     const handleUpdateProgress = useCallback(
         (id: string, newProgress: number, milestoneId?: string, milestoneDone?: boolean) => {
-            updateCourses((prev) =>
-                prev.map((c) => {
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => {
                     if (c.id !== id) return c;
 
                     let nextMidterms = c.midterms;
                     if (milestoneId) {
-                        nextMidterms = c.midterms?.map(m =>
+                        nextMidterms = c.midterms?.map((m: Milestone) =>
                             m.id === milestoneId ? { ...m, completed: milestoneDone ?? m.completed } : m
                         );
                     }
@@ -288,8 +309,8 @@ export function useCourses() {
     );
 
     const handleQuickUpdate = useCallback((id: string, delta: number) => {
-        updateCourses((prev) =>
-            prev.map((c) => {
+        updateCourses((prev: Course[]) =>
+            prev.map((c: Course) => {
                 if (c.id !== id) return c;
                 const next = Math.max(0, Math.min(c.totalChapters, c.completedChapters + delta));
                 return { ...c, completedChapters: next };
@@ -299,12 +320,12 @@ export function useCourses() {
 
     const handleToggleDeliverable = useCallback(
         (courseId: string, deliverableId: string) => {
-            updateCourses((prev) =>
-                prev.map((c) => {
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => {
                     if (c.id !== courseId) return c;
                     return {
                         ...c,
-                        deliverables: c.deliverables?.map((d) =>
+                        deliverables: c.deliverables?.map((d: any) =>
                             d.id === deliverableId ? { ...d, completed: !d.completed } : d
                         ),
                     };
@@ -316,8 +337,8 @@ export function useCourses() {
 
     const handleAddDeliverable = useCallback(
         (courseId: string, name: string, dueDate?: string) => {
-            updateCourses((prev) =>
-                prev.map((c) => {
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => {
                     if (c.id !== courseId) return c;
                     const newDeliverable = {
                         id: crypto.randomUUID(),
@@ -332,14 +353,48 @@ export function useCourses() {
         [updateCourses]
     );
 
+    const handleLogHours = useCallback(
+        (id: string, weekDate: string, hours: number) => {
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => {
+                    if (c.id !== id) return c;
+                    const logs = c.weeklyLogs || [];
+                    const existingLog = logs.find((l: any) => l.date === weekDate);
+                    let newLogs;
+                    if (existingLog) {
+                        newLogs = logs.map((l: any) => (l.date === weekDate ? { ...l, hours } : l));
+                    } else {
+                        newLogs = [...logs, { id: crypto.randomUUID(), date: weekDate, hours }];
+                    }
+                    return { ...c, weeklyLogs: newLogs };
+                })
+            );
+        },
+        [updateCourses]
+    );
+
+    const handleToggleChapter = useCallback(
+        (courseId: string, chapterNum: number) => {
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => {
+                    if (c.id !== courseId) return c;
+                    const isDone = (c.completedChapters || 0) >= chapterNum;
+                    const next = isDone ? chapterNum - 1 : chapterNum;
+                    return { ...c, completedChapters: Math.max(0, next) };
+                })
+            );
+        },
+        [updateCourses]
+    );
+
     const handleDeleteDeliverable = useCallback(
         (courseId: string, deliverableId: string) => {
-            updateCourses((prev) =>
-                prev.map((c) => {
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => {
                     if (c.id !== courseId) return c;
                     return {
                         ...c,
-                        deliverables: c.deliverables?.filter((d) => d.id !== deliverableId),
+                        deliverables: c.deliverables?.filter((d: any) => d.id !== deliverableId),
                     };
                 })
             );
@@ -354,7 +409,7 @@ export function useCourses() {
 
     const sortedCourses = useMemo(
         () =>
-            [...courses].sort((a, b) => {
+            [...courses].sort((a: Course, b: Course) => {
                 const aFocus = getCurrentFocus(a);
                 const bFocus = getCurrentFocus(b);
 
@@ -371,8 +426,8 @@ export function useCourses() {
 
     const overallProgress = useMemo(() => {
         if (courses.length === 0) return 0;
-        const total = courses.reduce((s, c) => s + c.totalChapters, 0);
-        const done = courses.reduce((s, c) => s + c.completedChapters, 0);
+        const total = courses.reduce((s: number, c: Course) => s + c.totalChapters, 0);
+        const done = courses.reduce((s: number, c: Course) => s + (c.completedChapters || 0), 0);
         return total === 0 ? 0 : Math.round((done / total) * 100);
     }, [courses]);
 
@@ -388,6 +443,8 @@ export function useCourses() {
         handleDeleteCourse,
         handleUpdateProgress,
         handleQuickUpdate,
+        handleLogHours,
+        handleToggleChapter,
         handleToggleDeliverable,
         handleAddDeliverable,
         handleDeleteDeliverable,
