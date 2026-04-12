@@ -174,12 +174,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Admin add button — only when logged in */}
-          {isAdmin && (
-            <div className="mb-3">
-              <AdminButton onAddCourse={openAdd} />
-            </div>
-          )}
 
           {/* Empty state */}
           {courses.length === 0 && (
@@ -201,7 +195,7 @@ export default function Home() {
           {/* ── Dashboard Overview ── */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
             {/* Weekly Plan card */}
-            <Link href="/plan" className="group p-6 rounded-3xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-300">
+            <Link href="/plan" className="group p-6 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl ring-1 ring-white/5 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-300">
               <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4 group-hover:text-blue-400 transition-colors">This Week</p>
               <p className="text-4xl font-black text-white mb-1">
                 {weekTasksDone}<span className="text-zinc-500 text-xl font-bold">/{weekTasksTotal}</span>
@@ -219,7 +213,7 @@ export default function Home() {
             </Link>
 
             {/* Courses count */}
-            <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/10">
+            <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl ring-1 ring-white/5">
               <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4">Courses</p>
               <p className="text-4xl font-black text-white mb-1">
                 {courses.filter((c: Course) => c.itemType !== "project").length}
@@ -284,23 +278,9 @@ export default function Home() {
         })()}
       </div>
 
-      {/* Footer: sign in / out */}
-      <div className="max-w-4xl mx-auto px-6 pb-10 flex justify-center">
-        {session ? (
-          <button
-            onClick={() => signOut()}
-            className="text-xs text-zinc-700 hover:text-zinc-400 transition-colors font-medium"
-          >
-            Sign out ({session.user?.name || session.user?.email})
-          </button>
-        ) : (
-          <button
-            onClick={() => signIn("google")}
-            className="text-xs text-zinc-700 hover:text-zinc-400 transition-colors font-medium"
-          >
-            Admin sign in
-          </button>
-        )}
+      {/* Footer: Admin controls */}
+      <div className="max-w-4xl mx-auto px-6 pb-20">
+        <AdminButton onAddCourse={openAdd} />
       </div>
     </div>
   );
