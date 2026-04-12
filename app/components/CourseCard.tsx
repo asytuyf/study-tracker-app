@@ -77,7 +77,7 @@ export default function CourseCard({
     currentWeekMonday.setDate(diff);
     currentWeekMonday.setHours(0, 0, 0, 0);
     const mondayStr = currentWeekMonday.toISOString().split('T')[0];
-    const weeklyHours = course.weeklyLogs?.find(l => l.date === mondayStr)?.hours || 0;
+    const weeklyHours = (course.weeklyLogs || []).find((l: any) => l.date === mondayStr)?.hours || 0;
     const hourGoal = course.weeklyHourGoal || 10;
     const hourPercent = (weeklyHours / hourGoal) * 100;
 
@@ -149,10 +149,10 @@ export default function CourseCard({
                         </div>
                         {isAdmin && (
                             <div className="flex gap-2 mt-3">
-                                {[1, 2, 5].map(h => (
+                                {[1, 2, 5].map((h: number) => (
                                     <button
                                         key={h}
-                                        onClick={() => onLogHours?.(course.id, weeklyHours + h)}
+                                        onClick={() => onLogHours?.(course.id, h)}
                                         className="px-2 py-1 rounded-md bg-white/5 border border-white/5 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-white/10 transition-all"
                                     >
                                         +{h}h

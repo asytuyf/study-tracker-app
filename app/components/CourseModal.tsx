@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Course, Milestone } from "../types";
 
 interface CourseModalProps {
@@ -47,11 +47,11 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     };
 
     const handleUpdateMidterm = (id: string, updates: Partial<Milestone>) => {
-        setMidterms(midterms.map(m => m.id === id ? { ...m, ...updates } : m));
+        setMidterms((prev: Milestone[]) => prev.map((m: Milestone) => m.id === id ? { ...m, ...updates } : m));
     };
 
     const handleRemoveMidterm = (id: string) => {
-        setMidterms(midterms.filter(m => m.id !== id));
+        setMidterms((prev: Milestone[]) => prev.filter((m: Milestone) => m.id !== id));
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -271,7 +271,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             )}
 
                             <div className="space-y-3">
-                                {midterms.map((midterm, index) => (
+                                {midterms.map((midterm: Milestone, index: number) => (
                                     <div key={midterm.id} className="p-4 rounded-xl bg-zinc-950/40 border border-white/5 space-y-3 relative group/midterm">
                                         <button
                                             type="button"

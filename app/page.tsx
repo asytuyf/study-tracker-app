@@ -185,7 +185,7 @@ export default function Home() {
           <div className="mb-12">
             <CurrentPlan
               courses={courses}
-              onEditCourse={(c) => {
+              onEditCourse={(c: Course) => {
                 setModal({ type: "addEdit", course: c });
               }}
             />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCourses } from "../hooks/useCourses";
+import { Course } from "../types";
 import WeeklyAnalysis from "../components/WeeklyAnalysis";
 import BubbleCluster from "../components/BubbleCluster";
 import Link from "next/link";
@@ -42,7 +43,7 @@ export default function WeeklyAnalysisPage() {
 
                     {/* Detailed Breakdown could go here */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {courses.filter(c => c.itemType === "project" || (c.weeklyHourGoal && c.weeklyHourGoal > 0)).map(course => (
+                        {courses.filter((c: Course) => c.itemType === "project" || (c.weeklyHourGoal && c.weeklyHourGoal > 0)).map((course: Course) => (
                             <div key={course.id} className="p-8 rounded-3xl border border-white/10 bg-white/[0.02] backdrop-blur-xl">
                                 <h3 className="text-xl font-bold text-white mb-4">{course.name}</h3>
                                 <div className="space-y-4">

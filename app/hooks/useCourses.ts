@@ -403,7 +403,7 @@ export function useCourses() {
     );
 
     const behindCourses = useMemo(
-        () => courses.filter((c) => getStatus(c) === "behind"),
+        () => courses.filter((c: Course) => getStatus(c) === "behind"),
         [courses]
     );
 
