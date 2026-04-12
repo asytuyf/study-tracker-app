@@ -19,7 +19,10 @@
     ],
     "notionLink": "https://www.notion.so/Linear-algebra-2-27cedf02476080e8b5d9dd4eec514728",
     "description": "- 6 sheets (12 pages) (Handwritten or not)\n\n- Office hours with Cara HOBOHM\n\n- There should be name and surname on all submitted sheets of papers.",
-    "notebookLMLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed"
+    "notebookLMLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed",
+    "itemType": "course",
+    "weeklyLogs": [],
+    "chapterSchedule": []
   },
   {
     "name": "Theoritical computer science",
@@ -35,7 +38,10 @@
     "midterms": [],
     "notionLink": "https://www.notion.so/Theoretical-computer-science-30cedf02476080278f7ff786d3a30077",
     "description": "I need a 9.1 with my old homework grades and don't forget to add a note with the year so they count your homework : 22-23\nPlease keep up with this, I will skip the test midterm for now I need to at least catch up to the midterm stuff this or next week (LA2 midterm).",
-    "notebookLMLink": "https://notebooklm.google.com/notebook/29ae3cec-7404-4cb5-8e56-9194205a19e2"
+    "notebookLMLink": "https://notebooklm.google.com/notebook/29ae3cec-7404-4cb5-8e56-9194205a19e2",
+    "itemType": "course",
+    "weeklyLogs": [],
+    "chapterSchedule": []
   },
   {
     "name": "Analysis 1",
@@ -49,7 +55,10 @@
     "id": "9b5f2488-a5ae-437e-9878-46a6464f89b7",
     "color": "from-sky-500 to-blue-400",
     "notionLink": "https://www.notion.so/Analysis-1-277edf024760808e8aa3f781fa321348",
-    "description": "Catch up during the holidays (!!!)"
+    "description": "Catch up during the holidays (!!!)",
+    "itemType": "course",
+    "weeklyLogs": [],
+    "chapterSchedule": []
   },
   {
     "name": "Discrete mathematics 2",
@@ -62,6 +71,23 @@
     "midtermCompleted": false,
     "id": "e1105728-ad9a-4b8d-8764-3a438724e26c",
     "color": "from-indigo-500 to-violet-400",
-    "notionLink": "https://www.notion.so/Discrete-math-2-27cedf02476080a38257e30e9ff98a31"
+    "notionLink": "https://www.notion.so/Discrete-math-2-27cedf02476080a38257e30e9ff98a31",
+    "itemType": "course",
+    "weeklyLogs": [],
+    "chapterSchedule": []
+  },
+  {
+    "name": "BSP 6",
+    "itemType": "project",
+    "courseType": "self-study",
+    "startDate": "2026-02-11",
+    "examDate": "2026-07-01",
+    "totalChapters": 0,
+    "completedChapters": 0,
+    "weeklyHourGoal": 10,
+    "description": "Midterm prognosis of geomagnetic storms",
+    "notionLink": "https://www.notion.so/BSP-6-Midterm-prognosis-of-geomagnetic-storms-32eedf02476080929b92f3471069942c?source=copy_link",
+    "id": "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6",
+    "color": "from-cyan-500 to-sky-400"
   }
 ]
