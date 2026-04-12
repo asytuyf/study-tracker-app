@@ -23,9 +23,14 @@ const BarContainer = styled.div`
 
 const BarFill = styled.div<{ $width: number; $color: string }>`
   height: 100%;
-  width: ${(props) => Math.min(100, props.$width)}%;
-  background: linear-gradient(90deg, ${(props) => props.$color.split(" ")[1]}, ${(props) => props.$color.split(" ")[3]});
-  box-shadow: 0 0 10px ${(props) => props.$color.split(" ")[1]}44;
+  width: ${(props: { $width: number; $color: string }) => Math.min(100, props.$width)}%;
+  background: ${(props: { $width: number; $color: string }) => {
+        const parts = props.$color.split(" ");
+        const fromColor = parts[0]?.replace("from-", "") || "blue-500";
+        const toColor = parts[1]?.replace("to-", "") || "cyan-400";
+        return `linear-gradient(90deg, var(--${fromColor}, #3b82f6), var(--${toColor}, #22d3ee))`;
+    }};
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
   transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
 `;
 

@@ -21,22 +21,28 @@ const ChapterBox = styled.button<{ $done: boolean; $color: string }>`
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 255, 255, 0.05);
   
-  ${(props) =>
-        props.$done
+  ${(props: { $done: boolean; $color: string }) => {
+        const parts = props.$color.split(" ");
+        const fromColor = parts[0]?.replace("from-", "") || "blue-500";
+        const toColor = parts[1]?.replace("to-", "") || "cyan-400";
+
+        return props.$done
             ? `
-    background: linear-gradient(135deg, ${props.$color.split(" ")[1]} 0%, ${props.$color.split(" ")[3]} 100%);
+    background: linear-gradient(135deg, var(--${fromColor}, #3b82f6) 0%, var(--${toColor}, #22d3ee) 100%);
+    background-color: #3b82f6; /* Fallback */
     color: white;
     box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
   `
             : `
-    background: rgba(255, 255, 10, 0.03);
+    background: rgba(255, 255, 255, 0.03);
     color: rgba(255, 255, 255, 0.3);
     &:hover {
       background: rgba(255, 255, 255, 0.08);
       color: rgba(255, 255, 255, 0.6);
       transform: translateY(-2px);
     }
-  `}
+  `;
+    }}
 `;
 
 interface ChapterGridProps {
@@ -89,8 +95,8 @@ export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridPr
                                         onClick={() => isAdmin && onToggle(ch)}
                                         disabled={!isAdmin}
                                         className={`px-2 py-1 rounded-md text-[10px] font-bold transition-all ${ch <= course.completedChapters
-                                                ? "bg-white/10 text-white"
-                                                : "bg-zinc-900/50 text-zinc-600 hover:text-zinc-400"
+                                            ? "bg-white/10 text-white"
+                                            : "bg-zinc-900/50 text-zinc-600 hover:text-zinc-400"
                                             }`}
                                     >
                                         Ch. {ch}

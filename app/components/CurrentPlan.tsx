@@ -30,15 +30,21 @@ const PriorityCard = styled.div<{ $gradient: string }>`
     left: 0;
     width: 4px;
     height: 100%;
-    background: linear-gradient(to bottom, ${(props) => props.$gradient.split(" ")[1]}, ${(props) => props.$gradient.split(" ")[3]});
+    background: ${(props: { $gradient: string }) => {
+        const parts = props.$gradient.split(" ");
+        const fromColor = parts[0]?.replace("from-", "") || "blue-500";
+        const toColor = parts[1]?.replace("to-", "") || "cyan-400";
+        return `linear-gradient(to bottom, var(--${fromColor}, #3b82f6), var(--${toColor}, #22d3ee))`;
+    }};
   }
 `;
 
 interface CurrentPlanProps {
     courses: Course[];
+    onEditCourse: (course: Course) => void;
 }
 
-export default function CurrentPlan({ courses }: CurrentPlanProps) {
+export default function CurrentPlan({ courses, onEditCourse }: CurrentPlanProps) {
     const behindItems = courses.filter(c => getStatus(c) === "behind");
 
     const urgentTasks: { courseName: string; task: Deliverable; color: string }[] = [];
@@ -73,7 +79,12 @@ export default function CurrentPlan({ courses }: CurrentPlanProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {behindItems.slice(0, 2).map(course => (
-                    <PriorityCard key={course.id} $gradient={course.color}>
+                    <PriorityCard
+                        key={course.id}
+                        $gradient={course.color}
+                        onClick={() => onEditCourse(course)}
+                        className="cursor-pointer hover:bg-white/[0.05] transition-colors"
+                    >
                         <p className="text-[10px] font-black uppercase tracking-widest text-red-400 mb-2 flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
                             Action Required
