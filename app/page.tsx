@@ -180,7 +180,7 @@ export default function Home() {
             <div className="text-center py-16 animate-fade-in rounded-3xl border border-dashed border-white/10 mb-10">
               <h3 className="text-xl font-black text-white mb-2 italic uppercase">Ready to start?</h3>
               <p className="text-zinc-500 text-sm">
-                {isAdmin ? "Add your first course or project above." : "Sign in to populate your dashboard."}
+                {isAdmin ? "Add your first course or project below." : "Sign in to populate your dashboard."}
               </p>
             </div>
           )}
@@ -279,7 +279,7 @@ export default function Home() {
       </div>
 
       {/* Footer: Admin controls */}
-      <div className="max-w-4xl mx-auto px-6 pb-20">
+      <div className="max-w-4xl mx-auto px-6 pt-12 pb-32">
         <AdminButton onAddCourse={openAdd} />
       </div>
     </div>

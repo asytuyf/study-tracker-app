@@ -59,7 +59,22 @@ export default function CourseCard({
     const progressPercent = Math.min((course.completedChapters / target) * 100, 100);
     const expectedPercent = target > 0 ? Math.min((expected / target) * 100, 100) : 0;
 
-    const isComplete = course.completedChapters >= course.totalChapters;
+    // Current week's hours for project — timezone-safe local date
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const mondayDate = new Date(now);
+    mondayDate.setDate(now.getDate() + daysToMonday);
+    const mondayStr = `${mondayDate.getFullYear()}-${String(mondayDate.getMonth() + 1).padStart(2, "0")}-${String(mondayDate.getDate()).padStart(2, "0")}`;
+
+    const weeklyHours = (course.weeklyLogs || []).find((l: any) => l.date === mondayStr)?.hours || 0;
+    const hourGoal = course.weeklyHourGoal || 10;
+    const hourPercent = (weeklyHours / hourGoal) * 100;
+
+    const isComplete = isProject
+        ? weeklyHours >= hourGoal
+        : course.completedChapters >= course.totalChapters;
+
     const isUrgent = focus.type === "midterm" && focus.milestone
         ? getDaysUntil(focus.milestone.date) <= 7 && getDaysUntil(focus.milestone.date) >= 0
         : daysToExam <= 7 && daysToExam >= 0;
@@ -69,21 +84,6 @@ export default function CourseCard({
     const plannedRate = isSelfStudy ? getPlannedChaptersPerWeek(course) : null;
     const currentRate = isSelfStudy ? getCurrentChaptersPerWeek(course) : null;
     const rateEscalated = plannedRate !== null && currentRate !== null && currentRate > plannedRate + 0.1;
-
-    // Current week's hours for project — timezone-safe local date
-    function localDateStr(d: Date): string {
-        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-    }
-    const now = new Date();
-    const dayOfWeek = now.getDay();
-    const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-    const mondayDate = new Date(now);
-    mondayDate.setDate(now.getDate() + daysToMonday);
-    const mondayStr = localDateStr(mondayDate);
-
-    const weeklyHours = (course.weeklyLogs || []).find((l: any) => l.date === mondayStr)?.hours || 0;
-    const hourGoal = course.weeklyHourGoal || 10;
-    const hourPercent = (weeklyHours / hourGoal) * 100;
 
     return (
         <div
@@ -252,19 +252,21 @@ export default function CourseCard({
                 <div className="flex gap-1.5">
                     {isAdmin && (
                         <>
-                            <button
-                                onClick={onUpdate}
-                                className="flex-1 py-2 px-2 rounded-lg bg-white/5 hover:bg-white/10 text-white text-[11px] font-bold transition-all border border-white/10 text-center"
-                            >
-                                {isProject ? "LOG" : "UP"}
-                            </button>
                             {!isProject && (
-                                <button
-                                    onClick={() => onQuickUpdate?.(+1)}
-                                    className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-lg font-bold border border-white/5 flex items-center justify-center transition-all"
-                                >
-                                    +
-                                </button>
+                                <>
+                                    <button
+                                        onClick={onUpdate}
+                                        className="flex-1 py-2 px-2 rounded-lg bg-white/5 hover:bg-white/10 text-white text-[11px] font-bold transition-all border border-white/10 text-center"
+                                    >
+                                        UP
+                                    </button>
+                                    <button
+                                        onClick={() => onQuickUpdate?.(+1)}
+                                        className="w-8 h-8 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 text-lg font-bold border border-white/5 flex items-center justify-center transition-all"
+                                    >
+                                        +
+                                    </button>
+                                </>
                             )}
                         </>
                     )}
