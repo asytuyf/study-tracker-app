@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 import { Course } from "./types";
 import { useCourses, SaveStatus, getDaysUntil } from "./hooks/useCourses";
 import CourseCard from "./components/CourseCard";
@@ -25,11 +25,10 @@ function getTodayLabel() {
 function getCurrentWeekMonday(): string {
   const d = new Date();
   const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const diff = day === 0 ? -6 : 1 - day;
   const monday = new Date(d);
-  monday.setDate(diff);
-  monday.setHours(0, 0, 0, 0);
-  return monday.toISOString().split("T")[0];
+  monday.setDate(d.getDate() + diff);
+  return `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, "0")}-${String(monday.getDate()).padStart(2, "0")}`;
 }
 
 // Save status indicator component
@@ -166,12 +165,8 @@ export default function Home() {
                   } : undefined}
                   onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
                   onToggleChapter={handleToggleChapter}
-                  onLogHours={(id, hoursToAdd) => {
-                    const mondayStr = getCurrentWeekMonday();
-                    const log = (course.weeklyLogs || []).find(l => l.date === mondayStr);
-                    const current = log?.hours || 0;
-                    const next = hoursToAdd === 0 ? 0 : current + hoursToAdd;
-                    handleLogHours(id, mondayStr, next);
+                  onLogHours={(id, hours) => {
+                    handleLogHours(id, getCurrentWeekMonday(), hours);
                   }}
                   isAdmin={isAdmin}
                 />
@@ -202,7 +197,7 @@ export default function Home() {
           </div>
 
           {/* ── Dashboard Overview ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
             {/* Weekly Plan card */}
             <Link href="/plan" className="group p-6 rounded-3xl bg-white/[0.02] border border-white/8 hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-300">
               <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4 group-hover:text-blue-400 transition-colors">This Week</p>
@@ -218,7 +213,7 @@ export default function Home() {
                   />
                 </div>
               )}
-              <p className="text-[10px] text-blue-500 font-bold mt-3 group-hover:gap-2 transition-all">Open plan →</p>
+              <p className="text-[10px] text-blue-500 font-bold mt-3">Open plan →</p>
             </Link>
 
             {/* Courses count */}
@@ -228,29 +223,11 @@ export default function Home() {
                 {courses.filter((c: Course) => c.itemType !== "project").length}
               </p>
               <p className="text-xs text-zinc-600">being tracked</p>
-              <div className="mt-4 flex items-center gap-3">
+              <div className="mt-4">
                 <span className="text-xs text-zinc-700">
                   {courses.filter((c: Course) => c.itemType === "project").length} project{courses.filter((c: Course) => c.itemType === "project").length !== 1 ? "s" : ""}
                 </span>
               </div>
-            </div>
-
-            {/* Upcoming deadlines */}
-            <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/8">
-              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4">Next Deadline</p>
-              {(() => {
-                const upcoming = [...courses]
-                  .filter((c: Course) => c.examDate)
-                  .sort((a: Course, b: Course) => getDaysUntil(a.examDate) - getDaysUntil(b.examDate))[0];
-                if (!upcoming) return <p className="text-zinc-600 text-sm">Nothing scheduled</p>;
-                const days = getDaysUntil(upcoming.examDate);
-                return (
-                  <>
-                    <p className="text-4xl font-black text-white mb-1">{days}d</p>
-                    <p className="text-xs text-zinc-600 truncate">{upcoming.name}</p>
-                  </>
-                );
-              })()}
             </div>
           </div>
 
@@ -303,6 +280,25 @@ export default function Home() {
             />
           );
         })()}
+      </div>
+
+      {/* Footer: sign in / out */}
+      <div className="max-w-4xl mx-auto px-6 pb-10 flex justify-center">
+        {session ? (
+          <button
+            onClick={() => signOut()}
+            className="text-xs text-zinc-700 hover:text-zinc-400 transition-colors font-medium"
+          >
+            Sign out ({session.user?.name || session.user?.email})
+          </button>
+        ) : (
+          <button
+            onClick={() => signIn("google")}
+            className="text-xs text-zinc-700 hover:text-zinc-400 transition-colors font-medium"
+          >
+            Admin sign in
+          </button>
+        )}
       </div>
     </div>
   );

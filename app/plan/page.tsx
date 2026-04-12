@@ -7,13 +7,19 @@ import Link from "next/link";
 import BubbleCluster from "../components/BubbleCluster";
 import { useSession } from "next-auth/react";
 
+function localDateStr(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
 function getMonday(d: Date): string {
     const day = d.getDay();
     const diff = d.getDate() - day + (day === 0 ? -6 : 1);
     const monday = new Date(d);
     monday.setDate(diff);
-    monday.setHours(0, 0, 0, 0);
-    return monday.toISOString().split("T")[0];
+    return localDateStr(monday);
 }
 
 function formatWeekLabel(weekDate: string): string {
@@ -103,8 +109,8 @@ export default function PlanPage() {
                             key={w}
                             onClick={() => setSelectedWeek(w)}
                             className={`px-4 py-2 rounded-2xl text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${w === selectedWeek
-                                    ? "bg-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]"
-                                    : "bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-zinc-300"
+                                ? "bg-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                                : "bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-zinc-300"
                                 }`}
                         >
                             {w === currentWeek ? "This Week" : formatWeekLabel(w)}
@@ -197,8 +203,8 @@ export default function PlanPage() {
                                             onClick={() => isAdmin && handleTogglePlanTask(task.id)}
                                             disabled={!isAdmin}
                                             className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${isAdmin
-                                                    ? "border-zinc-600 hover:border-blue-400 cursor-pointer"
-                                                    : "border-zinc-700 cursor-default"
+                                                ? "border-zinc-600 hover:border-blue-400 cursor-pointer"
+                                                : "border-zinc-700 cursor-default"
                                                 }`}
                                         />
                                         <div className="flex-1 min-w-0">

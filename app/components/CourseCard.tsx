@@ -70,13 +70,17 @@ export default function CourseCard({
     const currentRate = isSelfStudy ? getCurrentChaptersPerWeek(course) : null;
     const rateEscalated = plannedRate !== null && currentRate !== null && currentRate > plannedRate + 0.1;
 
-    // Current week's hours for project
-    const currentWeekMonday = new Date();
-    const day = currentWeekMonday.getDay(),
-        diff = currentWeekMonday.getDate() - day + (day === 0 ? -6 : 1);
-    currentWeekMonday.setDate(diff);
-    currentWeekMonday.setHours(0, 0, 0, 0);
-    const mondayStr = currentWeekMonday.toISOString().split('T')[0];
+    // Current week's hours for project — timezone-safe local date
+    function localDateStr(d: Date): string {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    }
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const daysToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const mondayDate = new Date(now);
+    mondayDate.setDate(now.getDate() + daysToMonday);
+    const mondayStr = localDateStr(mondayDate);
+
     const weeklyHours = (course.weeklyLogs || []).find((l: any) => l.date === mondayStr)?.hours || 0;
     const hourGoal = course.weeklyHourGoal || 10;
     const hourPercent = (weeklyHours / hourGoal) * 100;
@@ -148,22 +152,24 @@ export default function CourseCard({
                             />
                         </div>
                         {isAdmin && (
-                            <div className="flex gap-2 mt-3">
-                                {[1, 2, 5].map((h: number) => (
-                                    <button
-                                        key={h}
-                                        onClick={() => onLogHours?.(course.id, h)}
-                                        className="px-2 py-1 rounded-md bg-white/5 border border-white/5 text-[10px] font-bold text-zinc-400 hover:text-white hover:bg-white/10 transition-all"
-                                    >
-                                        +{h}h
-                                    </button>
-                                ))}
-                                <button
-                                    onClick={() => onLogHours?.(course.id, 0)}
-                                    className="px-2 py-1 rounded-md bg-white/5 border border-white/5 text-[10px] font-bold text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all ml-auto"
-                                >
-                                    RESET
-                                </button>
+                            <div className="flex items-center gap-2 mt-3">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    step="0.5"
+                                    defaultValue={weeklyHours}
+                                    key={weeklyHours} // re-mount when external value changes
+                                    onBlur={(e) => {
+                                        const val = parseFloat(e.target.value);
+                                        if (!isNaN(val) && val >= 0) onLogHours?.(course.id, val);
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+                                    }}
+                                    className="w-20 px-2 py-1 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm font-bold text-center focus:outline-none focus:border-amber-500 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                />
+                                <span className="text-zinc-600 text-[10px] font-bold">hrs this week</span>
                             </div>
                         )}
                     </div>
