@@ -107,6 +107,13 @@
       "done": false,
       "courseId": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
       "weekDate": "2026-04-13"
+    },
+    {
+      "id": "23068557-6975-4ed9-9b95-d5b567a616f2",
+      "text": "2 tutor sessions",
+      "done": false,
+      "courseId": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
+      "weekDate": "2026-04-13"
     }
   ]
 }
