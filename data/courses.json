@@ -88,6 +88,14 @@
     "description": "Midterm prognosis of geomagnetic storms",
     "notionLink": "https://www.notion.so/BSP-6-Midterm-prognosis-of-geomagnetic-storms-32eedf02476080929b92f3471069942c?source=copy_link",
     "id": "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6",
-    "color": "from-cyan-500 to-sky-400"
+    "color": "from-cyan-500 to-sky-400",
+    "weeklyLogs": [
+      {
+        "id": "3476cde6-039a-4f0c-87d9-f4afb35f0543",
+        "date": "2026-04-12",
+        "hours": 1
+      }
+    ],
+    "chapterSchedule": []
   }
 ]
