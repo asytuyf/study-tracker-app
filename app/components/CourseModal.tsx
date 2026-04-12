@@ -242,7 +242,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                     <div>
                         <label className="block text-sm text-zinc-400 mb-2">
                             Chapter Schedule (JSON)
-                            <span className="text-zinc-600 text-[10px] ml-2 tracking-tight">[{'{"week": 1, "chapters": [1, 2]}', ...}]</span>
+                            <span className="text-zinc-600 text-[10px] ml-2 tracking-tight">{`[{"week": 1, "chapters": [1, 2]}, ...]`}</span>
                         </label>
                         <textarea
                             value={chapterScheduleJson}

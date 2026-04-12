@@ -243,7 +243,14 @@ export default function Home() {
                   } : undefined}
                   onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
                   onToggleChapter={handleToggleChapter}
-                  onLogHours={handleLogHours}
+                  onLogHours={(id, hours) => {
+                    const d = new Date();
+                    const day = d.getDay();
+                    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+                    const monday = new Date(d.setDate(diff));
+                    monday.setHours(0, 0, 0, 0);
+                    handleLogHours(id, monday.toISOString().split("T")[0], hours);
+                  }}
                   isAdmin={isAdmin}
                 />
               </div>
