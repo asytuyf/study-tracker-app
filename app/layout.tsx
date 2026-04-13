@@ -12,7 +12,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Study Tracker",
   description: "Stay on track for your exams",
+  icons: {
+    icon: "/favicon.jpg",
+    apple: "/favicon.jpg",
+  },
 };
+
 
 
 export default function RootLayout({
