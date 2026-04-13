@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   title: "Study Tracker",
   description: "Stay on track for your exams",
   icons: {
-    icon: "/favicon.jpg",
-    apple: "/favicon.jpg",
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
   },
 };
 
