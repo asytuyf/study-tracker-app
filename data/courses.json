@@ -109,6 +109,12 @@
           "name": "2 papers to read",
           "completed": false,
           "category": "scientific"
+        },
+        {
+          "id": "e5d43350-3e0c-41bd-b911-50622a7dad0f",
+          "name": "Continue working on storm detection (multi-storm & small scale storms)",
+          "completed": false,
+          "category": "implementation"
         }
       ]
     }
