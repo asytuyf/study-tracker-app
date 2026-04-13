@@ -164,6 +164,16 @@
         "934da421-d4ab-4b28-9d4b-4207e05f4dee"
       ],
       "weekDate": "2026-04-13"
+    },
+    {
+      "id": "15159b0f-78cb-4084-80a9-de5cdd45619e",
+      "text": "1 ch + exercises",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7",
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-04-20"
     }
   ]
 }
