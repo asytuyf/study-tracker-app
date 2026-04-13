@@ -155,6 +155,15 @@
         "f3be84a4-c578-42e7-b59b-839fc9ddb8a6"
       ],
       "weekDate": "2026-04-20"
+    },
+    {
+      "id": "999f799c-36eb-4b23-8a96-518263641dbe",
+      "text": "Weekend sheet cheat",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-04-13"
     }
   ]
 }
