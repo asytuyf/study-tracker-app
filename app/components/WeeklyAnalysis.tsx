@@ -1,7 +1,7 @@
 "use client";
 
 import { Course, WeeklyPlanTask } from "../types";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 interface WeeklyAnalysisProps {
     courses: Course[];
@@ -20,12 +20,30 @@ function getCurrentWeekMonday(): string {
 }
 
 export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdmin }: WeeklyAnalysisProps) {
-    const currentWeek = useMemo(() => getCurrentWeekMonday(), []);
+    const actualCurrentWeek = useMemo(() => getCurrentWeekMonday(), []);
+    const [selectedWeek, setSelectedWeek] = useState(actualCurrentWeek);
 
-    // Filter tasks for this week
+    const weeks: string[] = useMemo(() => {
+        const result: string[] = [];
+        for (let i = 0; i < 5; i++) {
+            const d = new Date(actualCurrentWeek + "T12:00:00");
+            d.setDate(d.getDate() + i * 7);
+            result.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
+        }
+        return result;
+    }, [actualCurrentWeek]);
+
+    function formatWeekLabel(weekDate: string): string {
+        const start = new Date(weekDate + "T00:00:00");
+        const end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        return `${start.toLocaleDateString("en-US", { month: "short", day: "numeric" })} – ${end.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
+    }
+
+    // Filter tasks for the selected week
     const weekTasks = useMemo(() =>
-        planTasks.filter(t => t.weekDate === currentWeek),
-        [planTasks, currentWeek]);
+        planTasks.filter(t => t.taskType !== "deadline" && t.weekDate === selectedWeek),
+        [planTasks, selectedWeek]);
 
     // Projects with goals
     const allProjects = useMemo(() =>
@@ -45,7 +63,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
 
     // Helper to render a project card
     const renderProjectCard = (p: Course, idx: number, isBranch: boolean) => {
-        const log = (p.weeklyLogs || []).find(l => l.date === currentWeek);
+        const log = (p.weeklyLogs || []).find(l => l.date === selectedWeek);
         const hours = log?.hours || 0;
         const goal = p.weeklyHourGoal || 10;
         const percent = Math.min(100, (hours / goal) * 100);
@@ -98,6 +116,27 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
 
     return (
         <div className="mt-16 mb-12 animate-fade-in relative z-10">
+            {/* Week selector */}
+            <div className="flex justify-center mb-12 relative z-20">
+                <div className="flex gap-2 group min-h-[40px] items-start hover:bg-white/[0.02] hover:p-1 hover:-m-1 rounded-[20px] transition-all w-max bg-[#09090b]/80 backdrop-blur-md">
+                    {weeks.map((w: string) => {
+                        const isSelected = w === selectedWeek;
+                        return (
+                            <button
+                                key={w}
+                                onClick={() => setSelectedWeek(w)}
+                                className={`rounded-2xl text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${
+                                    isSelected
+                                        ? "px-4 py-2 bg-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                                        : "w-0 px-0 py-2 opacity-0 overflow-hidden group-hover:w-auto group-hover:px-4 group-hover:opacity-100 bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-zinc-300"
+                                }`}
+                            >
+                                {w === actualCurrentWeek ? "This Week" : formatWeekLabel(w)}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
             <div className="flex items-center gap-4 mb-10">
                 <div className="flex-1 h-px bg-white/5" />
                 <div className="text-center px-4">
