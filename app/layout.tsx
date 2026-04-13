@@ -12,12 +12,8 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Study Tracker",
   description: "Stay on track for your exams",
-  icons: {
-    icon: [
-      { url: '/favicon.jpg', type: 'image/jpeg' },
-    ],
-  },
 };
+
 
 export default function RootLayout({
   children,
