@@ -102,7 +102,15 @@
           "hours": 1
         }
       ],
-      "chapterSchedule": []
+      "chapterSchedule": [],
+      "deliverables": [
+        {
+          "id": "1925c6f0-c050-44b8-bc53-25b9b92b0ea9",
+          "name": "2 papers to read",
+          "completed": false,
+          "category": "scientific"
+        }
+      ]
     }
   ],
   "planTasks": [
