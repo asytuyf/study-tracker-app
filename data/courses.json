@@ -156,7 +156,7 @@
     {
       "id": "224f2dc1-77c2-4894-af28-86f41c20c832",
       "text": "2 tutor sessions",
-      "done": true,
+      "done": false,
       "courseIds": [
         "934da421-d4ab-4b28-9d4b-4207e05f4dee"
       ],
