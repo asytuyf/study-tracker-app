@@ -181,7 +181,14 @@
       "courseIds": [
         "f3be84a4-c578-42e7-b59b-839fc9ddb8a6"
       ],
-      "weekDate": "2026-04-20"
+      "weekDate": "2026-04-20",
+      "subtasks": [
+        {
+          "id": "3fb17bd1-7e44-4352-ac00-f08fd96412db",
+          "text": "Book page 50",
+          "done": false
+        }
+      ]
     },
     {
       "id": "999f799c-36eb-4b23-8a96-518263641dbe",
