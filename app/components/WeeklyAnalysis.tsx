@@ -112,7 +112,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
                 {/* ─── MAIN TRUNK ─── */}
                 <div className="relative flex-1 w-full pl-8 sm:pl-0">
                     {/* The timeline center line */}
-                    <div className="absolute left-[15px] sm:left-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-blue-500/80 via-zinc-800 to-transparent sm:-translate-x-1/2 rounded-full" />
+                    <div className="absolute left-[15px] sm:left-1/2 top-[60px] bottom-4 w-[2px] bg-gradient-to-b from-blue-500/80 via-zinc-800 to-transparent sm:-translate-x-1/2 rounded-full" />
 
                     <div className="space-y-12 pb-10">
                         {/* 1. Projects (Non-BSP) */}
@@ -180,7 +180,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
                     <div className="w-full lg:w-[320px] shrink-0 relative pl-8 mt-8 lg:mt-0 opacity-90 hover:opacity-100 transition-opacity duration-500">
                         
                         {/* Vertical branch line for the side items */}
-                        <div className="absolute left-[15px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-cyan-500/80 via-zinc-800 to-transparent rounded-full" />
+                        <div className="absolute left-[15px] top-[100px] bottom-4 w-[2px] bg-gradient-to-b from-cyan-500/80 via-zinc-800 to-transparent rounded-full" />
                         
                         {/* Branch Title Area */}
                         <div className="relative z-10 mb-8 mt-2 lg:mt-0 flex items-center gap-3">
