@@ -91,6 +91,7 @@ export default function Home() {
     handleDeleteDeliverable,
     handleToggleChapter,
     handleLogHours,
+    handleTogglePlanTask,
   } = useCourses();
 
   const [modal, setModal] = useState<ModalState>({ type: "none" });
@@ -244,7 +245,12 @@ export default function Home() {
           </div>
 
           {/* Weekly hours analysis */}
-          <WeeklyAnalysis courses={courses} />
+          <WeeklyAnalysis
+            courses={courses}
+            planTasks={planTasks}
+            onToggleTask={handleTogglePlanTask}
+            isAdmin={isAdmin}
+          />
         </div>
 
         {/* Modals */}

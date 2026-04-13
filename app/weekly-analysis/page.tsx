@@ -7,7 +7,12 @@ import BubbleCluster from "../components/BubbleCluster";
 import Link from "next/link";
 
 export default function WeeklyAnalysisPage() {
-    const { courses, mounted } = useCourses();
+    const {
+        courses,
+        planTasks,
+        handleTogglePlanTask,
+        mounted
+    } = useCourses();
 
     if (!mounted) {
         return (
@@ -38,7 +43,12 @@ export default function WeeklyAnalysisPage() {
 
                 <div className="space-y-12">
                     <section>
-                        <WeeklyAnalysis courses={courses} />
+                        <WeeklyAnalysis
+                            courses={courses}
+                            planTasks={planTasks}
+                            onToggleTask={handleTogglePlanTask}
+                            isAdmin={true}
+                        />
                     </section>
 
                     {/* Detailed Breakdown could go here */}
