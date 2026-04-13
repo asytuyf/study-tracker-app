@@ -127,7 +127,14 @@
       "courseIds": [
         "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
       ],
-      "weekDate": "2026-04-13"
+      "weekDate": "2026-04-13",
+      "subtasks": [
+        {
+          "id": "ad849e43-0d6b-4216-b9cb-3c5e37c4f9dc",
+          "text": "Read both papers that's for geomagnetic storms phases",
+          "done": false
+        }
+      ]
     },
     {
       "id": "9e3cc6ed-774f-4c2d-89b7-24d0b20271e1",
