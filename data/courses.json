@@ -121,6 +121,15 @@
   ],
   "planTasks": [
     {
+      "id": "a5f163d9-5521-49c1-9c89-d3d3a8dfc339",
+      "text": "Tuesday + Wednesday grind",
+      "done": false,
+      "courseIds": [
+        "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
+      ],
+      "weekDate": "2026-04-13"
+    },
+    {
       "id": "224f2dc1-77c2-4894-af28-86f41c20c832",
       "text": "2 tutor sessions",
       "done": false,
@@ -140,15 +149,6 @@
           "done": false
         }
       ]
-    },
-    {
-      "id": "a5f163d9-5521-49c1-9c89-d3d3a8dfc339",
-      "text": "Tuesday + Wednesday grind",
-      "done": false,
-      "courseIds": [
-        "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
-      ],
-      "weekDate": "2026-04-13"
     },
     {
       "id": "8b60c205-9dbf-4955-adec-2d036eeba3b0",
