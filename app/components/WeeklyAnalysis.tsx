@@ -179,23 +179,11 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
                 {bspProjects.length > 0 && (
                     <div className="w-full lg:w-[350px] shrink-0 relative pl-8 lg:pl-10 mt-8 lg:mt-0 opacity-90 hover:opacity-100 transition-opacity duration-500">
                         
-                        {/* Tree Branch Graphics */}
-                        {/* Desktop: A curved line from the main trunk to this side branch */}
-                        <svg className="hidden lg:block absolute left-[-150px] top-[40px] pointer-events-none z-0" width="160" height="100" fill="none">
-                            <path d="M 0 0 C 120 0, 140 20, 140 60" stroke="#10b981" strokeOpacity="0.4" strokeWidth="2" strokeDasharray="6 6" />
-                        </svg>
-
                         {/* Vertical branch line for the side items */}
-                        <div className="absolute left-[11px] lg:left-[10px] top-[-20px] lg:top-[85px] bottom-4 w-[2px] bg-gradient-to-b from-emerald-500/50 to-transparent" />
-                        
-                        {/* Mobile branch curve up */}
-                        <div className="lg:hidden absolute left-[11px] top-[-20px] w-8 h-[2px] bg-emerald-500/50" />
+                        <div className="absolute left-[11px] lg:left-[10px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-emerald-500/80 via-zinc-800 to-transparent rounded-full" />
                         
                         {/* Branch Title Area */}
-                        <div className="relative z-10 mb-8 mt-2 lg:mt-16 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full border border-emerald-500/20 bg-emerald-500/10 flex items-center justify-center shrink-0">
-                                <span className="text-emerald-500 text-sm">⎇</span>
-                            </div>
+                        <div className="relative z-10 mb-8 mt-2 lg:mt-0 flex items-center gap-3">
                             <div>
                                 <h3 className="text-sm font-black text-white italic tracking-widest uppercase">Long-Term Branch</h3>
                                 <p className="text-[10px] text-zinc-500 font-medium">Runs parallel to main tasks</p>
