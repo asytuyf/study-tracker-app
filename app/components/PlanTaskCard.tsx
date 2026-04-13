@@ -62,7 +62,7 @@ export default function PlanTaskCard({
     const progressPercent = hasSubtasks ? Math.round((doneSubtasks / subtasks.length) * 100) : (task.done ? 100 : 0);
 
     return (
-        <div className={`p-4 rounded-2xl border transition-all group ${task.done ? 'bg-white/[0.01] border-white/5 opacity-60 hover:opacity-80' : (isDeadlineMode ? 'bg-cyan-900/10 border-cyan-500/20 hover:bg-cyan-900/20 hover:border-cyan-500/40' : 'bg-white/[0.03] border-white/8 hover:bg-white/[0.05]')}`}>
+        <div className={`p-4 rounded-2xl border transition-all group backdrop-blur-xl ${task.done ? 'bg-white/[0.03] border-white/10 ring-1 ring-white/5 opacity-50 hover:opacity-80' : (isDeadlineMode ? 'bg-cyan-900/10 border-cyan-500/20 ring-1 ring-cyan-500/10 hover:bg-cyan-900/20 hover:border-cyan-500/40' : 'bg-white/[0.03] border-white/10 ring-1 ring-white/5 hover:bg-white/[0.05]')}`}>
             
             {/* Header row */}
             <div className="flex items-start gap-4">
