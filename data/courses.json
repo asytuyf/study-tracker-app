@@ -127,7 +127,14 @@
       "courseIds": [
         "934da421-d4ab-4b28-9d4b-4207e05f4dee"
       ],
-      "weekDate": "2026-04-13"
+      "weekDate": "2026-04-13",
+      "subtasks": [
+        {
+          "id": "5a872748-93e4-48be-beb1-cf7f0234703a",
+          "text": "Sech 1",
+          "done": false
+        }
+      ]
     },
     {
       "id": "a5f163d9-5521-49c1-9c89-d3d3a8dfc339",
