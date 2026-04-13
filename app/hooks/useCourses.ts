@@ -164,9 +164,34 @@ export function useCourses() {
     useEffect(() => {
         setMounted(true);
 
+        // 1. Load from localStorage immediately so cross-page navigation stays in sync
+        const localRaw = localStorage.getItem("examCoursesV3");
+        let loadedFromLocal = false;
+        if (localRaw) {
+            try {
+                const parsed = JSON.parse(localRaw);
+                if (Array.isArray(parsed)) {
+                    setCourses(parsed);
+                } else {
+                    setCourses(parsed.courses || []);
+                    setPlanTasks(parsed.planTasks || []);
+                    coursesRef.current = parsed.courses || [];
+                    planTasksRef.current = parsed.planTasks || [];
+                }
+                loadedFromLocal = true;
+            } catch {
+                // ignore parse errors
+            }
+        }
+
+        // 2. Fetch from API in background to pick up any server-side changes
         fetch("/api/courses")
             .then((res) => res.json())
             .then((data) => {
+                // If the save queue is pending/saving, skip API override to avoid
+                // overwriting local changes that haven't reached the server yet
+                if (saveTimeoutRef.current) return;
+
                 // Support both old array format and new object format { courses, planTasks }
                 const rawCourses: any[] = Array.isArray(data) ? data : (data.courses || []);
                 const rawPlanTasks: WeeklyPlanTask[] = Array.isArray(data) ? [] : (data.planTasks || []);
@@ -195,20 +220,10 @@ export function useCourses() {
                 setPlanTasks(rawPlanTasks);
             })
             .catch((err) => {
-                console.error("Failed to load courses:", err);
-                const saved = localStorage.getItem("examCoursesV3");
-                if (saved) {
-                    try {
-                        const parsed = JSON.parse(saved);
-                        if (Array.isArray(parsed)) {
-                            setCourses(parsed);
-                        } else {
-                            setCourses(parsed.courses || []);
-                            setPlanTasks(parsed.planTasks || []);
-                        }
-                    } catch {
-                        // ignore
-                    }
+                console.error("Failed to load courses from API:", err);
+                // Already loaded from localStorage above — nothing else to do
+                if (!loadedFromLocal) {
+                    console.error("No local data either:", err);
                 }
             });
     }, []);
