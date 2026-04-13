@@ -412,15 +412,35 @@ export function useCourses() {
 
     // ─── Weekly Plan Task handlers ────────────────────────────────────────────
 
-    const handleAddPlanTask = useCallback((text: string, weekDate: string, courseIds?: string[]) => {
+    const handleAddPlanTask = useCallback((text: string, weekDate: string, courseIds?: string[], taskType: "weekly" | "deadline" = "weekly", deadline?: string, description?: string) => {
         const task: WeeklyPlanTask = {
             id: crypto.randomUUID(),
             text: text.trim(),
             done: false,
             courseIds: courseIds || [],
             weekDate,
+            taskType,
+            deadline,
+            description,
+            subtasks: []
         };
         updatePlanTasks((prev: WeeklyPlanTask[]) => [...prev, task]);
+    }, [updatePlanTasks]);
+
+    const handleUpdatePlanTask = useCallback((id: string, updates: Partial<WeeklyPlanTask>) => {
+        updatePlanTasks((prev: WeeklyPlanTask[]) =>
+            prev.map((t: WeeklyPlanTask) => {
+                if (t.id === id) {
+                    const updated = { ...t, ...updates };
+                    // If subtasks array is sent, check for auto-completion
+                    if (updates.subtasks !== undefined && updated.subtasks && updated.subtasks.length > 0) {
+                        updated.done = updated.subtasks.every((st: any) => st.done);
+                    }
+                    return updated;
+                }
+                return t;
+            })
+        );
     }, [updatePlanTasks]);
 
     const handleTogglePlanTask = useCallback((id: string) => {
@@ -481,6 +501,7 @@ export function useCourses() {
         handleAddDeliverable,
         handleDeleteDeliverable,
         handleAddPlanTask,
+        handleUpdatePlanTask,
         handleTogglePlanTask,
         handleDeletePlanTask,
     };

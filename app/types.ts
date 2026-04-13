@@ -6,12 +6,23 @@ export interface Deliverable {
   category?: "implementation" | "scientific"; // For projects
 }
 
+export interface Subtask {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
 export interface WeeklyPlanTask {
   id: string;
   text: string;
   done: boolean;
   courseIds?: string[]; // Multiple courses allowed
   weekDate: string;     // ISO Monday of the week
+  
+  description?: string;
+  deadline?: string;
+  subtasks?: Subtask[];
+  taskType?: "weekly" | "deadline";
 }
 
 export interface Milestone {
