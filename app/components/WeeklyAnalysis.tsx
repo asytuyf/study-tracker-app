@@ -57,10 +57,10 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
         return (
             <div key={p.id} className={`relative flex flex-col sm:flex-row items-center gap-6 sm:gap-12 group ${isReverse ? 'sm:flex-row-reverse' : ''} ${isBranch ? '!flex-col sm:!flex-row !items-start sm:!gap-4' : ''}`}>
                 {/* Timeline dot */}
-                <div className={`absolute left-[-21px] ${isBranch ? 'sm:left-[-32px] top-6' : 'sm:left-1/2'} w-6 h-6 rounded-full border-4 bg-[#09090b] z-10 ${isBranch ? '' : 'sm:-translate-x-1/2'} transition-all duration-500 ${isDone ? 'border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)] scale-110' : 'border-zinc-800 group-hover:border-blue-500/50'}`}>
+                <div className={`absolute left-[-28px] ${isBranch ? 'sm:left-[-28px] top-6' : 'sm:left-1/2'} w-6 h-6 rounded-full border-4 bg-[#09090b] z-10 ${isBranch ? '' : 'sm:-translate-x-1/2'} transition-all duration-500 ${isDone ? (isBranch ? 'border-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'border-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.3)]') + ' scale-110' : 'border-zinc-800 group-hover:border-blue-500/50'}`}>
                     {isDone && (
                         <div className="absolute inset-0 flex items-center justify-center">
-                            <svg className="w-2.5 h-2.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className={`w-2.5 h-2.5 ${isBranch ? 'text-purple-500' : 'text-emerald-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
                             </svg>
                         </div>
@@ -68,7 +68,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
                 </div>
 
                 {/* Content Card */}
-                <div className={`w-full ${isBranch ? 'w-full' : 'sm:w-[calc(50%-2rem)]'} p-5 rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-xl ring-1 ring-white/5 hover:bg-white/[0.05] transition-all group-hover:translate-y-[-2px] ${isDone ? 'border-emerald-500/20' : ''}`}>
+                <div className={`w-full ${isBranch ? 'w-full' : 'sm:w-[calc(50%-2rem)]'} p-5 rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-xl ring-1 ring-white/5 hover:bg-white/[0.05] transition-all group-hover:translate-y-[-2px] ${isDone ? (isBranch ? 'border-purple-500/20' : 'border-emerald-500/20') : ''}`}>
                     <div className="flex justify-between items-start mb-3">
                         <div>
                             <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-1">{isBranch ? 'Long-Term Goal' : 'Hourly Goal'}</p>
@@ -80,7 +80,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
                     </div>
                     <div className="h-1.5 bg-zinc-900 rounded-full overflow-hidden">
                         <div
-                            className={`h-full transition-all duration-1000 ${isDone ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : 'bg-gradient-to-r from-blue-600 to-cyan-400'}`}
+                            className={`h-full transition-all duration-1000 ${isDone ? (isBranch ? 'bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)]' : 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]') : 'bg-gradient-to-r from-blue-600 to-cyan-400'}`}
                             style={{ width: `${percent}%` }}
                         />
                     </div>
@@ -107,12 +107,12 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
                 <div className="flex-1 h-px bg-white/5" />
             </div>
 
-            <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 max-w-[1400px] mx-auto items-start">
+            <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 max-w-[1400px] mx-auto items-start lg:items-center">
                 
                 {/* ─── MAIN TRUNK ─── */}
                 <div className="relative flex-1 w-full pl-8 sm:pl-0">
                     {/* The timeline center line */}
-                    <div className="absolute left-[11px] sm:left-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-blue-500/80 via-zinc-800 to-transparent sm:-translate-x-1/2 rounded-full" />
+                    <div className="absolute left-[15px] sm:left-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-blue-500/80 via-zinc-800 to-transparent sm:-translate-x-1/2 rounded-full" />
 
                     <div className="space-y-12 pb-10">
                         {/* 1. Projects (Non-BSP) */}
@@ -128,7 +128,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
                                     <button
                                         onClick={() => isAdmin && onToggleTask(task.id)}
                                         disabled={!isAdmin}
-                                        className={`absolute left-[-21px] sm:left-1/2 w-6 h-6 rounded-full border-4 bg-[#09090b] z-10 sm:-translate-x-1/2 transition-all duration-300 ${task.done ? 'border-blue-500 bg-blue-500/20 scale-110' : 'border-zinc-800 hover:border-zinc-600'}`}
+                                        className={`absolute left-[-28px] sm:left-1/2 w-6 h-6 rounded-full border-4 bg-[#09090b] z-10 sm:-translate-x-1/2 transition-all duration-300 ${task.done ? 'border-blue-500 bg-blue-500/20 scale-110' : 'border-zinc-800 hover:border-zinc-600'}`}
                                     >
                                         {task.done && (
                                             <div className="absolute inset-0 flex items-center justify-center">
@@ -177,15 +177,15 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
 
                 {/* ─── SIDE BRANCH (BSP) ─── */}
                 {bspProjects.length > 0 && (
-                    <div className="w-full lg:w-[350px] shrink-0 relative pl-8 lg:pl-10 mt-8 lg:mt-0 opacity-90 hover:opacity-100 transition-opacity duration-500">
+                    <div className="w-full lg:w-[320px] shrink-0 relative pl-8 mt-8 lg:mt-0 opacity-90 hover:opacity-100 transition-opacity duration-500">
                         
                         {/* Vertical branch line for the side items */}
-                        <div className="absolute left-[11px] lg:left-[10px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-emerald-500/80 via-zinc-800 to-transparent rounded-full" />
+                        <div className="absolute left-[15px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-purple-500/80 via-zinc-800 to-transparent rounded-full" />
                         
                         {/* Branch Title Area */}
                         <div className="relative z-10 mb-8 mt-2 lg:mt-0 flex items-center gap-3">
                             <div>
-                                <h3 className="text-sm font-black text-white italic tracking-widest uppercase">Long-Term Branch</h3>
+                                <h3 className="text-sm font-black text-white italic tracking-widest uppercase text-purple-400">Long-Term Branch</h3>
                                 <p className="text-[10px] text-zinc-500 font-medium">Runs parallel to main tasks</p>
                             </div>
                         </div>
