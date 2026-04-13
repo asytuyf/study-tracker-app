@@ -412,12 +412,12 @@ export function useCourses() {
 
     // ─── Weekly Plan Task handlers ────────────────────────────────────────────
 
-    const handleAddPlanTask = useCallback((text: string, weekDate: string, courseId?: string) => {
+    const handleAddPlanTask = useCallback((text: string, weekDate: string, courseIds?: string[]) => {
         const task: WeeklyPlanTask = {
             id: crypto.randomUUID(),
             text: text.trim(),
             done: false,
-            courseId,
+            courseIds: courseIds || [],
             weekDate,
         };
         updatePlanTasks((prev: WeeklyPlanTask[]) => [...prev, task]);

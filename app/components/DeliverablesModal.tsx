@@ -167,7 +167,12 @@ export default function DeliverablesModal({
                             {/* Implementation Tasks */}
                             {(implTasks.length > 0 || (sciTasks.length === 0 && totalCount > 0)) && (
                                 <div className="mb-4">
-                                    <p className="text-[9px] font-black uppercase tracking-widest text-blue-500 mb-2 px-1">⚙ Implementation</p>
+                                    <p className="text-[9px] font-black uppercase tracking-widest text-blue-500 mb-2 px-1 flex items-center gap-1.5">
+                                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                        Implementation
+                                    </p>
                                     <div className="space-y-2">
                                         {implTasks.map((task) => <TaskRow key={task.id} task={task} onToggle={onToggle} onDelete={onDelete} isAdmin={isAdmin} />)}
                                     </div>
@@ -196,9 +201,12 @@ export default function DeliverablesModal({
                                 <button
                                     type="button"
                                     onClick={() => setNewCategory("implementation")}
-                                    className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${newCategory === "implementation" ? "bg-blue-600 text-white" : "bg-zinc-800 text-zinc-500 hover:text-zinc-300"}`}
+                                    className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${newCategory === "implementation" ? "bg-blue-600 text-white" : "bg-zinc-800 text-zinc-500 hover:text-zinc-300"}`}
                                 >
-                                    ⚙ Implementation
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    Implementation
                                 </button>
                                 <button
                                     type="button"

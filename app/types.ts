@@ -10,8 +10,8 @@ export interface WeeklyPlanTask {
   id: string;
   text: string;
   done: boolean;
-  courseId?: string; // optional link to a course/project
-  weekDate: string;  // ISO Monday of the week
+  courseIds?: string[]; // Multiple courses allowed
+  weekDate: string;     // ISO Monday of the week
 }
 
 export interface Milestone {

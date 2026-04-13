@@ -44,7 +44,7 @@ export default function PlanPage() {
 
     const currentWeek = useMemo(() => getMonday(new Date()), []);
     const [newTaskText, setNewTaskText] = useState("");
-    const [newTaskCourseId, setNewTaskCourseId] = useState<string>("");
+    const [newTaskCourseIds, setNewTaskCourseIds] = useState<string[]>([]);
     const [selectedWeek, setSelectedWeek] = useState(currentWeek);
 
     // Build list of available weeks: current + 4 future
@@ -68,9 +68,27 @@ export default function PlanPage() {
 
     const handleAdd = () => {
         if (!newTaskText.trim() || !isAdmin) return;
-        handleAddPlanTask(newTaskText.trim(), selectedWeek, newTaskCourseId || undefined);
+        handleAddPlanTask(newTaskText.trim(), selectedWeek, newTaskCourseIds);
         setNewTaskText("");
-        setNewTaskCourseId("");
+        setNewTaskCourseIds([]);
+    };
+
+    const toggleCourseSelection = (id: string) => {
+        setNewTaskCourseIds(prev =>
+            prev.includes(id) ? prev.filter(cid => cid !== id) : [...prev, id]
+        );
+    };
+
+    const getCourseColor = (course: Course) => {
+        if (course.color.includes("blue")) return "#60a5fa";
+        if (course.color.includes("violet")) return "#a78bfa";
+        if (course.color.includes("purple")) return "#c084fc";
+        if (course.color.includes("cyan")) return "#22d3ee";
+        if (course.color.includes("emerald")) return "#34d399";
+        if (course.color.includes("amber")) return "#fbbf24";
+        if (course.color.includes("orange")) return "#fb923c";
+        if (course.color.includes("rose")) return "#fb7185";
+        return "#94a3b8";
     };
 
     if (!mounted) {
@@ -139,16 +157,23 @@ export default function PlanPage() {
                                 Add
                             </button>
                         </div>
-                        <select
-                            value={newTaskCourseId}
-                            onChange={(e) => setNewTaskCourseId(e.target.value)}
-                            className="w-full px-4 py-2.5 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-400 text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                        >
-                            <option value="">No course link (general task)</option>
-                            {courses.map((c: Course) => (
-                                <option key={c.id} value={c.id}>{c.name}</option>
-                            ))}
-                        </select>
+                        <div className="flex flex-wrap gap-2">
+                            {courses.map((c: Course) => {
+                                const isSelected = newTaskCourseIds.includes(c.id);
+                                return (
+                                    <button
+                                        key={c.id}
+                                        onClick={() => toggleCourseSelection(c.id)}
+                                        className={`px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-wider border transition-all ${isSelected
+                                            ? "bg-blue-500/20 border-blue-500/50 text-blue-400"
+                                            : "bg-white/5 border-white/5 text-zinc-600 hover:border-white/10"
+                                            }`}
+                                    >
+                                        {c.name}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
 
@@ -190,49 +215,45 @@ export default function PlanPage() {
                     <div className="mb-8">
                         <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4">To Do</p>
                         <div className="space-y-2">
-                            {pendingTasks.map((task: WeeklyPlanTask) => {
-                                const linkedCourse = task.courseId
-                                    ? courses.find((c: Course) => c.id === task.courseId)
-                                    : null;
-                                return (
-                                    <div
-                                        key={task.id}
-                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/8 hover:bg-white/[0.05] transition-all group"
-                                    >
-                                        <button
-                                            onClick={() => isAdmin && handleTogglePlanTask(task.id)}
-                                            disabled={!isAdmin}
-                                            className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${isAdmin
-                                                ? "border-zinc-600 hover:border-blue-400 cursor-pointer"
-                                                : "border-zinc-700 cursor-default"
-                                                }`}
-                                        />
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-zinc-200 text-sm font-medium">{task.text}</p>
-                                            {linkedCourse && (
-                                                <p className="text-[10px] font-bold uppercase tracking-wider mt-0.5" style={{
-                                                    color: linkedCourse.color.includes("blue") ? "#60a5fa"
-                                                        : linkedCourse.color.includes("violet") ? "#a78bfa"
-                                                            : linkedCourse.color.includes("cyan") ? "#22d3ee"
-                                                                : "#94a3b8"
-                                                }}>
-                                                    {linkedCourse.name}
-                                                </p>
-                                            )}
+                            {pendingTasks.map((task: WeeklyPlanTask) => (
+                                <div
+                                    key={task.id}
+                                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/8 hover:bg-white/[0.05] transition-all group"
+                                >
+                                    <button
+                                        onClick={() => isAdmin && handleTogglePlanTask(task.id)}
+                                        disabled={!isAdmin}
+                                        className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${isAdmin
+                                            ? "border-zinc-600 hover:border-blue-400 cursor-pointer"
+                                            : "border-zinc-700 cursor-default"
+                                            }`}
+                                    />
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-zinc-200 text-sm font-medium">{task.text}</p>
+                                        <div className="flex flex-wrap gap-1.5 mt-1">
+                                            {task.courseIds?.map(cid => {
+                                                const c = courses.find(c => c.id === cid);
+                                                if (!c) return null;
+                                                return (
+                                                    <span key={cid} className="text-[9px] font-black uppercase tracking-wider" style={{ color: getCourseColor(c) }}>
+                                                        {c.name}
+                                                    </span>
+                                                );
+                                            })}
                                         </div>
-                                        {isAdmin && (
-                                            <button
-                                                onClick={() => handleDeletePlanTask(task.id)}
-                                                className="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-red-400 transition-all flex-shrink-0"
-                                            >
-                                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        )}
                                     </div>
-                                );
-                            })}
+                                    {isAdmin && (
+                                        <button
+                                            onClick={() => handleDeletePlanTask(task.id)}
+                                            className="opacity-0 group-hover:opacity-100 text-zinc-600 hover:text-red-400 transition-all flex-shrink-0"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}
@@ -242,44 +263,47 @@ export default function PlanPage() {
                     <div className="mb-8">
                         <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600 mb-4">Completed</p>
                         <div className="space-y-2">
-                            {doneTasks.map((task: WeeklyPlanTask) => {
-                                const linkedCourse = task.courseId
-                                    ? courses.find((c: Course) => c.id === task.courseId)
-                                    : null;
-                                return (
-                                    <div
-                                        key={task.id}
-                                        className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.01] border border-white/5 group opacity-60 hover:opacity-80 transition-all"
+                            {doneTasks.map((task: WeeklyPlanTask) => (
+                                <div
+                                    key={task.id}
+                                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.01] border border-white/5 group opacity-60 hover:opacity-80 transition-all"
+                                >
+                                    <button
+                                        onClick={() => isAdmin && handleTogglePlanTask(task.id)}
+                                        disabled={!isAdmin}
+                                        className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${isAdmin ? "border-emerald-600 bg-emerald-600 cursor-pointer" : "border-emerald-800 bg-emerald-900 cursor-default"
+                                            }`}
                                     >
+                                        <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </button>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-zinc-600 text-sm line-through">{task.text}</p>
+                                        <div className="flex flex-wrap gap-1.5 mt-1 opacity-50">
+                                            {task.courseIds?.map(cid => {
+                                                const c = courses.find(c => c.id === cid);
+                                                if (!c) return null;
+                                                return (
+                                                    <span key={cid} className="text-[8px] font-bold uppercase tracking-wider text-zinc-600">
+                                                        {c.name}
+                                                    </span>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                    {isAdmin && (
                                         <button
-                                            onClick={() => isAdmin && handleTogglePlanTask(task.id)}
-                                            disabled={!isAdmin}
-                                            className={`w-6 h-6 rounded-lg border-2 flex-shrink-0 flex items-center justify-center transition-all ${isAdmin ? "border-emerald-600 bg-emerald-600 cursor-pointer" : "border-emerald-800 bg-emerald-900 cursor-default"
-                                                }`}
+                                            onClick={() => handleDeletePlanTask(task.id)}
+                                            className="opacity-0 group-hover:opacity-100 text-zinc-700 hover:text-red-500 transition-all flex-shrink-0"
                                         >
-                                            <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                             </svg>
                                         </button>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-zinc-600 text-sm line-through">{task.text}</p>
-                                            {linkedCourse && (
-                                                <p className="text-[10px] text-zinc-700 uppercase tracking-wider mt-0.5">{linkedCourse.name}</p>
-                                            )}
-                                        </div>
-                                        {isAdmin && (
-                                            <button
-                                                onClick={() => handleDeletePlanTask(task.id)}
-                                                className="opacity-0 group-hover:opacity-100 text-zinc-700 hover:text-red-500 transition-all flex-shrink-0"
-                                            >
-                                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
-                                            </button>
-                                        )}
-                                    </div>
-                                );
-                            })}
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )}
@@ -294,6 +318,6 @@ export default function PlanPage() {
                     </div>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

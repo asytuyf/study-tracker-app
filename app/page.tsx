@@ -102,10 +102,14 @@ export default function Home() {
 
   // Current week for plan task count
   const currentWeek = useMemo(() => getCurrentWeekMonday(), []);
+  const currentWeekTasks = useMemo(() =>
+    planTasks.filter(t => t.weekDate === currentWeek), [planTasks, currentWeek]);
   const weekTasksDone = useMemo(() =>
-    planTasks.filter(t => t.weekDate === currentWeek && t.done).length, [planTasks, currentWeek]);
+    currentWeekTasks.filter(t => t.done).length, [currentWeekTasks]);
   const weekTasksTotal = useMemo(() =>
-    planTasks.filter(t => t.weekDate === currentWeek).length, [planTasks, currentWeek]);
+    currentWeekTasks.length, [currentWeekTasks]);
+  const nextTasks = useMemo(() =>
+    currentWeekTasks.filter(t => !t.done).slice(0, 3), [currentWeekTasks]);
 
   if (!mounted) {
     return (
@@ -202,14 +206,26 @@ export default function Home() {
               </p>
               <p className="text-xs text-zinc-500 mb-4">tasks complete</p>
               {weekTasksTotal > 0 && (
-                <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-700"
-                    style={{ width: `${(weekTasksDone / weekTasksTotal) * 100}%` }}
-                  />
+                <div className="mt-4 space-y-2">
+                  <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-700"
+                      style={{ width: `${(weekTasksDone / weekTasksTotal) * 100}%` }}
+                    />
+                  </div>
+                  {nextTasks.length > 0 && (
+                    <div className="pt-2 border-t border-white/5 space-y-1">
+                      {nextTasks.map(t => (
+                        <p key={t.id} className="text-[10px] text-zinc-400 truncate flex items-center gap-1.5">
+                          <span className="w-1 h-1 rounded-full bg-blue-500/50" />
+                          {t.text}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
-              <p className="text-[10px] text-blue-500 font-bold mt-3">Open plan →</p>
+              <p className="text-[10px] text-blue-500 font-bold mt-4">Open plan →</p>
             </Link>
 
             {/* Courses count */}
