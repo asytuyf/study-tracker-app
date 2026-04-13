@@ -121,13 +121,6 @@
   ],
   "planTasks": [
     {
-      "id": "23068557-6975-4ed9-9b95-d5b567a616f2",
-      "text": "2 tutor sessions",
-      "done": false,
-      "courseId": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
-      "weekDate": "2026-04-13"
-    },
-    {
       "id": "a23e06a0-a97b-410d-8705-ac84601e39b5",
       "text": "Tuesday + Wednesday grind",
       "done": false,
@@ -144,6 +137,15 @@
     {
       "id": "af8f2670-3c4f-4cc4-8311-c038af565ce7",
       "text": "1 chapter at library with exercise sheet",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-04-13"
+    },
+    {
+      "id": "224f2dc1-77c2-4894-af28-86f41c20c832",
+      "text": "2 tutor sessions",
       "done": false,
       "courseIds": [
         "934da421-d4ab-4b28-9d4b-4207e05f4dee"
