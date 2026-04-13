@@ -213,7 +213,14 @@
         "9b5f2488-a5ae-437e-9878-46a6464f89b7",
         "e1105728-ad9a-4b8d-8764-3a438724e26c"
       ],
-      "weekDate": "2026-04-20"
+      "weekDate": "2026-04-20",
+      "subtasks": [
+        {
+          "id": "3c026dbb-eef8-4b67-922a-8cb839444340",
+          "text": "Ch 1 & Ex 1 (analysis)",
+          "done": false
+        }
+      ]
     },
     {
       "id": "3603c414-5d4a-42b3-8ecf-0a5fc17c4f0b",
