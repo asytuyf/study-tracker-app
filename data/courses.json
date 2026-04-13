@@ -147,6 +147,15 @@
       "done": false,
       "courseId": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
       "weekDate": "2026-04-20"
+    },
+    {
+      "id": "af8f2670-3c4f-4cc4-8311-c038af565ce7",
+      "text": "1 chapter at library with exercise sheet",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-04-13"
     }
   ]
 }
