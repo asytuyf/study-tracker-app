@@ -204,18 +204,6 @@
           "done": false
         }
       ]
-    },
-    {
-      "id": "036d994b-780d-4122-9945-8c238c887a0c",
-      "text": "gzgzre",
-      "done": false,
-      "courseIds": [
-        "e1105728-ad9a-4b8d-8764-3a438724e26c"
-      ],
-      "weekDate": "2026-04-13",
-      "taskType": "weekly",
-      "description": "hguzf",
-      "subtasks": []
     }
   ]
 }
