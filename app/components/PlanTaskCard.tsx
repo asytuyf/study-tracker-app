@@ -30,6 +30,8 @@ export default function PlanTaskCard({
     const [nameInput, setNameInput] = useState(task.text);
     const [editingDesc, setEditingDesc] = useState(false);
     const [descInput, setDescInput] = useState(task.description || "");
+    const [editingSubtaskId, setEditingSubtaskId] = useState<string | null>(null);
+    const [subtaskEditInput, setSubtaskEditInput] = useState("");
 
     const handleAddSubtask = () => {
         if (!newSubtask.trim()) return;
@@ -39,6 +41,7 @@ export default function PlanTaskCard({
     };
 
     const handleToggleSubtask = (stId: string) => {
+        if (editingSubtaskId === stId) return; // don't toggle when editing
         const updated = (task.subtasks || []).map(st =>
             st.id === stId ? { ...st, done: !st.done } : st
         );
@@ -48,6 +51,15 @@ export default function PlanTaskCard({
     const handleDeleteSubtask = (stId: string) => {
         const updated = (task.subtasks || []).filter(st => st.id !== stId);
         onUpdate(task.id, { subtasks: updated });
+    };
+
+    const handleSaveSubtaskEdit = (stId: string) => {
+        if (!subtaskEditInput.trim()) { setEditingSubtaskId(null); return; }
+        const updated = (task.subtasks || []).map(st =>
+            st.id === stId ? { ...st, text: subtaskEditInput.trim() } : st
+        );
+        onUpdate(task.id, { subtasks: updated });
+        setEditingSubtaskId(null);
     };
 
     const handleSaveName = () => {
@@ -259,7 +271,7 @@ export default function PlanTaskCard({
                                 <div key={st.id} className="flex items-center gap-2.5 group/st">
                                     <button
                                         onClick={() => isAdmin && handleToggleSubtask(st.id)}
-                                        disabled={!isAdmin}
+                                        disabled={!isAdmin || editingSubtaskId === st.id}
                                         className={`w-4 h-4 rounded border flex items-center justify-center transition-all flex-shrink-0 ${
                                             st.done ? "border-emerald-500 bg-emerald-500" : "border-zinc-600 hover:border-zinc-400 bg-transparent"
                                         }`}
@@ -270,8 +282,28 @@ export default function PlanTaskCard({
                                             </svg>
                                         )}
                                     </button>
-                                    <span className={`text-sm flex-1 leading-snug ${st.done ? "text-zinc-600 line-through" : "text-zinc-300"}`}>{st.text}</span>
-                                    {isAdmin && (
+
+                                    {editingSubtaskId === st.id ? (
+                                        <input
+                                            autoFocus
+                                            value={subtaskEditInput}
+                                            onChange={e => setSubtaskEditInput(e.target.value)}
+                                            onBlur={() => handleSaveSubtaskEdit(st.id)}
+                                            onKeyDown={e => {
+                                                if (e.key === "Enter") handleSaveSubtaskEdit(st.id);
+                                                if (e.key === "Escape") setEditingSubtaskId(null);
+                                            }}
+                                            className="flex-1 bg-zinc-900 border border-zinc-600 rounded-lg px-2 py-0.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                                        />
+                                    ) : (
+                                        <span
+                                            onDoubleClick={() => { if (isAdmin) { setEditingSubtaskId(st.id); setSubtaskEditInput(st.text); } }}
+                                            className={`text-sm flex-1 leading-snug select-none ${st.done ? "text-zinc-600 line-through" : "text-zinc-300"} ${isAdmin ? "cursor-text" : ""}`}
+                                            title={isAdmin ? "Double-click to edit" : ""}
+                                        >{st.text}</span>
+                                    )}
+
+                                    {isAdmin && editingSubtaskId !== st.id && (
                                         <button onClick={() => handleDeleteSubtask(st.id)} className="opacity-0 group-hover/st:opacity-100 text-zinc-600 hover:text-red-400 transition-all">
                                             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

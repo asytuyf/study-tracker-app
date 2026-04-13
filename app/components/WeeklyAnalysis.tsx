@@ -116,19 +116,18 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
 
     return (
         <div className="mt-16 mb-12 animate-fade-in relative z-10">
-            {/* Week selector */}
             <div className="flex justify-center mb-12 relative z-20">
-                <div className="flex gap-2 group min-h-[40px] items-start hover:bg-white/[0.02] hover:p-1 hover:-m-1 rounded-[20px] transition-all w-max bg-[#09090b]/80 backdrop-blur-md">
+                <div className="flex gap-2 overflow-x-auto pb-1">
                     {weeks.map((w: string) => {
                         const isSelected = w === selectedWeek;
                         return (
                             <button
                                 key={w}
                                 onClick={() => setSelectedWeek(w)}
-                                className={`rounded-2xl text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 ${
+                                className={`px-4 py-2 rounded-2xl text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                                     isSelected
-                                        ? "px-4 py-2 bg-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]"
-                                        : "w-0 px-0 py-2 opacity-0 overflow-hidden group-hover:w-auto group-hover:px-4 group-hover:opacity-100 bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-zinc-300"
+                                        ? "bg-blue-600 text-white shadow-[0_0_20px_rgba(59,130,246,0.3)]"
+                                        : "bg-white/5 text-zinc-500 hover:bg-white/10 hover:text-zinc-300 border border-white/5"
                                 }`}
                             >
                                 {w === actualCurrentWeek ? "This Week" : formatWeekLabel(w)}

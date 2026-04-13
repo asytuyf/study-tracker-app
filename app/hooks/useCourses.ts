@@ -453,6 +453,19 @@ export function useCourses() {
         updatePlanTasks((prev: WeeklyPlanTask[]) => prev.filter((t: WeeklyPlanTask) => t.id !== id));
     }, [updatePlanTasks]);
 
+    const handleReorderPlanTasks = useCallback((draggedId: string, targetId: string) => {
+        if (draggedId === targetId) return;
+        updatePlanTasks((prev: WeeklyPlanTask[]) => {
+            const arr = [...prev];
+            const fromIdx = arr.findIndex(t => t.id === draggedId);
+            const toIdx = arr.findIndex(t => t.id === targetId);
+            if (fromIdx === -1 || toIdx === -1) return prev;
+            const [item] = arr.splice(fromIdx, 1);
+            arr.splice(toIdx, 0, item);
+            return arr;
+        });
+    }, [updatePlanTasks]);
+
     const behindCourses = useMemo(
         () => courses.filter((c: Course) => getStatus(c) === "behind"),
         [courses]
@@ -504,5 +517,6 @@ export function useCourses() {
         handleUpdatePlanTask,
         handleTogglePlanTask,
         handleDeletePlanTask,
+        handleReorderPlanTasks,
     };
 }

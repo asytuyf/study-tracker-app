@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import { useCourses } from "../hooks/useCourses";
 import { WeeklyPlanTask, Course, Subtask } from "../types";
 import Link from "next/link";
@@ -42,7 +42,27 @@ export default function PlanPage() {
         handleTogglePlanTask,
         handleDeletePlanTask,
         handleUpdatePlanTask,
+        handleReorderPlanTasks,
     } = useCourses();
+
+    // Drag state
+    const draggedId = useRef<string | null>(null);
+    const [dragOverId, setDragOverId] = useState<string | null>(null);
+
+    const onDragStart = useCallback((id: string) => { draggedId.current = id; }, []);
+    const onDragOver = useCallback((e: React.DragEvent, id: string) => {
+        e.preventDefault();
+        setDragOverId(id);
+    }, []);
+    const onDrop = useCallback((targetId: string) => {
+        if (draggedId.current) handleReorderPlanTasks(draggedId.current, targetId);
+        draggedId.current = null;
+        setDragOverId(null);
+    }, [handleReorderPlanTasks]);
+    const onDragEnd = useCallback(() => {
+        draggedId.current = null;
+        setDragOverId(null);
+    }, []);
 
     const currentWeek = useMemo(() => getMonday(new Date()), []);
     const [selectedWeek, setSelectedWeek] = useState(currentWeek);
@@ -393,17 +413,26 @@ export default function PlanPage() {
                                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4">To Do</p>
                                 <div className="space-y-3">
                                     {pendingWeeklyTasks.map((task: WeeklyPlanTask) => (
-                                        <PlanTaskCard
+                                        <div
                                             key={task.id}
-                                            task={task}
-                                            courses={courses}
-                                            isAdmin={isAdmin}
-                                            getCourseColor={getCourseColor}
-                                            onToggle={handleTogglePlanTask}
-                                            onDelete={handleDeletePlanTask}
-                                            onUpdate={handleUpdatePlanTask}
-                                            isDeadlineMode={false}
-                                        />
+                                            draggable={isAdmin}
+                                            onDragStart={() => onDragStart(task.id)}
+                                            onDragOver={(e) => onDragOver(e, task.id)}
+                                            onDrop={() => onDrop(task.id)}
+                                            onDragEnd={onDragEnd}
+                                            className={`transition-all duration-150 ${dragOverId === task.id && draggedId.current !== task.id ? 'opacity-50 scale-[0.98]' : ''} ${isAdmin ? 'cursor-grab active:cursor-grabbing' : ''}`}
+                                        >
+                                            <PlanTaskCard
+                                                task={task}
+                                                courses={courses}
+                                                isAdmin={isAdmin}
+                                                getCourseColor={getCourseColor}
+                                                onToggle={handleTogglePlanTask}
+                                                onDelete={handleDeletePlanTask}
+                                                onUpdate={handleUpdatePlanTask}
+                                                isDeadlineMode={false}
+                                            />
+                                        </div>
                                     ))}
                                 </div>
                             </div>
@@ -458,17 +487,26 @@ export default function PlanPage() {
                     ) : (
                         <div className="space-y-3">
                             {pendingDeadlineTasks.map(task => (
-                                <PlanTaskCard
+                                <div
                                     key={task.id}
-                                    task={task}
-                                    courses={courses}
-                                    isAdmin={isAdmin}
-                                    getCourseColor={getCourseColor}
-                                    onToggle={handleTogglePlanTask}
-                                    onDelete={handleDeletePlanTask}
-                                    onUpdate={handleUpdatePlanTask}
-                                    isDeadlineMode={true}
-                                />
+                                    draggable={isAdmin}
+                                    onDragStart={() => onDragStart(task.id)}
+                                    onDragOver={(e) => onDragOver(e, task.id)}
+                                    onDrop={() => onDrop(task.id)}
+                                    onDragEnd={onDragEnd}
+                                    className={`transition-all duration-150 ${dragOverId === task.id && draggedId.current !== task.id ? 'opacity-50 scale-[0.98]' : ''} ${isAdmin ? 'cursor-grab active:cursor-grabbing' : ''}`}
+                                >
+                                    <PlanTaskCard
+                                        task={task}
+                                        courses={courses}
+                                        isAdmin={isAdmin}
+                                        getCourseColor={getCourseColor}
+                                        onToggle={handleTogglePlanTask}
+                                        onDelete={handleDeletePlanTask}
+                                        onUpdate={handleUpdatePlanTask}
+                                        isDeadlineMode={true}
+                                    />
+                                </div>
                             ))}
                             {doneDeadlineTasks.length > 0 && (
                                 <div className="pt-4">
