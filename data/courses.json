@@ -121,13 +121,6 @@
   ],
   "planTasks": [
     {
-      "id": "53ad4861-50ff-4995-8791-dced53b03d26",
-      "text": "Catch up to midterm material (book + exercises)",
-      "done": false,
-      "courseId": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
-      "weekDate": "2026-04-20"
-    },
-    {
       "id": "af8f2670-3c4f-4cc4-8311-c038af565ce7",
       "text": "1 chapter at library with exercise sheet",
       "done": false,
@@ -153,6 +146,15 @@
         "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
       ],
       "weekDate": "2026-04-13"
+    },
+    {
+      "id": "8b60c205-9dbf-4955-adec-2d036eeba3b0",
+      "text": "Catch up to midterm material (book + exercises)",
+      "done": false,
+      "courseIds": [
+        "f3be84a4-c578-42e7-b59b-839fc9ddb8a6"
+      ],
+      "weekDate": "2026-04-20"
     }
   ]
 }
