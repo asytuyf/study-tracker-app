@@ -133,6 +133,11 @@
           "id": "ad849e43-0d6b-4216-b9cb-3c5e37c4f9dc",
           "text": "Read both papers that's for geomagnetic storms phases",
           "done": false
+        },
+        {
+          "id": "025e5c1a-53bd-4e05-af5b-0bcde17dfb9c",
+          "text": "Understand and improve code for storm detection (different ways of Start and end + recovery)",
+          "done": false
         }
       ]
     },
