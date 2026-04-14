@@ -121,6 +121,17 @@
   ],
   "planTasks": [
     {
+      "id": "95a5e607-cadf-43ce-8363-a3f39a8e9ede",
+      "text": "Slides 5 & 6 + Exsheet",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-04-13",
+      "taskType": "weekly",
+      "subtasks": []
+    },
+    {
       "id": "a5f163d9-5521-49c1-9c89-d3d3a8dfc339",
       "text": "Tuesday + Wednesday grind",
       "done": false,
@@ -225,17 +236,6 @@
         "e1105728-ad9a-4b8d-8764-3a438724e26c"
       ],
       "weekDate": "2026-04-27"
-    },
-    {
-      "id": "95a5e607-cadf-43ce-8363-a3f39a8e9ede",
-      "text": "Slides 5 & 6 + Exsheet",
-      "done": false,
-      "courseIds": [
-        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
-      ],
-      "weekDate": "2026-04-13",
-      "taskType": "weekly",
-      "subtasks": []
     }
   ]
 }
