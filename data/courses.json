@@ -129,7 +129,13 @@
       ],
       "weekDate": "2026-04-13",
       "taskType": "weekly",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "25df9025-3f04-45de-8afd-8cc73c515bbf",
+          "text": "Slides",
+          "done": false
+        }
+      ]
     },
     {
       "id": "a5f163d9-5521-49c1-9c89-d3d3a8dfc339",
