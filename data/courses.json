@@ -99,7 +99,7 @@
         {
           "id": "f05a7e49-e843-4101-83c7-9c869a86ac52",
           "date": "2026-04-13",
-          "hours": 3.5
+          "hours": 2
         }
       ],
       "chapterSchedule": [],
@@ -154,7 +154,7 @@
         {
           "id": "ad849e43-0d6b-4216-b9cb-3c5e37c4f9dc",
           "text": "Read both papers that's for geomagnetic storms phases",
-          "done": false
+          "done": true
         },
         {
           "id": "025e5c1a-53bd-4e05-af5b-0bcde17dfb9c",
