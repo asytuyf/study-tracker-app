@@ -145,7 +145,7 @@
     {
       "id": "a5f163d9-5521-49c1-9c89-d3d3a8dfc339",
       "text": "Tuesday + Wednesday grind",
-      "done": false,
+      "done": true,
       "courseIds": [
         "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
       ],
@@ -159,7 +159,7 @@
         {
           "id": "025e5c1a-53bd-4e05-af5b-0bcde17dfb9c",
           "text": "Understand and improve code for storm detection (different ways of Start and end + recovery)",
-          "done": false
+          "done": true
         }
       ]
     },
