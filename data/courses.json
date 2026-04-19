@@ -123,7 +123,7 @@
     {
       "id": "95a5e607-cadf-43ce-8363-a3f39a8e9ede",
       "text": "Slides 5 & 6 + Exsheet 6",
-      "done": false,
+      "done": true,
       "courseIds": [
         "934da421-d4ab-4b28-9d4b-4207e05f4dee"
       ],
@@ -138,7 +138,7 @@
         {
           "id": "6708c0bc-f1fc-42e7-8371-eaf4b2ec71c6",
           "text": "Exsheet 6 (stopped at ex 4)",
-          "done": false
+          "done": true
         }
       ]
     },
