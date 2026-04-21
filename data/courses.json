@@ -23,7 +23,14 @@
       "notebookLMLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed",
       "itemType": "course",
       "weeklyLogs": [],
-      "chapterSchedule": []
+      "chapterSchedule": [],
+      "completedChaptersList": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
     },
     {
       "name": "Theoritical computer science",
@@ -42,7 +49,8 @@
       "notebookLMLink": "https://notebooklm.google.com/notebook/29ae3cec-7404-4cb5-8e56-9194205a19e2",
       "itemType": "course",
       "weeklyLogs": [],
-      "chapterSchedule": []
+      "chapterSchedule": [],
+      "completedChaptersList": []
     },
     {
       "name": "Analysis 1",
@@ -59,7 +67,8 @@
       "description": "Catch up during the holidays (!!!)",
       "itemType": "course",
       "weeklyLogs": [],
-      "chapterSchedule": []
+      "chapterSchedule": [],
+      "completedChaptersList": []
     },
     {
       "name": "Discrete mathematics 2",
@@ -75,7 +84,8 @@
       "notionLink": "https://www.notion.so/Discrete-math-2-27cedf02476080a38257e30e9ff98a31",
       "itemType": "course",
       "weeklyLogs": [],
-      "chapterSchedule": []
+      "chapterSchedule": [],
+      "completedChaptersList": []
     },
     {
       "name": "BSP 6",
@@ -116,7 +126,8 @@
           "completed": false,
           "category": "implementation"
         }
-      ]
+      ],
+      "completedChaptersList": []
     }
   ],
   "planTasks": [
