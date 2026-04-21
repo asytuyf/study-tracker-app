@@ -170,12 +170,21 @@ export function useCourses() {
         if (localRaw) {
             try {
                 const parsed = JSON.parse(localRaw);
+                const migrateLocal = (courseList: Course[]) => courseList.map((c: Course) => {
+                    const updated = { ...c };
+                    if (!updated.completedChaptersList) {
+                        updated.completedChaptersList = Array.from({ length: updated.completedChapters || 0 }, (_, i) => i + 1);
+                    }
+                    return updated;
+                });
+                
                 if (Array.isArray(parsed)) {
-                    setCourses(parsed);
+                    setCourses(migrateLocal(parsed));
                 } else {
-                    setCourses(parsed.courses || []);
+                    const localCourses = migrateLocal(parsed.courses || []);
+                    setCourses(localCourses);
                     setPlanTasks(parsed.planTasks || []);
-                    coursesRef.current = parsed.courses || [];
+                    coursesRef.current = localCourses;
                     planTasksRef.current = parsed.planTasks || [];
                 }
                 loadedFromLocal = true;
@@ -201,6 +210,9 @@ export function useCourses() {
                     if (!updated.itemType) updated.itemType = "course";
                     if (!updated.weeklyLogs) updated.weeklyLogs = [];
                     if (!updated.chapterSchedule) updated.chapterSchedule = [];
+                    if (!updated.completedChaptersList) {
+                        updated.completedChaptersList = Array.from({ length: updated.completedChapters || 0 }, (_, i) => i + 1);
+                    }
 
                     if (course.hasMidterm && course.midtermDate && !course.midterms) {
                         const milestone: Milestone = {
@@ -319,9 +331,12 @@ export function useCourses() {
                         );
                     }
 
+                    const list = Array.from({ length: newProgress }, (_, i) => i + 1);
+
                     return {
                         ...c,
                         completedChapters: newProgress,
+                        completedChaptersList: list,
                         midterms: nextMidterms,
                     };
                 })
@@ -335,7 +350,8 @@ export function useCourses() {
             prev.map((c: Course) => {
                 if (c.id !== id) return c;
                 const next = Math.max(0, Math.min(c.totalChapters, c.completedChapters + delta));
-                return { ...c, completedChapters: next };
+                const list = Array.from({ length: next }, (_, i) => i + 1);
+                return { ...c, completedChapters: next, completedChaptersList: list };
             })
         );
     }, [updateCourses]);
@@ -401,9 +417,25 @@ export function useCourses() {
             updateCourses((prev: Course[]) =>
                 prev.map((c: Course) => {
                     if (c.id !== courseId) return c;
-                    const isDone = (c.completedChapters || 0) >= chapterNum;
-                    const next = isDone ? chapterNum - 1 : chapterNum;
-                    return { ...c, completedChapters: Math.max(0, next) };
+                    
+                    let list = c.completedChaptersList;
+                    if (!list) {
+                        list = Array.from({ length: c.completedChapters || 0 }, (_, i) => i + 1);
+                    }
+                    
+                    const isDone = list.includes(chapterNum);
+                    
+                    if (isDone) {
+                        list = list.filter(n => n !== chapterNum);
+                    } else {
+                        list = [...list, chapterNum];
+                    }
+                    
+                    return { 
+                        ...c, 
+                        completedChaptersList: list,
+                        completedChapters: list.length
+                    };
                 })
             );
         },

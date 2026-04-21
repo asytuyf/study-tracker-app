@@ -58,6 +58,7 @@ export interface Course {
   examDate: string;
   totalChapters: number;
   completedChapters: number;
+  completedChaptersList?: number[];
   color: string;
 
   // Study item type

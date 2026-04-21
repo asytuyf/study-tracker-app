@@ -66,18 +66,24 @@ export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridPr
             </div>
 
             <GridContainer>
-                {chapters.map((num: number) => (
-                    <ChapterBox
-                        key={num}
-                        $done={num <= course.completedChapters}
-                        $color={course.color || "from-blue-500 to-cyan-400"}
-                        onClick={() => isAdmin && onToggle(num)}
-                        disabled={!isAdmin}
-                        title={`Chapter ${num}`}
-                    >
-                        {num}
-                    </ChapterBox>
-                ))}
+                {chapters.map((num: number) => {
+                    const isDone = course.completedChaptersList 
+                        ? course.completedChaptersList.includes(num)
+                        : num <= course.completedChapters;
+                        
+                    return (
+                        <ChapterBox
+                            key={num}
+                            $done={isDone}
+                            $color={course.color || "from-blue-500 to-cyan-400"}
+                            onClick={() => isAdmin && onToggle(num)}
+                            disabled={!isAdmin}
+                            title={`Chapter ${num}`}
+                        >
+                            {num}
+                        </ChapterBox>
+                    );
+                })}
             </GridContainer>
 
             {course.chapterSchedule && course.chapterSchedule.length > 0 && (
@@ -89,19 +95,24 @@ export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridPr
                                 <div className="h-[1px] flex-1 bg-white/5" />
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {sched.chapters.map((ch: number) => (
-                                    <button
-                                        key={ch}
-                                        onClick={() => isAdmin && onToggle(ch)}
-                                        disabled={!isAdmin}
-                                        className={`px-2 py-1 rounded-md text-[10px] font-bold transition-all ${ch <= course.completedChapters
-                                            ? "bg-white/10 text-white"
-                                            : "bg-zinc-900/50 text-zinc-600 hover:text-zinc-400"
-                                            }`}
-                                    >
-                                        Ch. {ch}
-                                    </button>
-                                ))}
+                                {sched.chapters.map((ch: number) => {
+                                    const isChDone = course.completedChaptersList 
+                                        ? course.completedChaptersList.includes(ch)
+                                        : ch <= course.completedChapters;
+                                    return (
+                                        <button
+                                            key={ch}
+                                            onClick={() => isAdmin && onToggle(ch)}
+                                            disabled={!isAdmin}
+                                            className={`px-2 py-1 rounded-md text-[10px] font-bold transition-all ${isChDone
+                                                ? "bg-white/10 text-white"
+                                                : "bg-zinc-900/50 text-zinc-600 hover:text-zinc-400"
+                                                }`}
+                                        >
+                                            Ch. {ch}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
                     ))}
