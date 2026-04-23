@@ -22,6 +22,7 @@ interface CourseCardProps {
     onDelete?: () => void;
     onQuickUpdate?: (delta: number) => void;
     onToggleChapter?: (id: string, num: number) => void;
+    onToggleExercise?: (id: string, num: number) => void;
     onLogHours?: (id: string, hours: number) => void;
     isAdmin?: boolean;
 }
@@ -35,6 +36,7 @@ export default function CourseCard({
     onDelete,
     onQuickUpdate,
     onToggleChapter,
+    onToggleExercise,
     onLogHours,
     isAdmin = false,
 }: CourseCardProps) {
@@ -160,20 +162,30 @@ export default function CourseCard({
                         {/* Stats Grid - Compact */}
                         <div className="grid grid-cols-2 gap-2 mb-4">
                             <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
-                                <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Progress</p>
+                                <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Chapters</p>
                                 <p className="text-sm font-bold text-white leading-none">
                                     {course.completedChapters}<span className="text-zinc-500 text-[10px]">/{target}</span>
                                 </p>
                             </div>
-                            <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
-                                <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Expected</p>
+
+                            {course.totalExercises ? (
+                                <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
+                                    <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Exercises</p>
+                                    <p className="text-sm font-bold text-white leading-none">
+                                        {course.completedExercises || 0}<span className="text-zinc-500 text-[10px]">/{course.totalExercises}</span>
+                                    </p>
+                                </div>
+                            ) : null}
+
+                            <div className={`bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5 ${course.totalExercises ? 'col-span-2' : ''}`}>
+                                <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Expected Progress</p>
                                 <div className="flex flex-col items-center">
                                     <p className={`text-sm font-bold leading-none ${status === "behind" ? "text-red-400" : "text-emerald-400"}`}>
-                                        {expected}
+                                        Week {expected} Target
                                     </p>
                                     {status === "behind" && !isComplete && (
                                         <p className="text-[8px] font-black text-red-500 mt-1 flex items-center gap-0.5 whitespace-nowrap">
-                                            ⚠️ {behind} BEHIND
+                                            ⚠️ {behind} {course.totalExercises ? 'ITEMS' : 'CH'} BEHIND
                                         </p>
                                     )}
                                 </div>
@@ -235,6 +247,7 @@ export default function CourseCard({
                         <ChapterGrid
                             course={course}
                             onToggle={(num) => onToggleChapter?.(course.id, num)}
+                            onToggleExercise={(num) => onToggleExercise?.(course.id, num)}
                             isAdmin={isAdmin}
                         />
                     </div>

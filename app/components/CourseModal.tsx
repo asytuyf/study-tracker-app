@@ -23,6 +23,10 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     const [completedChapters, setCompletedChapters] = useState(
         course?.completedChapters?.toString() || "0"
     );
+    const [totalExercises, setTotalExercises] = useState(course?.totalExercises?.toString() || "");
+    const [completedExercises, setCompletedExercises] = useState(
+        course?.completedExercises?.toString() || "0"
+    );
     const [weeklyHourGoal, setWeeklyHourGoal] = useState(
         course?.weeklyHourGoal?.toString() || "10"
     );
@@ -72,6 +76,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             examDate,
             totalChapters: parseInt(totalChapters) || 0,
             completedChapters: parseInt(completedChapters) || 0,
+            totalExercises: parseInt(totalExercises) || undefined,
+            completedExercises: parseInt(completedExercises) || 0,
             weeklyHourGoal: itemType === "project" ? parseInt(weeklyHourGoal) : undefined,
             chapterSchedule,
             midterms: courseType === "current" ? midterms : undefined,
@@ -222,6 +228,30 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                         </div>
                     </div>
 
+                    {/* Exercises */}
+                    <div className="grid grid-cols-2 gap-3">
+                        <div>
+                            <label className="block text-sm text-zinc-400 mb-2">Total Exercise Sheets</label>
+                            <input
+                                type="number"
+                                value={totalExercises}
+                                onChange={(e) => setTotalExercises(e.target.value)}
+                                placeholder="e.g., 10"
+                                min="0"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm text-zinc-400 mb-2">Completed Sheets</label>
+                            <input
+                                type="number"
+                                value={completedExercises}
+                                onChange={(e) => setCompletedExercises(e.target.value)}
+                                min="0"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                            />
+                        </div>
+                    </div>
 
                     {/* Weekly Hour Goal (Project only) */}
                     {itemType === "project" && (

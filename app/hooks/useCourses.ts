@@ -83,20 +83,25 @@ export function getExpectedChapter(course: Course): number {
 export function getCurrentChaptersPerWeek(course: Course): number {
     const focus = getCurrentFocus(course);
     
-    let target = course.totalChapters;
+    let targetChapters = course.totalChapters;
+    let targetExercises = course.totalExercises || 0;
     let weeksLeft = getWeeksUntilExam(course.examDate);
     
     if (focus.type === "midterm" && focus.milestone) {
-        target = focus.milestone.chapters;
+        targetChapters = focus.milestone.chapters;
+        // Midterms currently only define chapters, so we'll scale exercises proportionally or just assume no exercise targets for midterm to keep it simple.
+        // Actually, let's just include all remaining exercises since midterms usually test them.
         weeksLeft = getWeeksUntilExam(focus.milestone.date);
     }
     
-    const remaining = Math.max(0, target - course.completedChapters);
+    const remainingChapters = Math.max(0, targetChapters - course.completedChapters);
+    const remainingExercises = Math.max(0, targetExercises - (course.completedExercises || 0));
+    const remainingItems = remainingChapters + remainingExercises;
     
-    if (remaining <= 0) return 0;
-    if (weeksLeft <= 0) return remaining;
+    if (remainingItems <= 0) return 0;
+    if (weeksLeft <= 0) return remainingItems;
     
-    return Math.round((remaining / weeksLeft) * 10) / 10;
+    return Math.round((remainingItems / weeksLeft) * 10) / 10;
 }
 
 export function getTargetChapters(course: Course): number {
@@ -111,16 +116,22 @@ export function getTargetChapters(course: Course): number {
 
 export function getStatus(course: Course): CourseStatus {
     const expected = getExpectedChapter(course);
-    const diff = course.completedChapters - expected;
+    
+    const chapterDiff = course.completedChapters - expected;
+    const exerciseDiff = course.totalExercises ? (course.completedExercises || 0) - expected : 0;
+    const totalDiff = chapterDiff + exerciseDiff;
 
-    if (diff >= 1) return "ahead";
-    if (diff >= -0.5) return "on-track";
+    if (totalDiff >= 1) return "ahead";
+    if (totalDiff >= -0.5) return "on-track";
     return "behind";
 }
 
 export function getBehindAmount(course: Course): number {
     const expected = getExpectedChapter(course);
-    return Math.max(0, Math.ceil(expected - course.completedChapters));
+    const chapterBehind = Math.max(0, expected - course.completedChapters);
+    const exerciseBehind = course.totalExercises ? Math.max(0, expected - (course.completedExercises || 0)) : 0;
+    
+    return Math.ceil(chapterBehind + exerciseBehind);
 }
 
 // ─── Save status type ─────────────────────────────────────────────────────────
@@ -202,6 +213,9 @@ export function useCourses() {
                     if (!updated.chapterSchedule) updated.chapterSchedule = [];
                     if (!updated.completedChaptersList) {
                         updated.completedChaptersList = Array.from({ length: updated.completedChapters || 0 }, (_, i) => i + 1);
+                    }
+                    if (updated.totalExercises !== undefined && !updated.completedExercisesList) {
+                        updated.completedExercisesList = Array.from({ length: updated.completedExercises || 0 }, (_, i) => i + 1);
                     }
 
                     if (course.hasMidterm && course.midtermDate && !course.midterms) {
@@ -435,6 +449,36 @@ export function useCourses() {
         [updateCourses]
     );
 
+    const handleToggleExercise = useCallback(
+        (courseId: string, exerciseNum: number) => {
+            updateCourses((prev: Course[]) =>
+                prev.map((c: Course) => {
+                    if (c.id !== courseId) return c;
+                    
+                    let list = c.completedExercisesList;
+                    if (!list) {
+                        list = Array.from({ length: c.completedExercises || 0 }, (_, i) => i + 1);
+                    }
+                    
+                    const isDone = list.includes(exerciseNum);
+                    
+                    if (isDone) {
+                        list = list.filter(n => n !== exerciseNum);
+                    } else {
+                        list = [...list, exerciseNum];
+                    }
+                    
+                    return { 
+                        ...c, 
+                        completedExercisesList: list,
+                        completedExercises: list.length
+                    };
+                })
+            );
+        },
+        [updateCourses]
+    );
+
     const handleDeleteDeliverable = useCallback(
         (courseId: string, deliverableId: string) => {
             updateCourses((prev: Course[]) =>
@@ -550,6 +594,7 @@ export function useCourses() {
         handleQuickUpdate,
         handleLogHours,
         handleToggleChapter,
+        handleToggleExercise,
         handleToggleDeliverable,
         handleAddDeliverable,
         handleDeleteDeliverable,

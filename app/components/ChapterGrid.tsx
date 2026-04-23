@@ -48,11 +48,13 @@ const ChapterBox = styled.button<{ $done: boolean; $color: string }>`
 interface ChapterGridProps {
     course: Course;
     onToggle: (chapterNum: number) => void;
+    onToggleExercise?: (exerciseNum: number) => void;
     isAdmin?: boolean;
 }
 
-export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridProps) {
+export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmin }: ChapterGridProps) {
     const chapters = Array.from({ length: course.totalChapters }, (_: any, i: number) => i + 1);
+    const exercises = course.totalExercises ? Array.from({ length: course.totalExercises }, (_: any, i: number) => i + 1) : [];
 
     return (
         <div className="mt-6">
@@ -85,6 +87,39 @@ export default function ChapterGrid({ course, onToggle, isAdmin }: ChapterGridPr
                     );
                 })}
             </GridContainer>
+
+            {exercises.length > 0 && (
+                <div className="mt-6">
+                    <div className="flex items-center justify-between mb-3 px-1">
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                            Exercise Sheets
+                        </h4>
+                        <span className="text-[10px] font-black text-zinc-600">
+                            {course.completedExercises || 0} / {course.totalExercises}
+                        </span>
+                    </div>
+                    <GridContainer>
+                        {exercises.map((num: number) => {
+                            const isDone = course.completedExercisesList
+                                ? course.completedExercisesList.includes(num)
+                                : num <= (course.completedExercises || 0);
+
+                            return (
+                                <ChapterBox
+                                    key={num}
+                                    $done={isDone}
+                                    $color={course.color || "from-blue-500 to-cyan-400"}
+                                    onClick={() => isAdmin && onToggleExercise?.(num)}
+                                    disabled={!isAdmin}
+                                    title={`Exercise Sheet ${num}`}
+                                >
+                                    {num}
+                                </ChapterBox>
+                            );
+                        })}
+                    </GridContainer>
+                </div>
+            )}
 
             {course.chapterSchedule && course.chapterSchedule.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-white/5 space-y-3">
