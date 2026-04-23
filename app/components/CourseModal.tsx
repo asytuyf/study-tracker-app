@@ -26,9 +26,6 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     const [weeklyHourGoal, setWeeklyHourGoal] = useState(
         course?.weeklyHourGoal?.toString() || "10"
     );
-    const [chapterScheduleJson, setChapterScheduleJson] = useState(
-        course?.chapterSchedule ? JSON.stringify(course.chapterSchedule, null, 2) : ""
-    );
 
     const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
     const [description, setDescription] = useState(course?.description || "");
@@ -56,13 +53,6 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        let chapterSchedule;
-        try {
-            chapterSchedule = chapterScheduleJson ? JSON.parse(chapterScheduleJson) : undefined;
-        } catch (e) {
-            alert("Invalid JSON for Chapter Schedule. Please check the format.");
-            return;
-        }
 
         onSave({
             name: name.trim(),
@@ -73,7 +63,6 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             totalChapters: parseInt(totalChapters) || 0,
             completedChapters: parseInt(completedChapters) || 0,
             weeklyHourGoal: itemType === "project" ? parseInt(weeklyHourGoal) : undefined,
-            chapterSchedule,
             midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
             notebookLMLink: notebookLMLink.trim() || undefined,
@@ -238,19 +227,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                         </div>
                     )}
 
-                    {/* Chapter Schedule JSON */}
-                    <div>
-                        <label className="block text-sm text-zinc-400 mb-2">
-                            Chapter Schedule (JSON)
-                            <span className="text-zinc-600 text-[10px] ml-2 tracking-tight">{`[{"week": 1, "chapters": [1, 2]}, ...]`}</span>
-                        </label>
-                        <textarea
-                            value={chapterScheduleJson}
-                            onChange={(e) => setChapterScheduleJson(e.target.value)}
-                            placeholder='[{"week": 1, "chapters": [1, 2]}]'
-                            className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-xs placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors h-24 font-mono resize-none"
-                        />
-                    </div>
+                    )}
 
                     {/* Midterm section — current courses only */}
                     {courseType === "current" && (

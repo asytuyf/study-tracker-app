@@ -90,6 +90,7 @@ export default function Home() {
     handleAddDeliverable,
     handleDeleteDeliverable,
     handleToggleChapter,
+    handleToggleExercise,
     handleLogHours,
     handleTogglePlanTask,
   } = useCourses();
@@ -170,6 +171,7 @@ export default function Home() {
                   } : undefined}
                   onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
                   onToggleChapter={handleToggleChapter}
+                  onToggleExercise={handleToggleExercise}
                   onLogHours={(id, hours) => {
                     handleLogHours(id, getCurrentWeekMonday(), hours);
                   }}

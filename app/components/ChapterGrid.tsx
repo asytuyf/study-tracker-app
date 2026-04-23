@@ -121,38 +121,7 @@ export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmi
                 </div>
             )}
 
-            {course.chapterSchedule && course.chapterSchedule.length > 0 && (
-                <div className="mt-4 pt-4 border-t border-white/5 space-y-3">
-                    {course.chapterSchedule.map((sched) => (
-                        <div key={sched.week} className="flex flex-col gap-1.5">
-                            <div className="flex items-center gap-2">
-                                <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500">Week {sched.week}</span>
-                                <div className="h-[1px] flex-1 bg-white/5" />
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {sched.chapters.map((ch: number) => {
-                                    const isChDone = course.completedChaptersList 
-                                        ? course.completedChaptersList.includes(ch)
-                                        : ch <= course.completedChapters;
-                                    return (
-                                        <button
-                                            key={ch}
-                                            onClick={() => isAdmin && onToggle(ch)}
-                                            disabled={!isAdmin}
-                                            className={`px-2 py-1 rounded-md text-[10px] font-bold transition-all ${isChDone
-                                                ? "bg-white/10 text-white"
-                                                : "bg-zinc-900/50 text-zinc-600 hover:text-zinc-400"
-                                                }`}
-                                        >
-                                            Ch. {ch}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+
         </div>
     );
 }
