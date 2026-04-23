@@ -222,6 +222,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                         </div>
                     </div>
 
+
                     {/* Weekly Hour Goal (Project only) */}
                     {itemType === "project" && (
                         <div>

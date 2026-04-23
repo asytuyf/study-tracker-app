@@ -79,6 +79,9 @@ export interface Course {
   // Start date
   startDate?: string;
 
+  // The actual current chapter the class is on (overrides weeksSinceStart)
+  currentClassChapter?: number;
+
   // Midterm milestones
   midterms?: Milestone[];
 

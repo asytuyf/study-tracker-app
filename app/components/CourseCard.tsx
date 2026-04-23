@@ -6,7 +6,6 @@ import {
     getTargetChapters,
     getExpectedChapter,
     getBehindAmount,
-    getPlannedChaptersPerWeek,
     getCurrentChaptersPerWeek,
     getDaysUntil,
     getWeeksSinceStart,
@@ -81,9 +80,7 @@ export default function CourseCard({
 
     const status = getStatus(course);
 
-    const plannedRate = isSelfStudy ? getPlannedChaptersPerWeek(course) : null;
-    const currentRate = isSelfStudy ? getCurrentChaptersPerWeek(course) : null;
-    const rateEscalated = plannedRate !== null && currentRate !== null && currentRate > plannedRate + 0.1;
+    const currentRate = !isProject ? getCurrentChaptersPerWeek(course) : null;
 
     return (
         <div
@@ -219,18 +216,13 @@ export default function CourseCard({
                                 )}
                             </div>
 
-                            {isSelfStudy && plannedRate !== null && currentRate !== null && (
+                            {!isProject && currentRate !== null && (
                                 <div className="flex justify-between items-center text-[10px]">
                                     <span className="text-zinc-500 uppercase font-bold tracking-tight">Rate Need</span>
                                     <div className="flex items-center gap-1.5">
-                                        <span className={`font-bold ${rateEscalated ? "text-red-400" : "text-purple-400"}`}>
+                                        <span className="font-bold text-red-400">
                                             {currentRate}/wk
                                         </span>
-                                        {rateEscalated && (
-                                            <span className="text-zinc-600 font-medium">
-                                                ({plannedRate})
-                                            </span>
-                                        )}
                                     </div>
                                 </div>
                             )}
