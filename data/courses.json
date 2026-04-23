@@ -9,15 +9,7 @@
       "completedChapters": 8,
       "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
       "color": "from-blue-500 to-cyan-400",
-      "midterms": [
-        {
-          "id": "60cabfe2-069e-4edc-9613-9aa856f0a9ca",
-          "name": "Midterm 2",
-          "date": "2026-04-20",
-          "chapters": 8,
-          "completed": false
-        }
-      ],
+      "midterms": [],
       "notionLink": "https://www.notion.so/Linear-algebra-2-27cedf02476080e8b5d9dd4eec514728",
       "description": "- 6 sheets (12 pages) (Handwritten or not)\n\n- Office hours with Cara HOBOHM\n\n- There should be name and surname on all submitted sheets of papers.",
       "notebookLMLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed",
