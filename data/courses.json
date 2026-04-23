@@ -63,7 +63,13 @@
         3,
         4
       ],
-      "completedExercisesList": []
+      "completedExercisesList": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "completedExercises": 4
     },
     {
       "name": "Analysis 1",
