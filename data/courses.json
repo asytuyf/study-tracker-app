@@ -6,7 +6,7 @@
       "startDate": "2026-02-16",
       "examDate": "2026-06-25",
       "totalChapters": 13,
-      "completedChapters": 7,
+      "completedChapters": 8,
       "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
       "color": "from-blue-500 to-cyan-400",
       "midterms": [
@@ -31,8 +31,10 @@
         4,
         5,
         6,
-        7
-      ]
+        7,
+        9
+      ],
+      "completedExercisesList": []
     },
     {
       "name": "Theoritical computer science",
@@ -54,7 +56,8 @@
       "chapterSchedule": [],
       "completedChaptersList": [
         7
-      ]
+      ],
+      "completedExercisesList": []
     },
     {
       "name": "Analysis 1",
@@ -72,7 +75,8 @@
       "itemType": "course",
       "weeklyLogs": [],
       "chapterSchedule": [],
-      "completedChaptersList": []
+      "completedChaptersList": [],
+      "completedExercisesList": []
     },
     {
       "name": "Discrete mathematics 2",
@@ -89,7 +93,8 @@
       "itemType": "course",
       "weeklyLogs": [],
       "chapterSchedule": [],
-      "completedChaptersList": []
+      "completedChaptersList": [],
+      "completedExercisesList": []
     },
     {
       "name": "BSP 6",
@@ -131,7 +136,8 @@
           "category": "implementation"
         }
       ],
-      "completedChaptersList": []
+      "completedChaptersList": [],
+      "completedExercisesList": []
     }
   ],
   "planTasks": [
