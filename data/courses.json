@@ -35,7 +35,7 @@
       "startDate": "2026-02-19",
       "examDate": "2026-07-02",
       "totalChapters": 9,
-      "completedChapters": 1,
+      "completedChapters": 2,
       "hasMidterm": false,
       "midtermCompleted": false,
       "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
@@ -48,7 +48,8 @@
       "weeklyLogs": [],
       "chapterSchedule": [],
       "completedChaptersList": [
-        7
+        8,
+        9
       ],
       "completedExercisesList": []
     },
