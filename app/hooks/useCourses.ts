@@ -81,13 +81,22 @@ export function getExpectedChapter(course: Course): number {
 
 
 export function getCurrentChaptersPerWeek(course: Course): number {
-    const target = getTargetChapters(course);
-    if (course.completedChapters >= target) return 0;
+    const focus = getCurrentFocus(course);
     
-    const expected = getExpectedChapter(course);
-    const behind = Math.max(0, expected - course.completedChapters);
+    let target = course.totalChapters;
+    let weeksLeft = getWeeksUntilExam(course.examDate);
     
-    return Math.max(0, Math.ceil(1.0 + behind));
+    if (focus.type === "midterm" && focus.milestone) {
+        target = focus.milestone.chapters;
+        weeksLeft = getWeeksUntilExam(focus.milestone.date);
+    }
+    
+    const remaining = Math.max(0, target - course.completedChapters);
+    
+    if (remaining <= 0) return 0;
+    if (weeksLeft <= 0) return remaining;
+    
+    return Math.round((remaining / weeksLeft) * 10) / 10;
 }
 
 export function getTargetChapters(course: Course): number {
