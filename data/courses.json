@@ -6,10 +6,18 @@
       "startDate": "2026-02-16",
       "examDate": "2026-06-25",
       "totalChapters": 13,
-      "completedChapters": 9,
+      "completedChapters": 7,
       "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
       "color": "from-blue-500 to-cyan-400",
-      "midterms": [],
+      "midterms": [
+        {
+          "id": "60cabfe2-069e-4edc-9613-9aa856f0a9ca",
+          "name": "Midterm 2",
+          "date": "2026-04-20",
+          "chapters": 8,
+          "completed": false
+        }
+      ],
       "notionLink": "https://www.notion.so/Linear-algebra-2-27cedf02476080e8b5d9dd4eec514728",
       "description": "- 6 sheets (12 pages) (Handwritten or not)\n\n- Office hours with Cara HOBOHM\n\n- There should be name and surname on all submitted sheets of papers.",
       "notebookLMLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed",
@@ -23,9 +31,7 @@
         4,
         5,
         6,
-        7,
-        9,
-        8
+        7
       ],
       "completedExercisesList": []
     },
@@ -34,7 +40,7 @@
       "courseType": "current",
       "startDate": "2026-02-19",
       "examDate": "2026-07-02",
-      "totalChapters": 13,
+      "totalChapters": 9,
       "completedChapters": 5,
       "hasMidterm": false,
       "midtermCompleted": false,
@@ -48,11 +54,11 @@
       "weeklyLogs": [],
       "chapterSchedule": [],
       "completedChaptersList": [
-        8,
-        9,
+        7,
         1,
         2,
-        3
+        3,
+        4
       ],
       "completedExercisesList": []
     },
