@@ -54,7 +54,7 @@ interface ChapterGridProps {
 
 export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmin }: ChapterGridProps) {
     const chapters = Array.from({ length: course.totalChapters }, (_: any, i: number) => i + 1);
-    const exercises = course.totalExercises ? Array.from({ length: course.totalExercises }, (_: any, i: number) => i + 1) : [];
+    const exercises = Array.from({ length: course.totalChapters }, (_: any, i: number) => i + 1);
 
     return (
         <div className="mt-6">
@@ -95,7 +95,7 @@ export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmi
                             Exercise Sheets
                         </h4>
                         <span className="text-[10px] font-black text-zinc-600">
-                            {course.completedExercises || 0} / {course.totalExercises}
+                            {course.completedExercises || 0} / {course.totalChapters}
                         </span>
                     </div>
                     <GridContainer>

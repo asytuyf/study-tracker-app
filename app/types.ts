@@ -59,7 +59,6 @@ export interface Course {
   totalChapters: number;
   completedChapters: number;
   completedChaptersList?: number[];
-  totalExercises?: number;
   completedExercises?: number;
   completedExercisesList?: number[];
   color: string;

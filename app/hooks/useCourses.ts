@@ -84,13 +84,12 @@ export function getCurrentChaptersPerWeek(course: Course): number {
     const focus = getCurrentFocus(course);
     
     let targetChapters = course.totalChapters;
-    let targetExercises = course.totalExercises || 0;
+    let targetExercises = course.totalChapters;
     let weeksLeft = getWeeksUntilExam(course.examDate);
     
     if (focus.type === "midterm" && focus.milestone) {
         targetChapters = focus.milestone.chapters;
-        // Midterms currently only define chapters, so we'll scale exercises proportionally or just assume no exercise targets for midterm to keep it simple.
-        // Actually, let's just include all remaining exercises since midterms usually test them.
+        targetExercises = focus.milestone.chapters;
         weeksLeft = getWeeksUntilExam(focus.milestone.date);
     }
     
@@ -118,7 +117,7 @@ export function getStatus(course: Course): CourseStatus {
     const expected = getExpectedChapter(course);
     
     const chapterDiff = course.completedChapters - expected;
-    const exerciseDiff = course.totalExercises ? (course.completedExercises || 0) - expected : 0;
+    const exerciseDiff = (course.completedExercises || 0) - expected;
     const totalDiff = chapterDiff + exerciseDiff;
 
     if (totalDiff >= 1) return "ahead";
@@ -129,7 +128,7 @@ export function getStatus(course: Course): CourseStatus {
 export function getBehindAmount(course: Course): number {
     const expected = getExpectedChapter(course);
     const chapterBehind = Math.max(0, expected - course.completedChapters);
-    const exerciseBehind = course.totalExercises ? Math.max(0, expected - (course.completedExercises || 0)) : 0;
+    const exerciseBehind = Math.max(0, expected - (course.completedExercises || 0));
     
     return Math.ceil(chapterBehind + exerciseBehind);
 }
@@ -214,7 +213,7 @@ export function useCourses() {
                     if (!updated.completedChaptersList) {
                         updated.completedChaptersList = Array.from({ length: updated.completedChapters || 0 }, (_, i) => i + 1);
                     }
-                    if (updated.totalExercises !== undefined && !updated.completedExercisesList) {
+                    if (!updated.completedExercisesList) {
                         updated.completedExercisesList = Array.from({ length: updated.completedExercises || 0 }, (_, i) => i + 1);
                     }
 
