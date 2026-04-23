@@ -227,8 +227,6 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                         </div>
                     )}
 
-                    )}
-
                     {/* Midterm section — current courses only */}
                     {courseType === "current" && (
                         <div className="border-t border-zinc-800 pt-5 space-y-4">
