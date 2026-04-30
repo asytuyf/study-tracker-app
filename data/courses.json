@@ -93,8 +93,10 @@
       "completedChaptersList": [
         1
       ],
-      "completedExercisesList": [],
-      "completedExercises": 0
+      "completedExercisesList": [
+        1
+      ],
+      "completedExercises": 1
     },
     {
       "name": "Discrete mathematics 2",
