@@ -148,7 +148,14 @@
         }
       ],
       "chapterSchedule": [],
-      "deliverables": [],
+      "deliverables": [
+        {
+          "id": "4f5fc966-60d5-4e53-bc34-58a28d9e8615",
+          "name": "Make paper about storm detection pipeline (Flex)",
+          "completed": false,
+          "category": "scientific"
+        }
+      ],
       "completedChaptersList": [],
       "completedExercisesList": []
     }
