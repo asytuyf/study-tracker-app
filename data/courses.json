@@ -154,6 +154,12 @@
           "name": "Make paper about storm detection pipeline (Flex)",
           "completed": false,
           "category": "scientific"
+        },
+        {
+          "id": "a65178d7-8880-4e52-a134-5579ca1b1223",
+          "name": "Start phase 2 of coding",
+          "completed": false,
+          "category": "implementation"
         }
       ],
       "completedChaptersList": [],
