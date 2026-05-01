@@ -148,20 +148,7 @@
         }
       ],
       "chapterSchedule": [],
-      "deliverables": [
-        {
-          "id": "1925c6f0-c050-44b8-bc53-25b9b92b0ea9",
-          "name": "2 papers to read",
-          "completed": false,
-          "category": "scientific"
-        },
-        {
-          "id": "e5d43350-3e0c-41bd-b911-50622a7dad0f",
-          "name": "Continue working on storm detection (multi-storm & small scale storms)",
-          "completed": false,
-          "category": "implementation"
-        }
-      ],
+      "deliverables": [],
       "completedChaptersList": [],
       "completedExercisesList": []
     }
