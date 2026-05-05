@@ -332,6 +332,18 @@
         "e1105728-ad9a-4b8d-8764-3a438724e26c"
       ],
       "weekDate": "2026-04-27"
+    },
+    {
+      "id": "64ca1391-f9a9-4538-a2e3-e16581e5f90a",
+      "text": "Analysis hw #2 + Ch #1 of DM2",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7",
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-05-04",
+      "taskType": "weekly",
+      "subtasks": []
     }
   ]
 }
