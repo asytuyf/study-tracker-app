@@ -343,6 +343,18 @@
       "weekDate": "2026-05-04",
       "taskType": "weekly",
       "subtasks": []
+    },
+    {
+      "id": "6f29370f-3140-41ac-8edc-ed02436f64de",
+      "text": "DM2 ch#1",
+      "done": false,
+      "courseIds": [
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-05-04",
+      "taskType": "weekly",
+      "description": "Prep for when I get sent the exercises but you might find notes from the book already in notion, only later chapters are not well done",
+      "subtasks": []
     }
   ]
 }
