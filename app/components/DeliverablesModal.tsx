@@ -76,9 +76,9 @@ export default function DeliverablesModal({
                 {course.description && (
                     <div className="mb-4 p-4 rounded-xl bg-white/[0.03] border border-white/5">
                         <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-1.5">Exam Notes / Info</p>
-                        <p className="text-zinc-300 text-sm leading-relaxed italic">
-                            "{course.description}"
-                        </p>
+                        <div className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap opacity-90">
+                            {course.description}
+                        </div>
                     </div>
                 )}
 

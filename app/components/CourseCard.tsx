@@ -137,9 +137,9 @@ export default function CourseCard({
                             {dateLabel}
                         </p>
                         {course.description && (
-                            <p className="text-[10px] text-zinc-400 mt-1.5 line-clamp-2 leading-snug">
+                            <div className="text-[10px] text-zinc-400 mt-1.5 whitespace-pre-wrap leading-relaxed opacity-80">
                                 {course.description}
-                            </p>
+                            </div>
                         )}
                     </div>
                 </div>

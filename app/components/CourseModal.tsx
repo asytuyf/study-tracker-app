@@ -26,6 +26,10 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     const [weeklyHourGoal, setWeeklyHourGoal] = useState(
         course?.weeklyHourGoal?.toString() || "10"
     );
+    const [hasExercises, setHasExercises] = useState(course?.hasExercises ?? true);
+    const [totalExercises, setTotalExercises] = useState(
+        course?.totalExercises?.toString() || course?.totalChapters?.toString() || ""
+    );
     const [unitName, setUnitName] = useState(course?.unitName || "");
 
     const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
@@ -64,6 +68,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             examDate,
             totalChapters: parseInt(totalChapters) || 0,
             completedChapters: parseInt(completedChapters) || 0,
+            hasExercises,
+            totalExercises: hasExercises ? (parseInt(totalExercises) || 0) : undefined,
             weeklyHourGoal: itemType === "project" ? parseInt(weeklyHourGoal) : undefined,
             midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
@@ -214,6 +220,35 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             />
                         </div>
                     </div>
+                    
+                    {/* Exercise Sheets */}
+                    {itemType === "course" && (
+                        <div className="bg-zinc-800/50 p-4 rounded-xl border border-zinc-700/50 space-y-3">
+                            <label className="flex items-center gap-3 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={hasExercises}
+                                    onChange={(e) => setHasExercises(e.target.checked)}
+                                    className="w-5 h-5 rounded border-zinc-600 bg-zinc-800 text-blue-500 focus:ring-blue-500 focus:ring-offset-zinc-900"
+                                />
+                                <span className="text-sm text-zinc-300 font-medium">Course has Exercise Sheets</span>
+                            </label>
+                            
+                            {hasExercises && (
+                                <div className="pl-8">
+                                    <label className="block text-xs text-zinc-400 mb-1.5">Total Exercise Sheets</label>
+                                    <input
+                                        type="number"
+                                        value={totalExercises}
+                                        onChange={(e) => setTotalExercises(e.target.value)}
+                                        placeholder="e.g., 12"
+                                        min="1"
+                                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    )}
                     
                     {/* Unit Name */}
                     {itemType === "course" && (

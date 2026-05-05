@@ -84,12 +84,12 @@ export function getCurrentChaptersPerWeek(course: Course): number {
     const focus = getCurrentFocus(course);
     
     let targetChapters = course.totalChapters;
-    let targetExercises = course.totalChapters;
+    let targetExercises = course.hasExercises !== false ? (course.totalExercises ?? course.totalChapters) : 0;
     let weeksLeft = getWeeksUntilExam(course.examDate);
     
     if (focus.type === "midterm" && focus.milestone) {
         targetChapters = focus.milestone.chapters;
-        targetExercises = focus.milestone.chapters;
+        targetExercises = course.hasExercises !== false ? focus.milestone.chapters : 0;
         weeksLeft = getWeeksUntilExam(focus.milestone.date);
     }
     
@@ -178,6 +178,10 @@ export function useCourses() {
                     if (!updated.attendedChaptersList) {
                         updated.attendedChaptersList = [];
                     }
+                    if (updated.hasExercises === undefined) {
+                        updated.hasExercises = true;
+                        updated.totalExercises = updated.totalChapters;
+                    }
                     return updated;
                 });
                 
@@ -221,6 +225,10 @@ export function useCourses() {
                     }
                     if (!updated.completedExercisesList) {
                         updated.completedExercisesList = Array.from({ length: updated.completedExercises || 0 }, (_, i) => i + 1);
+                    }
+                    if (updated.hasExercises === undefined) {
+                        updated.hasExercises = true;
+                        updated.totalExercises = updated.totalChapters;
                     }
 
                     if (course.hasMidterm && course.midtermDate && !course.midterms) {
