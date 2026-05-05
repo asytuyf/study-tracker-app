@@ -44,7 +44,8 @@
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
       "hasExercises": true,
-      "totalExercises": 13
+      "totalExercises": 13,
+      "attendedExercisesList": []
     },
     {
       "name": "Theoritical computer science",
@@ -78,14 +79,16 @@
         5,
         6,
         7,
-        8,
-        9
+        8
       ],
       "completedExercises": 7,
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2454",
       "hasExercises": true,
-      "totalExercises": 13
+      "totalExercises": 13,
+      "attendedExercisesList": [
+        9
+      ]
     },
     {
       "name": "Analysis 1",
@@ -115,7 +118,8 @@
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=322",
       "hasExercises": true,
-      "totalExercises": 14
+      "totalExercises": 14,
+      "attendedExercisesList": []
     },
     {
       "name": "Discrete mathematics 2",
@@ -138,7 +142,8 @@
       "notebookLMLink": "https://notebooklm.google.com/notebook/76c94db4-2bcd-437a-9841-7bf2806dcaa3",
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329",
-      "hasExercises": false
+      "hasExercises": false,
+      "attendedExercisesList": []
     },
     {
       "name": "BSP 6",
@@ -195,7 +200,8 @@
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=4197",
       "hasExercises": true,
-      "totalExercises": 1
+      "totalExercises": 1,
+      "attendedExercisesList": []
     }
   ],
   "planTasks": [
