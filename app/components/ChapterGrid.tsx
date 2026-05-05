@@ -10,7 +10,7 @@ const GridContainer = styled.div`
   margin-top: 1rem;
 `;
 
-const ChapterBox = styled.button<{ $done: boolean; $color: string }>`
+const ChapterBox = styled.button<{ $state: "not_started" | "attended" | "completed"; $color: string }>`
   aspect-ratio: 1;
   border-radius: 0.5rem;
   display: flex;
@@ -21,19 +21,30 @@ const ChapterBox = styled.button<{ $done: boolean; $color: string }>`
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 255, 255, 0.05);
   
-  ${(props: { $done: boolean; $color: string }) => {
+  ${(props: { $state: "not_started" | "attended" | "completed"; $color: string }) => {
         const parts = props.$color.split(" ");
         const fromColor = parts[0]?.replace("from-", "") || "blue-500";
         const toColor = parts[1]?.replace("to-", "") || "cyan-400";
 
-        return props.$done
-            ? `
+        if (props.$state === "completed") {
+            return `
     background: linear-gradient(135deg, var(--${fromColor}, #3b82f6) 0%, var(--${toColor}, #22d3ee) 100%);
     background-color: #3b82f6; /* Fallback */
     color: white;
     box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
-  `
-            : `
+  `;
+        }
+
+        if (props.$state === "attended") {
+            return `
+    background: linear-gradient(135deg, #f59e0b 0%, #facc15 100%);
+    background-color: #f59e0b;
+    color: white;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+  `;
+        }
+
+        return `
     background: rgba(255, 255, 255, 0.03);
     color: rgba(255, 255, 255, 0.3);
     &:hover {
@@ -56,11 +67,13 @@ export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmi
     const chapters = Array.from({ length: course.totalChapters }, (_: any, i: number) => i + 1);
     const exercises = Array.from({ length: course.totalChapters }, (_: any, i: number) => i + 1);
 
+    const unitName = course.unitName || (course.courseType === "current" ? "Lecture" : "Chapter");
+
     return (
         <div className="mt-6">
             <div className="flex items-center justify-between mb-3 px-1">
                 <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
-                    Chapter Progress
+                    {unitName} Progress
                 </h4>
                 <span className="text-[10px] font-black text-zinc-600">
                     {course.completedChapters} / {course.totalChapters}
@@ -69,18 +82,21 @@ export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmi
 
             <GridContainer>
                 {chapters.map((num: number) => {
-                    const isDone = course.completedChaptersList 
+                    const isCompleted = course.completedChaptersList 
                         ? course.completedChaptersList.includes(num)
                         : num <= course.completedChapters;
+                        
+                    const isAttended = course.attendedChaptersList?.includes(num);
+                    const state = isCompleted ? "completed" : isAttended ? "attended" : "not_started";
                         
                     return (
                         <ChapterBox
                             key={num}
-                            $done={isDone}
+                            $state={state}
                             $color={course.color || "from-blue-500 to-cyan-400"}
                             onClick={() => isAdmin && onToggle(num)}
                             disabled={!isAdmin}
-                            title={`Chapter ${num}`}
+                            title={`${unitName} ${num}`}
                         >
                             {num}
                         </ChapterBox>
@@ -107,7 +123,7 @@ export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmi
                             return (
                                 <ChapterBox
                                     key={num}
-                                    $done={isDone}
+                                    $state={isDone ? "completed" : "not_started"}
                                     $color={course.color || "from-blue-500 to-cyan-400"}
                                     onClick={() => isAdmin && onToggleExercise?.(num)}
                                     disabled={!isAdmin}

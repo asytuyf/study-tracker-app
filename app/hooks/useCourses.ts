@@ -175,6 +175,9 @@ export function useCourses() {
                     if (!updated.completedChaptersList) {
                         updated.completedChaptersList = Array.from({ length: updated.completedChapters || 0 }, (_, i) => i + 1);
                     }
+                    if (!updated.attendedChaptersList) {
+                        updated.attendedChaptersList = [];
+                    }
                     return updated;
                 });
                 
@@ -212,6 +215,9 @@ export function useCourses() {
                     if (!updated.chapterSchedule) updated.chapterSchedule = [];
                     if (!updated.completedChaptersList) {
                         updated.completedChaptersList = Array.from({ length: updated.completedChapters || 0 }, (_, i) => i + 1);
+                    }
+                    if (!updated.attendedChaptersList) {
+                        updated.attendedChaptersList = [];
                     }
                     if (!updated.completedExercisesList) {
                         updated.completedExercisesList = Array.from({ length: updated.completedExercises || 0 }, (_, i) => i + 1);
@@ -424,23 +430,32 @@ export function useCourses() {
                 prev.map((c: Course) => {
                     if (c.id !== courseId) return c;
                     
-                    let list = c.completedChaptersList;
-                    if (!list) {
-                        list = Array.from({ length: c.completedChapters || 0 }, (_, i) => i + 1);
+                    let completed = c.completedChaptersList;
+                    if (!completed) {
+                        completed = Array.from({ length: c.completedChapters || 0 }, (_, i) => i + 1);
                     }
+                    let attended = c.attendedChaptersList || [];
                     
-                    const isDone = list.includes(chapterNum);
+                    const isCompleted = completed.includes(chapterNum);
+                    const isAttended = attended.includes(chapterNum);
                     
-                    if (isDone) {
-                        list = list.filter(n => n !== chapterNum);
+                    if (isCompleted) {
+                        // Completed -> Not Started
+                        completed = completed.filter(n => n !== chapterNum);
+                    } else if (isAttended) {
+                        // Attended -> Completed
+                        attended = attended.filter(n => n !== chapterNum);
+                        completed = [...completed, chapterNum];
                     } else {
-                        list = [...list, chapterNum];
+                        // Not Started -> Attended
+                        attended = [...attended, chapterNum];
                     }
                     
                     return { 
                         ...c, 
-                        completedChaptersList: list,
-                        completedChapters: list.length
+                        completedChaptersList: completed,
+                        attendedChaptersList: attended,
+                        completedChapters: completed.length
                     };
                 })
             );

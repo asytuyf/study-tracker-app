@@ -61,7 +61,9 @@ export interface Course {
   completedChaptersList?: number[];
   completedExercises?: number;
   completedExercisesList?: number[];
+  attendedChaptersList?: number[];
   color: string;
+  unitName?: string;
 
   // Study item type
   itemType: "course" | "project";
@@ -109,6 +111,9 @@ export interface Course {
 
   // Notion page link for notes and resources
   notionLink?: string;
+
+  // Moodle link for course platform
+  moodleLink?: string;
 }
 
 export type CourseStatus = "ahead" | "on-track" | "behind";

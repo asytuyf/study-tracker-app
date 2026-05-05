@@ -26,11 +26,13 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     const [weeklyHourGoal, setWeeklyHourGoal] = useState(
         course?.weeklyHourGoal?.toString() || "10"
     );
+    const [unitName, setUnitName] = useState(course?.unitName || "");
 
     const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
     const [description, setDescription] = useState(course?.description || "");
     const [notebookLMLink, setNotebookLMLink] = useState(course?.notebookLMLink || "");
     const [notionLink, setNotionLink] = useState(course?.notionLink || "");
+    const [moodleLink, setMoodleLink] = useState(course?.moodleLink || "");
 
     const handleAddMidterm = () => {
         const newMidterm: Milestone = {
@@ -67,6 +69,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             description: description.trim() || undefined,
             notebookLMLink: notebookLMLink.trim() || undefined,
             notionLink: notionLink.trim() || undefined,
+            moodleLink: moodleLink.trim() || undefined,
+            unitName: unitName.trim() || undefined,
         });
     };
 
@@ -210,6 +214,20 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             />
                         </div>
                     </div>
+                    
+                    {/* Unit Name */}
+                    {itemType === "course" && (
+                        <div>
+                            <label className="block text-sm text-zinc-400 mb-2">Unit Name (e.g., Chapter, Lecture)</label>
+                            <input
+                                type="text"
+                                value={unitName}
+                                onChange={(e) => setUnitName(e.target.value)}
+                                placeholder="Leaves blank for default"
+                                className="w-full px-3 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
+                            />
+                        </div>
+                    )}
 
                     {/* Weekly Hour Goal (Project only) */}
                     {itemType === "project" && (
@@ -355,6 +373,26 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                     onChange={(e) => setNotionLink(e.target.value)}
                                     placeholder="notion.so/..."
                                     className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 transition-colors text-sm"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Moodle Link */}
+                        <div className="overflow-hidden">
+                            <label className="block text-sm text-zinc-400 mb-2">
+                                Moodle Link
+                                <span className="text-zinc-600 text-xs ml-2">(optional)</span>
+                            </label>
+                            <div className="relative">
+                                <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 bg-orange-500 rounded flex items-center justify-center">
+                                    <span className="text-white text-[10px] font-bold font-serif leading-none">M</span>
+                                </div>
+                                <input
+                                    type="url"
+                                    value={moodleLink}
+                                    onChange={(e) => setMoodleLink(e.target.value)}
+                                    placeholder="moodle.uni.edu/..."
+                                    className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition-colors text-sm"
                                 />
                             </div>
                         </div>

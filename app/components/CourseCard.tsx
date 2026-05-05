@@ -83,6 +83,7 @@ export default function CourseCard({
     const status = getStatus(course);
 
     const currentRate = !isProject ? getCurrentChaptersPerWeek(course) : null;
+    const unitName = course.unitName || (course.courseType === "current" ? "Lecture" : "Chapter");
 
     return (
         <div
@@ -135,6 +136,11 @@ export default function CourseCard({
                             {isCurrent && weeksIn !== null ? `Wk ${weeksIn} · ` : ""}
                             {dateLabel}
                         </p>
+                        {course.description && (
+                            <p className="text-[10px] text-zinc-400 mt-1.5 line-clamp-2 leading-snug">
+                                {course.description}
+                            </p>
+                        )}
                     </div>
                 </div>
 
@@ -213,7 +219,7 @@ export default function CourseCard({
                                 </div>
                                 {!isComplete && (
                                     <p className="text-[9px] text-zinc-600 mt-1">
-                                        │ = ch.{expected} · {focus.type === "midterm" && focus.milestone ? focus.milestone.name : "Final"}
+                                        │ = {unitName.substring(0, 3).toLowerCase()}.{expected} · {focus.type === "midterm" && focus.milestone ? focus.milestone.name : "Final"}
                                     </p>
                                 )}
                             </div>

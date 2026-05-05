@@ -83,8 +83,8 @@ export default function DeliverablesModal({
                 )}
 
                 {/* Link buttons */}
-                {(course.notebookLMLink || course.notionLink) && (
-                    <div className={`mb-6 grid gap-2 ${course.notebookLMLink && course.notionLink ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                {(course.notebookLMLink || course.notionLink || course.moodleLink) && (
+                    <div className={`mb-6 grid gap-2 ${[course.notebookLMLink, course.notionLink, course.moodleLink].filter(Boolean).length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                         {/* NotebookLM Link */}
                         {course.notebookLMLink && (
                             <a
@@ -131,6 +131,24 @@ export default function DeliverablesModal({
                                 <div className="flex-1 min-w-0">
                                     <p className="text-white font-semibold text-xs">Notion</p>
                                     <p className="text-zinc-500 text-[10px] truncate">Notes & docs</p>
+                                </div>
+                            </a>
+                        )}
+
+                        {/* Moodle Link */}
+                        {course.moodleLink && (
+                            <a
+                                href={course.moodleLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 p-3 rounded-xl bg-orange-950/40 border border-orange-900/50 hover:border-orange-700/60 transition-all group"
+                            >
+                                <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
+                                    <span className="text-white text-lg font-bold font-serif leading-none">M</span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-white font-semibold text-xs">Moodle</p>
+                                    <p className="text-zinc-500 text-[10px] truncate">Course page</p>
                                 </div>
                             </a>
                         )}
