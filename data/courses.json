@@ -91,7 +91,7 @@
       "id": "9b5f2488-a5ae-437e-9878-46a6464f89b7",
       "color": "from-sky-500 to-blue-400",
       "notionLink": "https://www.notion.so/Analysis-1-277edf024760808e8aa3f781fa321348",
-      "description": "Catch up during the holidays (!!!)",
+      "description": "14 Ex sheets + Exam prep sheet",
       "itemType": "course",
       "weeklyLogs": [],
       "chapterSchedule": [],
@@ -102,7 +102,8 @@
       "completedExercisesList": [
         1
       ],
-      "completedExercises": 1
+      "completedExercises": 1,
+      "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c"
     },
     {
       "name": "Discrete mathematics 2",
