@@ -65,6 +65,7 @@ export interface Course {
   hasExercises?: boolean;
   totalExercises?: number;
   attendedChaptersList?: number[];
+  attendedExercisesList?: number[];
   color: string;
   unitName?: string;
 

@@ -121,11 +121,12 @@ export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmi
                             const isDone = course.completedExercisesList
                                 ? course.completedExercisesList.includes(num)
                                 : num <= (course.completedExercises || 0);
+                            const isAttended = course.attendedExercisesList?.includes(num);
 
                             return (
                                 <ChapterBox
                                     key={num}
-                                    $state={isDone ? "completed" : "not_started"}
+                                    $state={isDone ? "completed" : isAttended ? "attended" : "not_started"}
                                     $color={course.color || "from-blue-500 to-cyan-400"}
                                     onClick={() => isAdmin && onToggleExercise?.(num)}
                                     disabled={!isAdmin}

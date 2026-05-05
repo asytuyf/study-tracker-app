@@ -226,6 +226,9 @@ export function useCourses() {
                     if (!updated.completedExercisesList) {
                         updated.completedExercisesList = Array.from({ length: updated.completedExercises || 0 }, (_, i) => i + 1);
                     }
+                    if (!updated.attendedExercisesList) {
+                        updated.attendedExercisesList = [];
+                    }
                     if (updated.hasExercises === undefined) {
                         updated.hasExercises = true;
                         updated.totalExercises = updated.totalChapters;
@@ -357,6 +360,7 @@ export function useCourses() {
                         ...c,
                         completedChapters: newProgress,
                         completedChaptersList: list,
+                        attendedChaptersList: [],
                         midterms: nextMidterms,
                     };
                 })
@@ -371,7 +375,7 @@ export function useCourses() {
                 if (c.id !== id) return c;
                 const next = Math.max(0, Math.min(c.totalChapters, c.completedChapters + delta));
                 const list = Array.from({ length: next }, (_, i) => i + 1);
-                return { ...c, completedChapters: next, completedChaptersList: list };
+                return { ...c, completedChapters: next, completedChaptersList: list, attendedChaptersList: [] };
             })
         );
     }, [updateCourses]);
@@ -463,7 +467,7 @@ export function useCourses() {
                         ...c, 
                         completedChaptersList: completed,
                         attendedChaptersList: attended,
-                        completedChapters: completed.length
+                        completedChapters: completed.length + attended.length
                     };
                 })
             );
@@ -477,23 +481,29 @@ export function useCourses() {
                 prev.map((c: Course) => {
                     if (c.id !== courseId) return c;
                     
-                    let list = c.completedExercisesList;
-                    if (!list) {
-                        list = Array.from({ length: c.completedExercises || 0 }, (_, i) => i + 1);
+                    let completed = c.completedExercisesList;
+                    if (!completed) {
+                        completed = Array.from({ length: c.completedExercises || 0 }, (_, i) => i + 1);
                     }
+                    let attended = c.attendedExercisesList || [];
                     
-                    const isDone = list.includes(exerciseNum);
+                    const isCompleted = completed.includes(exerciseNum);
+                    const isAttended = attended.includes(exerciseNum);
                     
-                    if (isDone) {
-                        list = list.filter(n => n !== exerciseNum);
+                    if (isCompleted) {
+                        completed = completed.filter(n => n !== exerciseNum);
+                    } else if (isAttended) {
+                        attended = attended.filter(n => n !== exerciseNum);
+                        completed = [...completed, exerciseNum];
                     } else {
-                        list = [...list, exerciseNum];
+                        attended = [...attended, exerciseNum];
                     }
                     
                     return { 
                         ...c, 
-                        completedExercisesList: list,
-                        completedExercises: list.length
+                        completedExercisesList: completed,
+                        attendedExercisesList: attended,
+                        completedExercises: completed.length + attended.length
                     };
                 })
             );
@@ -580,6 +590,16 @@ export function useCourses() {
     const sortedCourses = useMemo(
         () =>
             [...courses].sort((a: Course, b: Course) => {
+                const typeWeight = (c: Course) => {
+                    if (c.itemType === "project") return 1; // Project
+                    if (c.courseType === "self-study") return 2; // Flex
+                    return 0; // Semester (current)
+                };
+
+                const weightA = typeWeight(a);
+                const weightB = typeWeight(b);
+                if (weightA !== weightB) return weightA - weightB;
+
                 const aFocus = getCurrentFocus(a);
                 const bFocus = getCurrentFocus(b);
 
