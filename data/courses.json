@@ -138,8 +138,7 @@
       "notebookLMLink": "https://notebooklm.google.com/notebook/76c94db4-2bcd-437a-9841-7bf2806dcaa3",
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329",
-      "hasExercises": true,
-      "totalExercises": 5
+      "hasExercises": false
     },
     {
       "name": "BSP 6",
