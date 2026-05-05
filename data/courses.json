@@ -40,7 +40,8 @@
         10,
         11
       ],
-      "completedExercises": 9
+      "completedExercises": 9,
+      "attendedChaptersList": []
     },
     {
       "name": "Theoritical computer science",
@@ -77,7 +78,8 @@
         8,
         9
       ],
-      "completedExercises": 7
+      "completedExercises": 7,
+      "attendedChaptersList": []
     },
     {
       "name": "Analysis 1",
@@ -103,7 +105,8 @@
         1
       ],
       "completedExercises": 1,
-      "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c"
+      "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
+      "attendedChaptersList": []
     },
     {
       "name": "Discrete mathematics 2",
@@ -122,8 +125,10 @@
       "chapterSchedule": [],
       "completedChaptersList": [],
       "completedExercisesList": [],
-      "description": "- Prof will give me exercises to solve and we will discuss the solutions I'll bring in the exam\n- Mostly following the online notes from MIT (see moodle). (PartsIII&IV)",
-      "notebookLMLink": "https://notebooklm.google.com/notebook/76c94db4-2bcd-437a-9841-7bf2806dcaa3"
+      "description": "- Prof will give me exercises to solve and we will discuss the solutions I'll bring in the exam\n\n- Mostly following the online notes from MIT (see moodle). (PartsIII&IV)",
+      "notebookLMLink": "https://notebooklm.google.com/notebook/76c94db4-2bcd-437a-9841-7bf2806dcaa3",
+      "attendedChaptersList": [],
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329"
     },
     {
       "name": "BSP 6",
@@ -171,7 +176,8 @@
         }
       ],
       "completedChaptersList": [],
-      "completedExercisesList": []
+      "completedExercisesList": [],
+      "attendedChaptersList": []
     }
   ],
   "planTasks": [
