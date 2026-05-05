@@ -42,7 +42,9 @@
       ],
       "completedExercises": 9,
       "attendedChaptersList": [],
-      "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456"
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
+      "hasExercises": true,
+      "totalExercises": 13
     },
     {
       "name": "Theoritical computer science",
@@ -81,7 +83,9 @@
       ],
       "completedExercises": 7,
       "attendedChaptersList": [],
-      "moodleLink": "https://moodle.uni.lu/course/view.php?id=2454"
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=2454",
+      "hasExercises": true,
+      "totalExercises": 13
     },
     {
       "name": "Analysis 1",
@@ -109,7 +113,9 @@
       "completedExercises": 1,
       "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
       "attendedChaptersList": [],
-      "moodleLink": "https://moodle.uni.lu/course/view.php?id=322"
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=322",
+      "hasExercises": true,
+      "totalExercises": 14
     },
     {
       "name": "Discrete mathematics 2",
@@ -131,7 +137,9 @@
       "description": "- Prof will give me exercises to solve and we will discuss the solutions I'll bring in the exam\n\n- Mostly following the online notes from MIT (see moodle). (PartsIII&IV)",
       "notebookLMLink": "https://notebooklm.google.com/notebook/76c94db4-2bcd-437a-9841-7bf2806dcaa3",
       "attendedChaptersList": [],
-      "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329"
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329",
+      "hasExercises": true,
+      "totalExercises": 5
     },
     {
       "name": "BSP 6",
@@ -186,7 +194,9 @@
       "completedChaptersList": [],
       "completedExercisesList": [],
       "attendedChaptersList": [],
-      "moodleLink": "https://moodle.uni.lu/course/view.php?id=4197"
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=4197",
+      "hasExercises": true,
+      "totalExercises": 1
     }
   ],
   "planTasks": [
