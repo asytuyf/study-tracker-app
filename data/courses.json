@@ -357,6 +357,17 @@
       "taskType": "weekly",
       "description": "Prep for when I get sent the exercises but you might find notes from the book already in notion, only later chapters are not well done",
       "subtasks": []
+    },
+    {
+      "id": "bd72e26f-dd6e-4d00-b473-da9abc7fd8a5",
+      "text": "CH 3 & 4 + exsheets",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-05-11",
+      "taskType": "weekly",
+      "subtasks": []
     }
   ]
 }
