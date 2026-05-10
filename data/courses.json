@@ -368,6 +368,17 @@
       "weekDate": "2026-05-11",
       "taskType": "weekly",
       "subtasks": []
+    },
+    {
+      "id": "ed26f67b-df38-4541-a31b-20c2c32b4e3d",
+      "text": "1 chapter",
+      "done": false,
+      "courseIds": [
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-05-11",
+      "taskType": "weekly",
+      "subtasks": []
     }
   ]
 }
