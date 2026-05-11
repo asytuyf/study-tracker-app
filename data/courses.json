@@ -46,7 +46,9 @@
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
       "hasExercises": true,
       "totalExercises": 14,
-      "attendedExercisesList": []
+      "attendedExercisesList": [],
+      "currentClassChapter": 11,
+      "currentClassExercise": 1
     },
     {
       "name": "Theoritical computer science",
