@@ -26,7 +26,8 @@
         7,
         8,
         9,
-        10
+        10,
+        11
       ],
       "completedExercisesList": [
         1,
@@ -37,18 +38,15 @@
         8,
         9,
         10,
-        11
+        11,
+        12
       ],
       "completedExercises": 10,
-      "attendedChaptersList": [
-        11
-      ],
+      "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
       "hasExercises": true,
       "totalExercises": 14,
-      "attendedExercisesList": [
-        12
-      ]
+      "attendedExercisesList": []
     },
     {
       "name": "Theoritical computer science",
