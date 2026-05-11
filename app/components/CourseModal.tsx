@@ -259,6 +259,42 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                         </div>
                     )}
                     
+                    {/* Current Class Overrides */}
+                    {courseType === "current" && itemType === "course" && (
+                        <div className="bg-blue-500/5 p-4 rounded-xl border border-blue-500/10 space-y-3">
+                            <h3 className="text-sm font-bold text-blue-400 mb-1">Expected Progress Overrides</h3>
+                            <p className="text-[11px] text-zinc-500 mb-3 leading-tight">
+                                Leave blank to automatically calculate based on weeks since the semester started.
+                            </p>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="block text-xs text-zinc-400 mb-1.5">Expected Lecture</label>
+                                    <input
+                                        type="number"
+                                        value={currentClassChapter}
+                                        onChange={(e) => setCurrentClassChapter(e.target.value)}
+                                        placeholder="e.g., 11"
+                                        min="0"
+                                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors"
+                                    />
+                                </div>
+                                {hasExercises && (
+                                    <div>
+                                        <label className="block text-xs text-zinc-400 mb-1.5">Expected ExSheet</label>
+                                        <input
+                                            type="number"
+                                            value={currentClassExercise}
+                                            onChange={(e) => setCurrentClassExercise(e.target.value)}
+                                            placeholder="e.g., 12"
+                                            min="0"
+                                            className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Unit Name */}
                     {itemType === "course" && (
                         <div>
