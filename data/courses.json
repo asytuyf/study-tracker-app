@@ -84,12 +84,15 @@
         8,
         9
       ],
-      "completedExercises": 7,
+      "completedExercises": 9,
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2454",
       "hasExercises": true,
       "totalExercises": 13,
-      "attendedExercisesList": []
+      "attendedExercisesList": [
+        2,
+        1
+      ]
     },
     {
       "name": "Analysis 1",
