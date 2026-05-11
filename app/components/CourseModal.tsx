@@ -32,6 +32,13 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     );
     const [unitName, setUnitName] = useState(course?.unitName || "");
 
+    const [currentClassChapter, setCurrentClassChapter] = useState(
+        course?.currentClassChapter?.toString() || ""
+    );
+    const [currentClassExercise, setCurrentClassExercise] = useState(
+        course?.currentClassExercise?.toString() || ""
+    );
+
     const [midterms, setMidterms] = useState<Milestone[]>(course?.midterms || []);
     const [description, setDescription] = useState(course?.description || "");
     const [notebookLMLink, setNotebookLMLink] = useState(course?.notebookLMLink || "");
@@ -77,6 +84,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             notionLink: notionLink.trim() || undefined,
             moodleLink: moodleLink.trim() || undefined,
             unitName: unitName.trim() || undefined,
+            currentClassChapter: currentClassChapter ? parseInt(currentClassChapter) : undefined,
+            currentClassExercise: currentClassExercise ? parseInt(currentClassExercise) : undefined,
         });
     };
 

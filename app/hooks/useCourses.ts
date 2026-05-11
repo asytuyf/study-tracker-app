@@ -59,10 +59,12 @@ export function getCurrentFocus(course: Course): { type: "midterm" | "final"; mi
     return { type: "midterm", milestone: activeMidterm };
 }
 
-export function getExpectedChapter(course: Course): number {
+export function getExpectedChapters(course: Course): number {
     if (!course.startDate) return 0;
     
-    const weeks = getWeeksSinceStart(course.startDate);
+    const weeks = course.currentClassChapter !== undefined 
+                    ? course.currentClassChapter 
+                    : getWeeksSinceStart(course.startDate);
 
     if (course.courseType === "current") {
         const focus = getCurrentFocus(course);
@@ -74,6 +76,33 @@ export function getExpectedChapter(course: Course): number {
 
     if (course.courseType === "self-study") {
         return Math.min(weeks, course.totalChapters);
+    }
+
+    return 0;
+}
+
+export function getExpectedExercises(course: Course): number {
+    if (course.hasExercises === false) return 0;
+    if (!course.startDate) return 0;
+    
+    const weeks = course.currentClassExercise !== undefined
+                    ? course.currentClassExercise
+                    : (course.currentClassChapter !== undefined 
+                        ? course.currentClassChapter 
+                        : getWeeksSinceStart(course.startDate));
+
+    const totalEx = course.totalExercises ?? course.totalChapters;
+
+    if (course.courseType === "current") {
+        const focus = getCurrentFocus(course);
+        if (focus.type === "midterm" && focus.milestone) {
+            return Math.min(weeks, focus.milestone.chapters);
+        }
+        return Math.min(weeks, totalEx);
+    }
+
+    if (course.courseType === "self-study") {
+        return Math.min(weeks, totalEx);
     }
 
     return 0;
@@ -114,10 +143,11 @@ export function getTargetChapters(course: Course): number {
 }
 
 export function getStatus(course: Course): CourseStatus {
-    const expected = getExpectedChapter(course);
+    const expectedChapters = getExpectedChapters(course);
+    const expectedExercises = getExpectedExercises(course);
     
-    const chapterDiff = course.completedChapters - expected;
-    const exerciseDiff = (course.completedExercises || 0) - expected;
+    const chapterDiff = course.completedChapters - expectedChapters;
+    const exerciseDiff = course.hasExercises !== false ? (course.completedExercises || 0) - expectedExercises : 0;
     const totalDiff = chapterDiff + exerciseDiff;
 
     if (totalDiff >= 1) return "ahead";
@@ -126,9 +156,11 @@ export function getStatus(course: Course): CourseStatus {
 }
 
 export function getBehindAmount(course: Course): number {
-    const expected = getExpectedChapter(course);
-    const chapterBehind = Math.max(0, expected - course.completedChapters);
-    const exerciseBehind = Math.max(0, expected - (course.completedExercises || 0));
+    const expectedChapters = getExpectedChapters(course);
+    const expectedExercises = getExpectedExercises(course);
+
+    const chapterBehind = Math.max(0, expectedChapters - course.completedChapters);
+    const exerciseBehind = course.hasExercises !== false ? Math.max(0, expectedExercises - (course.completedExercises || 0)) : 0;
     
     return Math.ceil(chapterBehind + exerciseBehind);
 }
@@ -247,6 +279,9 @@ export function useCourses() {
                     }
                     if (course.currentClassChapter !== undefined) {
                         updated.currentClassChapter = course.currentClassChapter;
+                    }
+                    if (course.currentClassExercise !== undefined) {
+                        updated.currentClassExercise = course.currentClassExercise;
                     }
                     return updated;
                 });
@@ -616,8 +651,8 @@ export function useCourses() {
 
     const overallProgress = useMemo(() => {
         if (courses.length === 0) return 0;
-        const total = courses.reduce((s: number, c: Course) => s + c.totalChapters, 0);
-        const done = courses.reduce((s: number, c: Course) => s + (c.completedChapters || 0), 0);
+        const total = courses.reduce((s: number, c: Course) => s + c.totalChapters + (c.hasExercises !== false ? (c.totalExercises ?? c.totalChapters) : 0), 0);
+        const done = courses.reduce((s: number, c: Course) => s + (c.completedChapters || 0) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
         return total === 0 ? 0 : Math.round((done / total) * 100);
     }, [courses]);
 

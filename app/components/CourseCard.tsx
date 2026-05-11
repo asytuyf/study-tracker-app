@@ -4,7 +4,8 @@ import {
     getCurrentFocus,
     getStatus,
     getTargetChapters,
-    getExpectedChapter,
+    getExpectedChapters,
+    getExpectedExercises,
     getBehindAmount,
     getCurrentChaptersPerWeek,
     getDaysUntil,
@@ -45,7 +46,8 @@ export default function CourseCard({
     const focus = getCurrentFocus(course);
     const behind = getBehindAmount(course);
     const target = getTargetChapters(course);
-    const expected = getExpectedChapter(course);
+    const expectedChapters = getExpectedChapters(course);
+    const expectedExercises = getExpectedExercises(course);
 
     const isProject = course.itemType === "project";
     const isCurrent = course.courseType === "current";
@@ -57,8 +59,25 @@ export default function CourseCard({
         ? formatDaysUntil(getDaysUntil(focus.milestone.date), focus.milestone.name)
         : formatDaysUntil(daysToExam, isProject ? "Deadline" : "Final");
 
-    const progressPercent = Math.min((course.completedChapters / target) * 100, 100);
-    const expectedPercent = target > 0 ? Math.min((expected / target) * 100, 100) : 0;
+    const totalCourseChapters = target;
+    const totalCourseExercises = course.hasExercises !== false ? (course.totalExercises ?? target) : 0;
+    const totalCourseItems = totalCourseChapters + totalCourseExercises;
+    const completedItems = course.completedChapters + (course.hasExercises !== false ? (course.completedExercises || 0) : 0);
+
+    const expectedItems = expectedChapters + expectedExercises;
+
+    // Absolute progress for the bar width
+    const absoluteProgressPercent = totalCourseItems > 0 ? Math.min((completedItems / totalCourseItems) * 100, 100) : 0;
+    // Expected progress for the white line position
+    const expectedPercent = totalCourseItems > 0 ? Math.min((expectedItems / totalCourseItems) * 100, 100) : 0;
+
+    // Catch-up percentage for the text indicator
+    let catchUpPercent = 0;
+    if (isCurrent) {
+        catchUpPercent = expectedItems > 0 ? Math.min((completedItems / expectedItems) * 100, 100) : 100;
+    } else {
+        catchUpPercent = absoluteProgressPercent;
+    }
 
     // Current week's hours for project — timezone-safe local date
     const now = new Date();
@@ -177,7 +196,7 @@ export default function CourseCard({
                                 <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Expected</p>
                                 <div className="flex flex-col items-center">
                                     <p className={`text-sm font-bold leading-none ${status === "behind" ? "text-red-400" : "text-emerald-400"}`}>
-                                        {expected}
+                                        {expectedChapters}
                                     </p>
                                     {status === "behind" && !isComplete && (
                                         <p className="text-[8px] font-black text-red-500 mt-1 flex items-center gap-0.5 whitespace-nowrap">
@@ -193,7 +212,7 @@ export default function CourseCard({
                             <div>
                                 <div className="flex justify-between text-[10px] text-zinc-500 mb-1.5">
                                     <span className="uppercase font-bold tracking-wider">Progress</span>
-                                    <span className="font-medium">{Math.round(progressPercent)}%</span>
+                                    <span className="font-medium">{Math.round(catchUpPercent)}%</span>
                                 </div>
                                 <div className="h-3 bg-zinc-800 rounded-full overflow-visible relative">
                                     {/* Colored progress fill */}
@@ -206,20 +225,20 @@ export default function CourseCard({
                                                     ? "bg-gradient-to-r from-emerald-500 to-green-400"
                                                     : "bg-gradient-to-r from-red-500 to-orange-400"
                                             }`}
-                                        style={{ width: `${progressPercent}%` }}
+                                        style={{ width: `${absoluteProgressPercent}%` }}
                                     />
                                     {/* White expected marker line */}
-                                    {!isComplete && expectedPercent > 0 && (
+                                    {!isComplete && expectedPercent > 0 && expectedPercent < 100 && (
                                         <div
                                             className="absolute top-1/2 -translate-y-1/2 w-0.5 h-5 bg-white/70 rounded-full"
                                             style={{ left: `${Math.min(expectedPercent, 99)}%` }}
-                                            title={`Should be at chapter ${expected}`}
+                                            title={`Expected: L${expectedChapters} E${expectedExercises}`}
                                         />
                                     )}
                                 </div>
                                 {!isComplete && (
                                     <p className="text-[9px] text-zinc-600 mt-1">
-                                        │ = {unitName.substring(0, 3).toLowerCase()}.{expected} · {focus.type === "midterm" && focus.milestone ? focus.milestone.name : "Final"}
+                                        │ = {unitName.substring(0, 3).toLowerCase()}.{expectedChapters} · {focus.type === "midterm" && focus.milestone ? focus.milestone.name : "Final"}
                                     </p>
                                 )}
                             </div>
