@@ -39,7 +39,7 @@
         10,
         11
       ],
-      "completedExercises": 10,
+      "completedExercises": 12,
       "attendedChaptersList": [
         11
       ],
@@ -47,7 +47,9 @@
       "hasExercises": true,
       "totalExercises": 14,
       "attendedExercisesList": [
-        12
+        12,
+        3,
+        2
       ]
     },
     {
