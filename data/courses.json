@@ -91,7 +91,9 @@
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2454",
       "hasExercises": true,
       "totalExercises": 13,
-      "attendedExercisesList": []
+      "attendedExercisesList": [],
+      "currentClassChapter": 7,
+      "currentClassExercise": 7
     },
     {
       "name": "Analysis 1",
