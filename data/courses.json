@@ -90,12 +90,14 @@
         8,
         9
       ],
-      "completedExercises": 7,
+      "completedExercises": 8,
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2454",
       "hasExercises": true,
       "totalExercises": 13,
-      "attendedExercisesList": [],
+      "attendedExercisesList": [
+        10
+      ],
       "currentClassChapter": 7,
       "currentClassExercise": 9
     },
