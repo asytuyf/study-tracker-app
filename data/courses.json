@@ -113,17 +113,17 @@
       "chapterSchedule": [],
       "completedChaptersList": [
         1,
-        2
+        2,
+        3
       ],
       "completedExercisesList": [
         1,
-        2
-      ],
-      "completedExercises": 2,
-      "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
-      "attendedChaptersList": [
+        2,
         3
       ],
+      "completedExercises": 3,
+      "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
+      "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=322",
       "hasExercises": true,
       "totalExercises": 14,
