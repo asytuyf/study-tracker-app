@@ -6,7 +6,7 @@
       "startDate": "2026-02-16",
       "examDate": "2026-06-25",
       "totalChapters": 13,
-      "completedChapters": 11,
+      "completedChapters": 12,
       "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
       "color": "from-blue-500 to-cyan-400",
       "midterms": [],
@@ -41,12 +41,16 @@
         11,
         12
       ],
-      "completedExercises": 10,
-      "attendedChaptersList": [],
+      "completedExercises": 11,
+      "attendedChaptersList": [
+        12
+      ],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
       "hasExercises": true,
       "totalExercises": 14,
-      "attendedExercisesList": [],
+      "attendedExercisesList": [
+        13
+      ],
       "currentClassChapter": 11,
       "currentClassExercise": 12
     },
