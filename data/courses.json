@@ -27,7 +27,8 @@
         8,
         9,
         10,
-        11
+        11,
+        12
       ],
       "completedExercisesList": [
         1,
@@ -42,9 +43,7 @@
         12
       ],
       "completedExercises": 11,
-      "attendedChaptersList": [
-        12
-      ],
+      "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
       "hasExercises": true,
       "totalExercises": 14,
