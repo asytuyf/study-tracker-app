@@ -27,6 +27,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
         course?.weeklyHourGoal?.toString() || "10"
     );
     const [hasExercises, setHasExercises] = useState(course?.hasExercises ?? true);
+    const [exerciseMode, setExerciseMode] = useState<"numbers" | "list">(course?.exerciseMode || "numbers");
     const [totalExercises, setTotalExercises] = useState(
         course?.totalExercises?.toString() || course?.totalChapters?.toString() || ""
     );
@@ -76,7 +77,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             totalChapters: parseInt(totalChapters) || 0,
             completedChapters: parseInt(completedChapters) || 0,
             hasExercises,
-            totalExercises: hasExercises ? (parseInt(totalExercises) || 0) : undefined,
+            exerciseMode: hasExercises ? exerciseMode : undefined,
+            totalExercises: hasExercises && exerciseMode === "numbers" ? (parseInt(totalExercises) || 0) : undefined,
             weeklyHourGoal: itemType === "project" ? parseInt(weeklyHourGoal) : undefined,
             midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
@@ -244,16 +246,42 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             </label>
                             
                             {hasExercises && (
-                                <div className="pl-8">
-                                    <label className="block text-xs text-zinc-400 mb-1.5">Total Exercise Sheets</label>
-                                    <input
-                                        type="number"
-                                        value={totalExercises}
-                                        onChange={(e) => setTotalExercises(e.target.value)}
-                                        placeholder="e.g., 12"
-                                        min="1"
-                                        className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
-                                    />
+                                <div className="pl-8 space-y-3 mt-2">
+                                    <div className="flex gap-4">
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="exerciseMode"
+                                                checked={exerciseMode === "numbers"}
+                                                onChange={() => setExerciseMode("numbers")}
+                                                className="w-4 h-4 text-blue-500 focus:ring-blue-500 bg-zinc-900 border-zinc-700"
+                                            />
+                                            <span className="text-xs text-zinc-400">Numbered Sheets</span>
+                                        </label>
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="exerciseMode"
+                                                checked={exerciseMode === "list"}
+                                                onChange={() => setExerciseMode("list")}
+                                                className="w-4 h-4 text-blue-500 focus:ring-blue-500 bg-zinc-900 border-zinc-700"
+                                            />
+                                            <span className="text-xs text-zinc-400">Custom Task List</span>
+                                        </label>
+                                    </div>
+                                    {exerciseMode === "numbers" && (
+                                        <div>
+                                            <label className="block text-xs text-zinc-400 mb-1.5">Total Exercise Sheets</label>
+                                            <input
+                                                type="number"
+                                                value={totalExercises}
+                                                onChange={(e) => setTotalExercises(e.target.value)}
+                                                placeholder="e.g., 12"
+                                                min="1"
+                                                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-colors"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -278,7 +306,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                         className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-blue-500 transition-colors"
                                     />
                                 </div>
-                                {hasExercises && (
+                                {hasExercises && exerciseMode === "numbers" && (
                                     <div>
                                         <label className="block text-xs text-zinc-400 mb-1.5">Expected ExSheet</label>
                                         <input

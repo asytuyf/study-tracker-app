@@ -65,7 +65,7 @@ interface ChapterGridProps {
 
 export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmin }: ChapterGridProps) {
     const chapters = Array.from({ length: course.totalChapters }, (_: any, i: number) => i + 1);
-    const exercises = course.hasExercises !== false 
+    const exercises = course.hasExercises !== false && course.exerciseMode !== "list"
         ? Array.from({ length: course.totalExercises ?? course.totalChapters }, (_: any, i: number) => i + 1)
         : [];
 

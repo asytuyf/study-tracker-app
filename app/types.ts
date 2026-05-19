@@ -63,6 +63,7 @@ export interface Course {
   completedExercisesList?: number[];
   
   hasExercises?: boolean;
+  exerciseMode?: "numbers" | "list";
   totalExercises?: number;
   attendedChaptersList?: number[];
   attendedExercisesList?: number[];

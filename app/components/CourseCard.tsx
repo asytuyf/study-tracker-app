@@ -60,9 +60,13 @@ export default function CourseCard({
         : formatDaysUntil(daysToExam, isProject ? "Deadline" : "Final");
 
     const totalCourseChapters = target;
-    const totalCourseExercises = course.hasExercises !== false ? (course.totalExercises ?? target) : 0;
+    const isListMode = course.exerciseMode === "list";
+    const totalCourseExercises = course.hasExercises !== false 
+        ? (isListMode ? (course.deliverables?.length || 0) : (course.totalExercises ?? target)) 
+        : 0;
     const totalCourseItems = totalCourseChapters + totalCourseExercises;
-    const completedItems = course.completedChapters + (course.hasExercises !== false ? (course.completedExercises || 0) : 0);
+    const completedExercisesCount = isListMode ? (course.deliverables?.filter(d => d.completed).length || 0) : (course.completedExercises || 0);
+    const completedItems = course.completedChapters + (course.hasExercises !== false ? completedExercisesCount : 0);
 
     const expectedItems = expectedChapters + expectedExercises;
 

@@ -25,7 +25,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
 
     const weeks: string[] = useMemo(() => {
         const result: string[] = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = -2; i < 5; i++) {
             const d = new Date(actualCurrentWeek + "T12:00:00");
             d.setDate(d.getDate() + i * 7);
             result.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`);
