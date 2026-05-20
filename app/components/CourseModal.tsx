@@ -282,6 +282,13 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                             />
                                         </div>
                                     )}
+                                    {exerciseMode === "list" && (
+                                        <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                                            <p className="text-xs text-blue-400">
+                                                Save this course, then click the <strong>TASKS</strong> button on its card to define your custom exercises.
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
