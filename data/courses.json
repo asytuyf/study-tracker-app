@@ -164,38 +164,7 @@
       "hasExercises": true,
       "attendedExercisesList": [],
       "exerciseMode": "list",
-      "deliverables": [
-        {
-          "id": "7f18f6f8-dda0-47b0-9e9a-7495407cbca7",
-          "name": "15.12 Ex (for exam)",
-          "completed": false
-        },
-        {
-          "id": "cfdbc141-5229-4d89-8012-fdcd09542c5f",
-          "name": "15.28 Ex (for exam)",
-          "completed": false
-        },
-        {
-          "id": "ca059e57-f5a6-4410-a64c-71cd502f4cfb",
-          "name": "16.14 Ex (for exam)",
-          "completed": false
-        },
-        {
-          "id": "91dab28f-32a6-4846-9aea-92ac0026cf0a",
-          "name": "18.33 Ex (for exam)",
-          "completed": false
-        },
-        {
-          "id": "a7747ad5-56b9-4aea-adba-5a945d53b3a4",
-          "name": "19.16 Ex (for exam)",
-          "completed": false
-        },
-        {
-          "id": "766e402b-d090-4d31-b4d3-7fb528242dfd",
-          "name": "20.2 Ex (for exam)",
-          "completed": false
-        }
-      ],
+      "deliverables": [],
       "customExerciseNames": [
         "15.12",
         "15.28",
