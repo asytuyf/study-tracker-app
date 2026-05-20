@@ -56,6 +56,53 @@ const ChapterBox = styled.button<{ $state: "not_started" | "attended" | "complet
     }}
 `;
 
+const CustomChapterBox = styled.button<{ $state: "not_started" | "attended" | "completed"; $color: string }>`
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
+  
+  ${(props: { $state: "not_started" | "attended" | "completed"; $color: string }) => {
+        const parts = props.$color.split(" ");
+        const fromColor = parts[0]?.replace("from-", "") || "blue-500";
+        const toColor = parts[1]?.replace("to-", "") || "cyan-400";
+
+        if (props.$state === "completed") {
+            return `
+    background: linear-gradient(135deg, var(--${fromColor}, #3b82f6) 0%, var(--${toColor}, #22d3ee) 100%);
+    background-color: #3b82f6;
+    color: white;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+  `;
+        }
+
+        if (props.$state === "attended") {
+            return `
+    background: linear-gradient(135deg, #f59e0b 0%, #facc15 100%);
+    background-color: #f59e0b;
+    color: white;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+  `;
+        }
+
+        return `
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.3);
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-2px);
+    }
+  `;
+    }}
+`;
+
 interface ChapterGridProps {
     course: Course;
     onToggle: (chapterNum: number) => void;
@@ -137,6 +184,41 @@ export default function ChapterGrid({ course, onToggle, onToggleExercise, isAdmi
                             );
                         })}
                     </GridContainer>
+                </div>
+            )}
+
+            {course.hasExercises !== false && course.exerciseMode === "list" && course.customExerciseNames && course.customExerciseNames.length > 0 && (
+                <div className="mt-6">
+                    <div className="flex items-center justify-between mb-3 px-1">
+                        <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                            Exam Prep Progress
+                        </h4>
+                        <span className="text-[10px] font-black text-zinc-600">
+                            {course.completedExercises || 0} / {course.customExerciseNames.length}
+                        </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mt-1">
+                        {course.customExerciseNames.map((name: string, i: number) => {
+                            const num = i + 1;
+                            const isDone = course.completedExercisesList
+                                ? course.completedExercisesList.includes(num)
+                                : num <= (course.completedExercises || 0);
+                            const isAttended = course.attendedExercisesList?.includes(num);
+
+                            return (
+                                <CustomChapterBox
+                                    key={num}
+                                    $state={isDone ? "completed" : isAttended ? "attended" : "not_started"}
+                                    $color={course.color || "from-blue-500 to-cyan-400"}
+                                    onClick={() => isAdmin && onToggleExercise?.(num)}
+                                    disabled={!isAdmin}
+                                    title={name}
+                                >
+                                    {name}
+                                </CustomChapterBox>
+                            );
+                        })}
+                    </div>
                 </div>
             )}
 

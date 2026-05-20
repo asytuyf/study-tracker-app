@@ -91,7 +91,7 @@ export function getExpectedExercises(course: Course): number {
                         ? course.currentClassChapter 
                         : getWeeksSinceStart(course.startDate));
 
-    const totalEx = course.exerciseMode === "list" ? (course.deliverables?.length || 0) : (course.totalExercises ?? course.totalChapters);
+    const totalEx = course.exerciseMode === "list" ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? course.totalChapters);
 
     if (course.courseType === "current") {
         const focus = getCurrentFocus(course);
@@ -113,7 +113,7 @@ export function getCurrentChaptersPerWeek(course: Course): number {
     const focus = getCurrentFocus(course);
     
     let targetChapters = course.totalChapters;
-    let targetExercises = course.hasExercises !== false ? (course.exerciseMode === "list" ? (course.deliverables?.length || 0) : (course.totalExercises ?? course.totalChapters)) : 0;
+    let targetExercises = course.hasExercises !== false ? (course.exerciseMode === "list" ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? course.totalChapters)) : 0;
     let weeksLeft = getWeeksUntilExam(course.examDate);
     
     if (focus.type === "midterm" && focus.milestone) {
@@ -123,8 +123,7 @@ export function getCurrentChaptersPerWeek(course: Course): number {
     }
     
     const remainingChapters = Math.max(0, targetChapters - course.completedChapters);
-    const completedExercisesCount = course.exerciseMode === "list" ? (course.deliverables?.filter(d => d.completed).length || 0) : (course.completedExercises || 0);
-    const remainingExercises = Math.max(0, targetExercises - completedExercisesCount);
+    const remainingExercises = Math.max(0, targetExercises - (course.completedExercises || 0));
     const remainingItems = remainingChapters + remainingExercises;
     
     if (remainingItems <= 0) return 0;
@@ -148,8 +147,7 @@ export function getStatus(course: Course): CourseStatus {
     const expectedExercises = getExpectedExercises(course);
     
     const chapterDiff = course.completedChapters - expectedChapters;
-    const completedExercisesCount = course.exerciseMode === "list" ? (course.deliverables?.filter(d => d.completed).length || 0) : (course.completedExercises || 0);
-    const exerciseDiff = course.hasExercises !== false ? completedExercisesCount - expectedExercises : 0;
+    const exerciseDiff = course.hasExercises !== false ? (course.completedExercises || 0) - expectedExercises : 0;
     const totalDiff = chapterDiff + exerciseDiff;
 
     if (totalDiff >= 1) return "ahead";
@@ -162,8 +160,7 @@ export function getBehindAmount(course: Course): number {
     const expectedExercises = getExpectedExercises(course);
 
     const chapterBehind = Math.max(0, expectedChapters - course.completedChapters);
-    const completedExercisesCount = course.exerciseMode === "list" ? (course.deliverables?.filter(d => d.completed).length || 0) : (course.completedExercises || 0);
-    const exerciseBehind = course.hasExercises !== false ? Math.max(0, expectedExercises - completedExercisesCount) : 0;
+    const exerciseBehind = course.hasExercises !== false ? Math.max(0, expectedExercises - (course.completedExercises || 0)) : 0;
     
     return Math.ceil(chapterBehind + exerciseBehind);
 }
@@ -654,8 +651,8 @@ export function useCourses() {
 
     const overallProgress = useMemo(() => {
         if (courses.length === 0) return 0;
-        const total = courses.reduce((s: number, c: Course) => s + c.totalChapters + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.deliverables?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
-        const done = courses.reduce((s: number, c: Course) => s + (c.completedChapters || 0) + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.deliverables?.filter(d => d.completed).length || 0) : (c.completedExercises || 0)) : 0), 0);
+        const total = courses.reduce((s: number, c: Course) => s + c.totalChapters + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.customExerciseNames?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
+        const done = courses.reduce((s: number, c: Course) => s + (c.completedChapters || 0) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
         return total === 0 ? 0 : Math.round((done / total) * 100);
     }, [courses]);
 

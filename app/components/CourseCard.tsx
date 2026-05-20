@@ -62,11 +62,10 @@ export default function CourseCard({
     const totalCourseChapters = target;
     const isListMode = course.exerciseMode === "list";
     const totalCourseExercises = course.hasExercises !== false 
-        ? (isListMode ? (course.deliverables?.length || 0) : (course.totalExercises ?? target)) 
+        ? (isListMode ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? target)) 
         : 0;
     const totalCourseItems = totalCourseChapters + totalCourseExercises;
-    const completedExercisesCount = isListMode ? (course.deliverables?.filter(d => d.completed).length || 0) : (course.completedExercises || 0);
-    const completedItems = course.completedChapters + (course.hasExercises !== false ? completedExercisesCount : 0);
+    const completedItems = course.completedChapters + (course.hasExercises !== false ? (course.completedExercises || 0) : 0);
 
     const expectedItems = expectedChapters + expectedExercises;
 

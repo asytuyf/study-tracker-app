@@ -28,6 +28,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     );
     const [hasExercises, setHasExercises] = useState(course?.hasExercises ?? true);
     const [exerciseMode, setExerciseMode] = useState<"numbers" | "list">(course?.exerciseMode || "numbers");
+    const [customExerciseNames, setCustomExerciseNames] = useState(course?.customExerciseNames?.join('\n') || "");
     const [totalExercises, setTotalExercises] = useState(
         course?.totalExercises?.toString() || course?.totalChapters?.toString() || ""
     );
@@ -79,6 +80,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             hasExercises,
             exerciseMode: hasExercises ? exerciseMode : undefined,
             totalExercises: hasExercises && exerciseMode === "numbers" ? (parseInt(totalExercises) || 0) : undefined,
+            customExerciseNames: hasExercises && exerciseMode === "list" ? customExerciseNames.split('\n').map(n => n.trim()).filter(Boolean) : undefined,
             weeklyHourGoal: itemType === "project" ? parseInt(weeklyHourGoal) : undefined,
             midterms: courseType === "current" ? midterms : undefined,
             description: description.trim() || undefined,
@@ -283,10 +285,15 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                                         </div>
                                     )}
                                     {exerciseMode === "list" && (
-                                        <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                                            <p className="text-xs text-blue-400">
-                                                Save this course, then click the <strong>TASKS</strong> button on its card to define your custom exercises.
-                                            </p>
+                                        <div>
+                                            <label className="block text-xs text-zinc-400 mb-1.5">Custom Exercises (One per line)</label>
+                                            <textarea
+                                                value={customExerciseNames}
+                                                onChange={(e) => setCustomExerciseNames(e.target.value)}
+                                                placeholder="e.g., Ex 2.1&#10;Page 50&#10;Assignment 3"
+                                                rows={4}
+                                                className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500 transition-colors resize-y"
+                                            />
                                         </div>
                                     )}
                                 </div>

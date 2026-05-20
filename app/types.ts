@@ -64,6 +64,7 @@ export interface Course {
   
   hasExercises?: boolean;
   exerciseMode?: "numbers" | "list";
+  customExerciseNames?: string[];
   totalExercises?: number;
   attendedChaptersList?: number[];
   attendedExercisesList?: number[];
