@@ -163,7 +163,14 @@
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329",
       "hasExercises": true,
       "attendedExercisesList": [],
-      "exerciseMode": "list"
+      "exerciseMode": "list",
+      "deliverables": [
+        {
+          "id": "7f18f6f8-dda0-47b0-9e9a-7495407cbca7",
+          "name": "15.12 Ex (for exam)",
+          "completed": false
+        }
+      ]
     },
     {
       "name": "BSP 6",
