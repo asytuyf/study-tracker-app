@@ -59,7 +59,7 @@
       "startDate": "2026-02-19",
       "examDate": "2026-07-02",
       "totalChapters": 9,
-      "completedChapters": 8,
+      "completedChapters": 9,
       "hasMidterm": false,
       "midtermCompleted": false,
       "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
@@ -78,7 +78,9 @@
         4,
         5,
         6,
-        7
+        7,
+        9,
+        8
       ],
       "completedExercisesList": [
         3,
@@ -90,9 +92,7 @@
         9
       ],
       "completedExercises": 8,
-      "attendedChaptersList": [
-        8
-      ],
+      "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2454",
       "hasExercises": true,
       "totalExercises": 13,
