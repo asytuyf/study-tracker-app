@@ -147,7 +147,7 @@ export function getStatus(course: Course): CourseStatus {
     const expectedChapters = getExpectedChapters(course);
     const expectedExercises = getExpectedExercises(course);
     
-    const chapterDiff = course.completedChapters - expectedChapters;
+    const chapterDiff = course.progressOnlyExercises ? 0 : course.completedChapters - expectedChapters;
     const exerciseDiff = course.hasExercises !== false ? (course.completedExercises || 0) - expectedExercises : 0;
     const totalDiff = chapterDiff + exerciseDiff;
 
@@ -160,7 +160,7 @@ export function getBehindAmount(course: Course): number {
     const expectedChapters = getExpectedChapters(course);
     const expectedExercises = getExpectedExercises(course);
 
-    const chapterBehind = Math.max(0, expectedChapters - course.completedChapters);
+    const chapterBehind = course.progressOnlyExercises ? 0 : Math.max(0, expectedChapters - course.completedChapters);
     const exerciseBehind = course.hasExercises !== false ? Math.max(0, expectedExercises - (course.completedExercises || 0)) : 0;
     
     return Math.ceil(chapterBehind + exerciseBehind);
