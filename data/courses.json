@@ -229,16 +229,16 @@
       "chapterSchedule": [],
       "deliverables": [
         {
-          "id": "4f5fc966-60d5-4e53-bc34-58a28d9e8615",
-          "name": "Make paper about storm detection pipeline (Flex)",
-          "completed": false,
-          "category": "scientific"
-        },
-        {
           "id": "a65178d7-8880-4e52-a134-5579ca1b1223",
           "name": "Start phase 2 of coding",
           "completed": false,
           "category": "implementation"
+        },
+        {
+          "id": "8f416d1f-271c-480e-9545-179cfbdbd032",
+          "name": "Fix presentation for end of june",
+          "completed": false,
+          "category": "scientific"
         }
       ],
       "completedChaptersList": [],
