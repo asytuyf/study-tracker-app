@@ -59,13 +59,16 @@ export default function CourseCard({
         ? formatDaysUntil(getDaysUntil(focus.milestone.date), focus.milestone.name, focus.milestone.date)
         : formatDaysUntil(daysToExam, isProject ? "Deadline" : "Final", course.examDate);
 
-    const totalCourseChapters = target;
     const isListMode = course.exerciseMode === "list";
+    const displayTotalChapters = target;
+    const progressTotalChapters = isListMode ? 0 : target;
+    
     const totalCourseExercises = course.hasExercises !== false 
         ? (isListMode ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? target)) 
         : 0;
-    const totalCourseItems = totalCourseChapters + totalCourseExercises;
-    const completedItems = course.completedChapters + (course.hasExercises !== false ? (course.completedExercises || 0) : 0);
+    
+    const totalCourseItems = progressTotalChapters + totalCourseExercises;
+    const completedItems = (isListMode ? 0 : course.completedChapters) + (course.hasExercises !== false ? (course.completedExercises || 0) : 0);
 
     const expectedItems = expectedChapters + expectedExercises;
 
@@ -192,7 +195,7 @@ export default function CourseCard({
                             <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">
                                 <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5">Progress</p>
                                 <p className="text-sm font-bold text-white leading-none">
-                                    {course.completedChapters}<span className="text-zinc-500 text-[10px]">/{target}</span>
+                                    {course.completedChapters}<span className="text-zinc-500 text-[10px]">/{displayTotalChapters}</span>
                                 </p>
                             </div>
                             <div className="bg-zinc-950/40 rounded-lg p-2 flex flex-col items-center justify-center border border-white/5">

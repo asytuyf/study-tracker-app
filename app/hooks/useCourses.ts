@@ -69,7 +69,7 @@ export function getCurrentFocus(course: Course): { type: "midterm" | "final"; mi
 }
 
 export function getExpectedChapters(course: Course): number {
-    if (course.progressOnlyExercises) return 0;
+    if (course.exerciseMode === "list") return 0;
     if (!course.startDate) return 0;
     
     const weeks = course.currentClassChapter !== undefined 
@@ -122,7 +122,7 @@ export function getExpectedExercises(course: Course): number {
 export function getCurrentChaptersPerWeek(course: Course): number {
     const focus = getCurrentFocus(course);
     
-    let targetChapters = course.progressOnlyExercises ? 0 : course.totalChapters;
+    let targetChapters = course.exerciseMode === "list" ? 0 : course.totalChapters;
     let targetExercises = course.hasExercises !== false ? (course.exerciseMode === "list" ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? course.totalChapters)) : 0;
     let weeksLeft = getWeeksUntilExam(course.examDate);
     
@@ -156,7 +156,7 @@ export function getStatus(course: Course): CourseStatus {
     const expectedChapters = getExpectedChapters(course);
     const expectedExercises = getExpectedExercises(course);
     
-    const chapterDiff = course.progressOnlyExercises ? 0 : course.completedChapters - expectedChapters;
+    const chapterDiff = course.exerciseMode === "list" ? 0 : course.completedChapters - expectedChapters;
     const exerciseDiff = course.hasExercises !== false ? (course.completedExercises || 0) - expectedExercises : 0;
     const totalDiff = chapterDiff + exerciseDiff;
 
@@ -169,7 +169,7 @@ export function getBehindAmount(course: Course): number {
     const expectedChapters = getExpectedChapters(course);
     const expectedExercises = getExpectedExercises(course);
 
-    const chapterBehind = course.progressOnlyExercises ? 0 : Math.max(0, expectedChapters - course.completedChapters);
+    const chapterBehind = course.exerciseMode === "list" ? 0 : Math.max(0, expectedChapters - course.completedChapters);
     const exerciseBehind = course.hasExercises !== false ? Math.max(0, expectedExercises - (course.completedExercises || 0)) : 0;
     
     return Math.ceil(chapterBehind + exerciseBehind);
@@ -661,8 +661,8 @@ export function useCourses() {
 
     const overallProgress = useMemo(() => {
         if (courses.length === 0) return 0;
-        const total = courses.reduce((s: number, c: Course) => s + (c.progressOnlyExercises ? 0 : c.totalChapters) + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.customExerciseNames?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
-        const done = courses.reduce((s: number, c: Course) => s + (c.progressOnlyExercises ? 0 : (c.completedChapters || 0)) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
+        const total = courses.reduce((s: number, c: Course) => s + (c.exerciseMode === "list" ? 0 : c.totalChapters) + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.customExerciseNames?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
+        const done = courses.reduce((s: number, c: Course) => s + (c.exerciseMode === "list" ? 0 : (c.completedChapters || 0)) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
         return total === 0 ? 0 : Math.round((done / total) * 100);
     }, [courses]);
 
