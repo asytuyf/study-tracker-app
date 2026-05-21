@@ -28,6 +28,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     );
     const [hasExercises, setHasExercises] = useState(course?.hasExercises ?? true);
     const [exerciseMode, setExerciseMode] = useState<"numbers" | "list">(course?.exerciseMode || "numbers");
+    const [progressOnlyExercises, setProgressOnlyExercises] = useState(course?.progressOnlyExercises ?? false);
     const [customExerciseNames, setCustomExerciseNames] = useState(course?.customExerciseNames?.join('\n') || "");
     const [totalExercises, setTotalExercises] = useState(
         course?.totalExercises?.toString() || course?.totalChapters?.toString() || ""
@@ -79,6 +80,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             completedChapters: parseInt(completedChapters) || 0,
             hasExercises,
             exerciseMode: hasExercises ? exerciseMode : undefined,
+            progressOnlyExercises: hasExercises ? progressOnlyExercises : undefined,
             totalExercises: hasExercises && exerciseMode === "numbers" ? (parseInt(totalExercises) || 0) : undefined,
             customExerciseNames: hasExercises && exerciseMode === "list" ? customExerciseNames.split('\n').map(n => n.trim()).filter(Boolean) : undefined,
             weeklyHourGoal: itemType === "project" ? parseInt(weeklyHourGoal) : undefined,
@@ -249,6 +251,15 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             
                             {hasExercises && (
                                 <div className="pl-8 space-y-3 mt-2">
+                                    <label className="flex items-center gap-3 cursor-pointer mb-2">
+                                        <input
+                                            type="checkbox"
+                                            checked={progressOnlyExercises}
+                                            onChange={(e) => setProgressOnlyExercises(e.target.checked)}
+                                            className="w-4 h-4 rounded border-zinc-600 bg-zinc-800 text-blue-500 focus:ring-blue-500 focus:ring-offset-zinc-900"
+                                        />
+                                        <span className="text-xs text-zinc-400">Track progress using <strong>ONLY</strong> exercises</span>
+                                    </label>
                                     <div className="flex gap-4">
                                         <label className="flex items-center gap-2 cursor-pointer">
                                             <input

@@ -60,6 +60,7 @@ export function getCurrentFocus(course: Course): { type: "midterm" | "final"; mi
 }
 
 export function getExpectedChapters(course: Course): number {
+    if (course.progressOnlyExercises) return 0;
     if (!course.startDate) return 0;
     
     const weeks = course.currentClassChapter !== undefined 
@@ -112,7 +113,7 @@ export function getExpectedExercises(course: Course): number {
 export function getCurrentChaptersPerWeek(course: Course): number {
     const focus = getCurrentFocus(course);
     
-    let targetChapters = course.totalChapters;
+    let targetChapters = course.progressOnlyExercises ? 0 : course.totalChapters;
     let targetExercises = course.hasExercises !== false ? (course.exerciseMode === "list" ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? course.totalChapters)) : 0;
     let weeksLeft = getWeeksUntilExam(course.examDate);
     
@@ -651,8 +652,8 @@ export function useCourses() {
 
     const overallProgress = useMemo(() => {
         if (courses.length === 0) return 0;
-        const total = courses.reduce((s: number, c: Course) => s + c.totalChapters + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.customExerciseNames?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
-        const done = courses.reduce((s: number, c: Course) => s + (c.completedChapters || 0) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
+        const total = courses.reduce((s: number, c: Course) => s + (c.progressOnlyExercises ? 0 : c.totalChapters) + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.customExerciseNames?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
+        const done = courses.reduce((s: number, c: Course) => s + (c.progressOnlyExercises ? 0 : (c.completedChapters || 0)) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
         return total === 0 ? 0 : Math.round((done / total) * 100);
     }, [courses]);
 
