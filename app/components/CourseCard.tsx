@@ -56,8 +56,8 @@ export default function CourseCard({
 
     const daysToExam = getDaysUntil(course.examDate);
     const dateLabel = focus.type === "midterm" && focus.milestone
-        ? formatDaysUntil(getDaysUntil(focus.milestone.date), focus.milestone.name)
-        : formatDaysUntil(daysToExam, isProject ? "Deadline" : "Final");
+        ? formatDaysUntil(getDaysUntil(focus.milestone.date), focus.milestone.name, focus.milestone.date)
+        : formatDaysUntil(daysToExam, isProject ? "Deadline" : "Final", course.examDate);
 
     const totalCourseChapters = target;
     const isListMode = course.exerciseMode === "list";

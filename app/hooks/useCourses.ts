@@ -36,12 +36,21 @@ export function getDaysUntil(dateStr: string): number {
     return Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-export function formatDaysUntil(days: number, label: string): string {
-    if (days === 0) return `${label} is Today!`;
-    if (days === 1) return `${label} Tomorrow`;
-    if (days === -1) return `${label} was Yesterday`;
-    if (days > 0) return `${label} in ${days}d`;
-    return `${label} was ${Math.abs(days)}d ago`;
+export function formatDaysUntil(days: number, label: string, dateStr?: string): string {
+    let datePrefix = "";
+    if (dateStr) {
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+            const formattedDate = d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+            datePrefix = ` ${formattedDate}`;
+        }
+    }
+
+    if (days === 0) return `${label}${datePrefix} (Today)`;
+    if (days === 1) return `${label}${datePrefix} (Tomorrow)`;
+    if (days === -1) return `${label}${datePrefix} (Yesterday)`;
+    if (days > 0) return `${label}${datePrefix} (in ${days}d)`;
+    return `${label}${datePrefix} (${Math.abs(days)}d ago)`;
 }
 
 // ─── Course logic helpers ────────────────────────────────────────────────────
