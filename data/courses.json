@@ -90,7 +90,7 @@
         8,
         9
       ],
-      "completedExercises": 8,
+      "completedExercises": 9,
       "attendedChaptersList": [
         9
       ],
@@ -98,7 +98,8 @@
       "hasExercises": true,
       "totalExercises": 13,
       "attendedExercisesList": [
-        10
+        10,
+        11
       ],
       "currentClassChapter": 7,
       "currentClassExercise": 9
