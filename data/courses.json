@@ -189,7 +189,7 @@
       "examDate": "2026-07-01",
       "totalChapters": 1,
       "completedChapters": 0,
-      "weeklyHourGoal": 10,
+      "weeklyHourGoal": 15,
       "description": "Midterm prognosis of geomagnetic storms",
       "notionLink": "https://www.notion.so/BSP-6-Midterm-prognosis-of-geomagnetic-storms-32eedf02476080929b92f3471069942c?source=copy_link",
       "id": "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6",
@@ -247,7 +247,8 @@
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=4197",
       "hasExercises": true,
       "totalExercises": 1,
-      "attendedExercisesList": []
+      "attendedExercisesList": [],
+      "exerciseMode": "numbers"
     }
   ],
   "planTasks": [
