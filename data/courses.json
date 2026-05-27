@@ -435,6 +435,18 @@
       "weekDate": "2026-05-11",
       "taskType": "weekly",
       "subtasks": []
+    },
+    {
+      "id": "22fbce8c-d957-4154-b684-a5a89da1b127",
+      "text": "Analysis L 5 & 6 and Ex sheets",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-05-25",
+      "taskType": "deadline",
+      "deadline": "2026-05-31",
+      "subtasks": []
     }
   ]
 }
