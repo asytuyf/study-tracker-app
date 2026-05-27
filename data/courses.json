@@ -40,8 +40,7 @@
         9,
         10,
         11,
-        12,
-        14
+        12
       ],
       "completedExercises": 12,
       "attendedChaptersList": [],
@@ -49,7 +48,8 @@
       "hasExercises": true,
       "totalExercises": 14,
       "attendedExercisesList": [
-        13
+        13,
+        14
       ],
       "currentClassChapter": 11,
       "currentClassExercise": 12
