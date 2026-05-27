@@ -164,16 +164,16 @@
       "weeklyLogs": [],
       "chapterSchedule": [],
       "completedChaptersList": [],
-      "completedExercisesList": [],
+      "completedExercisesList": [
+        2,
+        1
+      ],
       "description": "- Prof will give me exercises to solve and we will discuss the solutions I'll bring in the exam\n- Mostly following the online notes from MIT (see moodle). (PartsIII&IV)",
       "notebookLMLink": "https://notebooklm.google.com/notebook/76c94db4-2bcd-437a-9841-7bf2806dcaa3",
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329",
       "hasExercises": true,
-      "attendedExercisesList": [
-        1,
-        2
-      ],
+      "attendedExercisesList": [],
       "exerciseMode": "list",
       "deliverables": [],
       "customExerciseNames": [
