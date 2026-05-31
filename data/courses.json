@@ -137,10 +137,9 @@
         2,
         3,
         4,
-        5,
-        6
+        5
       ],
-      "completedExercises": 6,
+      "completedExercises": 7,
       "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
       "attendedChaptersList": [
         7
@@ -148,7 +147,10 @@
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=322",
       "hasExercises": true,
       "totalExercises": 14,
-      "attendedExercisesList": []
+      "attendedExercisesList": [
+        6,
+        7
+      ]
     },
     {
       "name": "Discrete mathematics 2",
