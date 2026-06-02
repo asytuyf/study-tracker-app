@@ -241,6 +241,11 @@
           "id": "eb5e76dd-088e-47d0-af4c-c0840e052b46",
           "date": "2026-05-25",
           "hours": 5
+        },
+        {
+          "id": "d70efc60-1986-4121-9a42-030af40c5a8f",
+          "date": "2026-06-01",
+          "hours": 1
         }
       ],
       "chapterSchedule": [],
