@@ -61,7 +61,7 @@
       "name": "Theoritical computer science",
       "courseType": "current",
       "startDate": "2026-02-19",
-      "examDate": "2026-07-02",
+      "examDate": "2026-07-01",
       "totalChapters": 9,
       "completedChapters": 9,
       "hasMidterm": false,
@@ -107,7 +107,8 @@
         13
       ],
       "currentClassChapter": 7,
-      "currentClassExercise": 9
+      "currentClassExercise": 9,
+      "exerciseMode": "numbers"
     },
     {
       "name": "Analysis 1",
