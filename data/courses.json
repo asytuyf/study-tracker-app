@@ -112,7 +112,7 @@
       "name": "Analysis 1",
       "courseType": "self-study",
       "startDate": "2026-02-16",
-      "examDate": "2026-06-10",
+      "examDate": "2026-06-12",
       "totalChapters": 14,
       "completedChapters": 9,
       "hasMidterm": false,
@@ -153,7 +153,8 @@
       "totalExercises": 14,
       "attendedExercisesList": [
         9
-      ]
+      ],
+      "exerciseMode": "numbers"
     },
     {
       "name": "Discrete mathematics 2",
