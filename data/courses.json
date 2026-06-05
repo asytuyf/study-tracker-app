@@ -186,7 +186,10 @@
       "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329",
       "hasExercises": true,
-      "attendedExercisesList": [],
+      "attendedExercisesList": [
+        3,
+        4
+      ],
       "exerciseMode": "list",
       "deliverables": [],
       "customExerciseNames": [
@@ -197,7 +200,7 @@
         "19.16",
         "20.2"
       ],
-      "completedExercises": 2
+      "completedExercises": 4
     },
     {
       "name": "BSP 6",
