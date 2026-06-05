@@ -507,7 +507,13 @@
       "weekDate": "2026-06-01",
       "taskType": "weekly",
       "description": "Tasks before meeting then in the meeting push to have future tasks so I can complete the project in time like coding wise not graphs",
-      "subtasks": []
+      "subtasks": [
+        {
+          "id": "550cad47-257d-4655-946f-37c7377c7dfd",
+          "text": "Clean graphs SSC and Gradual graphs to be unicolor",
+          "done": false
+        }
+      ]
     }
   ]
 }
