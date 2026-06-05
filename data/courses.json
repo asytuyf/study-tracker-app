@@ -489,13 +489,7 @@
       ],
       "weekDate": "2026-06-01",
       "taskType": "weekly",
-      "subtasks": [
-        {
-          "id": "b043b10b-9aa9-4016-9b6f-4101bdeb6b9f",
-          "text": "Download FTP ace datad clean it up (Bt, Speed,...) + Interpelate to 1 minute",
-          "done": false
-        }
-      ]
+      "subtasks": []
     },
     {
       "id": "1ef2449a-d017-49ce-b6bb-a5ea12782c75",
@@ -511,6 +505,11 @@
         {
           "id": "550cad47-257d-4655-946f-37c7377c7dfd",
           "text": "Clean graphs SSC and Gradual graphs to be unicolor",
+          "done": false
+        },
+        {
+          "id": "b2b6c2ce-d757-4956-837c-f66654e6ebc5",
+          "text": "Download FTP ace datad clean it up (Bt, Speed,...) + Interpelate to 1 minute",
           "done": false
         }
       ]
