@@ -491,11 +491,6 @@
       "taskType": "weekly",
       "subtasks": [
         {
-          "id": "533bc655-1b26-41ad-8ad7-64b582d0d46b",
-          "text": "Clean graphs SSC and Gradual graphs to be unicolor",
-          "done": false
-        },
-        {
           "id": "b043b10b-9aa9-4016-9b6f-4101bdeb6b9f",
           "text": "Download FTP ace datad clean it up (Bt, Speed,...) + Interpelate to 1 minute",
           "done": false
