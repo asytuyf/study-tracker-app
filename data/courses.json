@@ -490,6 +490,15 @@
       "weekDate": "2026-06-01",
       "taskType": "weekly",
       "subtasks": []
+    },
+    {
+      "id": "00227b39-590c-4350-a9a3-3924ad92e33a",
+      "text": "BSP (3h) + BSP meeting 4pm (MSA 3rd floor) (5th June)",
+      "done": false,
+      "courseIds": [],
+      "weekDate": "2026-06-01",
+      "taskType": "weekly",
+      "subtasks": []
     }
   ]
 }
