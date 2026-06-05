@@ -479,6 +479,17 @@
       "weekDate": "2026-06-01",
       "taskType": "weekly",
       "subtasks": []
+    },
+    {
+      "id": "34c543a9-b928-4245-8461-febf2d117bbb",
+      "text": "Analysis L12 & Exsheet 11 (?) (5th June)",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-06-01",
+      "taskType": "weekly",
+      "subtasks": []
     }
   ]
 }
