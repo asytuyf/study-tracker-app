@@ -499,6 +499,11 @@
           "id": "b2b6c2ce-d757-4956-837c-f66654e6ebc5",
           "text": "Download FTP ace datad clean it up (Bt, Speed,...) + Interpelate to 1 minute",
           "done": false
+        },
+        {
+          "id": "a0d05d97-d6f4-439a-abc7-d8e935d5a01e",
+          "text": "If time prevails import notebook to google collab",
+          "done": false
         }
       ]
     }
