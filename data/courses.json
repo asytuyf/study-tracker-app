@@ -458,18 +458,6 @@
       "subtasks": []
     },
     {
-      "id": "22fbce8c-d957-4154-b684-a5a89da1b127",
-      "text": "Analysis L 5 & 6 and Ex sheets",
-      "done": true,
-      "courseIds": [
-        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
-      ],
-      "weekDate": "2026-05-25",
-      "taskType": "deadline",
-      "deadline": "2026-05-31",
-      "subtasks": []
-    },
-    {
       "id": "e499c1f9-052a-4e13-a61e-6395b2cc0a19",
       "text": "Ex sheet 9 & 10 (5th June) Analysis",
       "done": false,
