@@ -137,7 +137,8 @@
         7,
         9,
         10,
-        11
+        11,
+        12
       ],
       "completedExercisesList": [
         1,
@@ -153,9 +154,7 @@
       ],
       "completedExercises": 11,
       "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
-      "attendedChaptersList": [
-        12
-      ],
+      "attendedChaptersList": [],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=322",
       "hasExercises": true,
       "totalExercises": 14,
