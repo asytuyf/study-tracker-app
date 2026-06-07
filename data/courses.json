@@ -116,7 +116,7 @@
       "startDate": "2026-02-16",
       "examDate": "2026-06-11",
       "totalChapters": 14,
-      "completedChapters": 12,
+      "completedChapters": 13,
       "hasMidterm": false,
       "midtermCompleted": false,
       "id": "9b5f2488-a5ae-437e-9878-46a6464f89b7",
@@ -152,14 +152,17 @@
         9,
         10
       ],
-      "completedExercises": 11,
+      "completedExercises": 12,
       "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
-      "attendedChaptersList": [],
+      "attendedChaptersList": [
+        13
+      ],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=322",
       "hasExercises": true,
       "totalExercises": 14,
       "attendedExercisesList": [
-        11
+        11,
+        12
       ],
       "exerciseMode": "numbers"
     },
