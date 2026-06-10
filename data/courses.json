@@ -500,21 +500,28 @@
       "description": "Tasks before meeting then in the meeting push to have future tasks so I can complete the project in time like coding wise not graphs",
       "subtasks": [
         {
-          "id": "550cad47-257d-4655-946f-37c7377c7dfd",
-          "text": "Clean graphs SSC and Gradual graphs to be unicolor",
-          "done": true
-        },
-        {
-          "id": "b2b6c2ce-d757-4956-837c-f66654e6ebc5",
-          "text": "Dumb data because what you mean you gave me a link with massive datasets and tell me to select what's needed using an FTP link where I can't select those??",
+          "id": "be666b97-76e1-432e-8291-c925ae49fe00",
+          "text": "Do 2024 exam without looking at solution",
           "done": false
         },
         {
-          "id": "a0d05d97-d6f4-439a-abc7-d8e935d5a01e",
-          "text": "If time prevails import notebook to google collab",
+          "id": "525433e0-fdf6-4c97-9fd6-4efeca157300",
+          "text": "Set up tutor session for seeing the exercises I struggled with (11 June)",
           "done": false
         }
       ]
+    },
+    {
+      "id": "9ca6c4e4-82a6-48fd-b2d9-4516e7a09c0a",
+      "text": "Analysis Exam plan",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-06-08",
+      "taskType": "weekly",
+      "description": "Pass that 🧠",
+      "subtasks": []
     }
   ]
 }
