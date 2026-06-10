@@ -521,6 +521,21 @@
       "weekDate": "2026-06-08",
       "taskType": "weekly",
       "description": "Pass that 🧠",
+      "subtasks": [
+        {
+          "id": "e87dbd12-1401-415b-93e6-2a1291197bdf",
+          "text": "Tutor session today at 16h for the last 2 exercises (19.16 & 20.2)",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "882b95c1-f251-4082-bd32-8a8735165b9a",
+      "text": "DM2 exam plan",
+      "done": false,
+      "courseIds": [],
+      "weekDate": "2026-06-08",
+      "taskType": "weekly",
       "subtasks": []
     }
   ]
