@@ -528,15 +528,6 @@
           "done": false
         }
       ]
-    },
-    {
-      "id": "882b95c1-f251-4082-bd32-8a8735165b9a",
-      "text": "DM2 exam plan",
-      "done": false,
-      "courseIds": [],
-      "weekDate": "2026-06-08",
-      "taskType": "weekly",
-      "subtasks": []
     }
   ]
 }
