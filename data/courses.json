@@ -523,11 +523,27 @@
       "description": "Pass that 🧠",
       "subtasks": [
         {
-          "id": "e87dbd12-1401-415b-93e6-2a1291197bdf",
-          "text": "Tutor session today at 16h for the last 2 exercises (19.16 & 20.2)",
+          "id": "9cc4eb26-c029-403c-ac17-91c012f27ee4",
+          "text": "Do the last 2 exercises for exam with tutor (10 June)",
+          "done": false
+        },
+        {
+          "id": "2f057c55-906f-4e43-b9a5-ca5843488886",
+          "text": "Write the solutions more formally this weekend and send them to the teacher before Monday",
           "done": false
         }
       ]
+    },
+    {
+      "id": "81a8dd4c-4984-4958-9c2b-817182e42328",
+      "text": "DM2 exam plan",
+      "done": false,
+      "courseIds": [
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-06-08",
+      "taskType": "weekly",
+      "subtasks": []
     }
   ]
 }
