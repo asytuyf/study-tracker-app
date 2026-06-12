@@ -524,12 +524,12 @@
         {
           "id": "9cc4eb26-c029-403c-ac17-91c012f27ee4",
           "text": "Do the last 2 exercises for exam with tutor (10 June)",
-          "done": false
+          "done": true
         },
         {
           "id": "2f057c55-906f-4e43-b9a5-ca5843488886",
           "text": "Write the solutions more formally this weekend and send them to the teacher before Monday",
-          "done": false
+          "done": true
         }
       ]
     },
