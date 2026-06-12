@@ -513,7 +513,7 @@
     {
       "id": "9ca6c4e4-82a6-48fd-b2d9-4516e7a09c0a",
       "text": "Analysis Exam plan",
-      "done": false,
+      "done": true,
       "courseIds": [
         "9b5f2488-a5ae-437e-9878-46a6464f89b7"
       ],
