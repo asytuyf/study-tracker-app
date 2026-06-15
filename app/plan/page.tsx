@@ -79,7 +79,7 @@ export default function PlanPage() {
 
     const weeks: string[] = useMemo(() => {
         const result: string[] = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = -2; i < 5; i++) {
             const d = new Date(currentWeek + "T12:00:00");
             d.setDate(d.getDate() + i * 7);
             result.push(getMonday(d));
