@@ -575,6 +575,28 @@
       "weekDate": "2026-06-15",
       "taskType": "weekly",
       "description": "Find where did midterm 1 ended because I have a good cheat sheet for that then make a complete one for all chapter from there, remember no algorithms and theoretically solved exercises",
+      "subtasks": [
+        {
+          "id": "421bb3a3-9ee4-4bf2-b1ab-419c1cce8501",
+          "text": "Write 2 or 3 sections of the report",
+          "done": false
+        },
+        {
+          "id": "fa5ed4dd-37dd-4f1d-8afb-1d63625813f7",
+          "text": "Make graphs for the report",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "aa4d9372-41cc-4565-8f9e-6d86effc8fdd",
+      "text": "BSP",
+      "done": false,
+      "courseIds": [
+        "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
+      ],
+      "weekDate": "2026-06-15",
+      "taskType": "weekly",
       "subtasks": []
     }
   ]
