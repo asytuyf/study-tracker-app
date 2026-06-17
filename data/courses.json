@@ -602,6 +602,11 @@
           "id": "fdffe128-9336-4d19-a886-329ffd0f6386",
           "text": "Write 2 or 3 sections of the report",
           "done": false
+        },
+        {
+          "id": "a931b154-b308-4704-b56f-0940c7f5f6cf",
+          "text": "Make graphs for the report",
+          "done": false
         }
       ]
     }
