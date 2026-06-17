@@ -585,6 +585,11 @@
           "id": "fa5ed4dd-37dd-4f1d-8afb-1d63625813f7",
           "text": "Redo important exercises from the Exsheets",
           "done": false
+        },
+        {
+          "id": "b3ffff47-1962-4e50-a7ad-f5d217fe130c",
+          "text": "Make cheat sheet for all lecture",
+          "done": false
         }
       ]
     },
