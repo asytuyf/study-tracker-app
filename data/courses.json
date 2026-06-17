@@ -542,6 +542,39 @@
       ],
       "weekDate": "2026-06-08",
       "taskType": "weekly",
+      "subtasks": [
+        {
+          "id": "723c2c48-12ca-4783-a783-278aba7e70a1",
+          "text": "Make cheat sheet",
+          "done": false
+        },
+        {
+          "id": "c597c4ba-6f02-4c41-a631-bba1a4d3110d",
+          "text": "Watch all videos as a quick revision",
+          "done": false
+        },
+        {
+          "id": "b11887b4-e3bc-40c0-9a5a-ef8032cf6962",
+          "text": "Solve Exsheets as they have notes for exercises that will be in the exam",
+          "done": false
+        },
+        {
+          "id": "f7291757-ca38-48e1-b17c-31665dd18ea3",
+          "text": "Schedule tutor sessions (0 / 3)",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "90036a87-f08e-4631-b205-e48663f19f0f",
+      "text": "LA 2 exam",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-06-15",
+      "taskType": "weekly",
+      "description": "Find where did midterm 1 ended because I have a good cheat sheet for that then make a complete one for all chapter from there, remember no algorithms and theoretically solved exercises",
       "subtasks": []
     }
   ]
