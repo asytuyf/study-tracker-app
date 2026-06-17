@@ -617,6 +617,11 @@
           "id": "a931b154-b308-4704-b56f-0940c7f5f6cf",
           "text": "Make graphs for the report",
           "done": false
+        },
+        {
+          "id": "b80d532a-e3ff-40db-9aa3-97f5a38c29d9",
+          "text": "Histogram & correct scatter plot",
+          "done": false
         }
       ]
     }
