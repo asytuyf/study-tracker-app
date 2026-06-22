@@ -17,8 +17,6 @@
       "weeklyLogs": [],
       "chapterSchedule": [],
       "completedChaptersList": [
-        1,
-        2,
         3,
         4,
         5,
@@ -48,7 +46,10 @@
         2
       ],
       "completedExercises": 14,
-      "attendedChaptersList": [],
+      "attendedChaptersList": [
+        1,
+        2
+      ],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
       "hasExercises": true,
       "totalExercises": 14,
