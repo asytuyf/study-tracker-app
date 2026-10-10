@@ -11,6 +11,7 @@ import DeliverablesModal from "./components/DeliverablesModal";
 import BubbleCluster from "./components/BubbleCluster";
 import AdminButton from "./components/AdminButton";
 import WeeklyAnalysis from "./components/WeeklyAnalysis";
+import ArchivedCourses from "./components/ArchivedCourses";
 import Link from "next/link";
 
 // Today's date formatted nicely
@@ -77,6 +78,8 @@ export default function Home() {
 
   const {
     courses,
+    activeCourses,
+    archivedCourses,
     planTasks,
     mounted,
     saveStatus,
@@ -84,6 +87,7 @@ export default function Home() {
     handleAddCourse,
     handleEditCourse,
     handleDeleteCourse,
+    handleArchiveCourse,
     handleUpdateProgress,
     handleQuickUpdate,
     handleToggleDeliverable,
@@ -164,11 +168,7 @@ export default function Home() {
                   onUpdate={isAdmin ? () => openProgress(course.id) : undefined}
                   onTasks={() => openTasks(course.id)}
                   onEdit={isAdmin ? () => openEdit(course) : undefined}
-                  onDelete={isAdmin ? () => {
-                    if (confirm(`Delete "${course.name}"? This can't be undone.`)) {
-                      handleDeleteCourse(course.id);
-                    }
-                  } : undefined}
+                  onArchive={isAdmin ? () => handleArchiveCourse(course.id, true) : undefined}
                   onQuickUpdate={isAdmin ? (delta) => handleQuickUpdate(course.id, delta) : undefined}
                   onToggleChapter={handleToggleChapter}
                   onToggleExercise={handleToggleExercise}
@@ -183,7 +183,7 @@ export default function Home() {
 
 
           {/* Empty state */}
-          {courses.length === 0 && (
+          {activeCourses.length === 0 && (
             <div className="text-center py-16 animate-fade-in rounded-3xl border border-dashed border-white/10 mb-10">
               <h3 className="text-xl font-black text-white mb-2 italic uppercase">Ready to start?</h3>
               <p className="text-zinc-500 text-sm">
@@ -191,6 +191,18 @@ export default function Home() {
               </p>
             </div>
           )}
+
+          {/* Archived courses — hidden from stats, restorable */}
+          <ArchivedCourses
+            courses={archivedCourses}
+            onRestore={isAdmin ? (id) => handleArchiveCourse(id, false) : undefined}
+            onDelete={isAdmin ? (id) => {
+              const course = archivedCourses.find((c) => c.id === id);
+              if (course && confirm(`Permanently delete "${course.name}"? All its progress and notes will be lost.`)) {
+                handleDeleteCourse(id);
+              }
+            } : undefined}
+          />
 
           {/* ── Separator ── */}
           <div className="flex items-center gap-4 my-12">
@@ -235,12 +247,12 @@ export default function Home() {
             <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl ring-1 ring-white/5">
               <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-4">Courses</p>
               <p className="text-4xl font-black text-white mb-1">
-                {courses.filter((c: Course) => c.itemType !== "project").length}
+                {activeCourses.filter((c: Course) => c.itemType !== "project").length}
               </p>
               <p className="text-xs text-zinc-500">being tracked</p>
               <div className="mt-4">
                 <span className="text-xs text-zinc-600">
-                  {courses.filter((c: Course) => c.itemType === "project").length} project{courses.filter((c: Course) => c.itemType === "project").length !== 1 ? "s" : ""}
+                  {activeCourses.filter((c: Course) => c.itemType === "project").length} project{activeCourses.filter((c: Course) => c.itemType === "project").length !== 1 ? "s" : ""}
                 </span>
               </div>
             </div>

@@ -47,7 +47,7 @@ export default function WeeklyAnalysis({ courses, planTasks, onToggleTask, isAdm
 
     // Projects with goals
     const allProjects = useMemo(() =>
-        courses.filter(c => c.itemType === "project" || (c.weeklyHourGoal && c.weeklyHourGoal > 0)),
+        courses.filter(c => !c.archived && (c.itemType === "project" || (c.weeklyHourGoal && c.weeklyHourGoal > 0))),
         [courses]);
 
     // Split projects into BSP (branch) and Main

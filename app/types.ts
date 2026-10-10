@@ -121,6 +121,9 @@ export interface Course {
 
   // Moodle link for course platform
   moodleLink?: string;
+
+  // Archived courses are hidden from the dashboard, plan, and stats (data is kept)
+  archived?: boolean;
 }
 
 export type CourseStatus = "ahead" | "on-track" | "behind";

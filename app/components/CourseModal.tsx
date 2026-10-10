@@ -88,8 +88,9 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             notionLink: notionLink.trim() || undefined,
             moodleLink: moodleLink.trim() || undefined,
             unitName: unitName.trim() || undefined,
-            currentClassChapter: currentClassChapter ? parseInt(currentClassChapter) : undefined,
-            currentClassExercise: currentClassExercise ? parseInt(currentClassExercise) : undefined,
+            // Overrides are only editable (and only meaningful) for semester courses
+            currentClassChapter: courseType === "current" && currentClassChapter ? parseInt(currentClassChapter) : undefined,
+            currentClassExercise: courseType === "current" && currentClassExercise ? parseInt(currentClassExercise) : undefined,
         });
     };
 

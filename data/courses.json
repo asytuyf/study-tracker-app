@@ -23,8 +23,6 @@
       "hasExercises": true,
       "totalExercises": 14,
       "attendedExercisesList": [],
-      "currentClassChapter": 11,
-      "currentClassExercise": 12,
       "exerciseMode": "numbers"
     },
     {
@@ -52,8 +50,6 @@
       "hasExercises": true,
       "totalExercises": 13,
       "attendedExercisesList": [],
-      "currentClassChapter": 7,
-      "currentClassExercise": 9,
       "exerciseMode": "numbers"
     },
     {
@@ -112,7 +108,8 @@
       "attendedExercisesList": [
         14
       ],
-      "exerciseMode": "numbers"
+      "exerciseMode": "numbers",
+      "archived": true
     },
     {
       "name": "Discrete mathematics 2 (✅)",
@@ -154,7 +151,8 @@
         "19.16",
         "20.2"
       ],
-      "completedExercises": 6
+      "completedExercises": 6,
+      "archived": true
     },
     {
       "name": "BSP 6 (🟡)",
@@ -233,7 +231,8 @@
       "hasExercises": true,
       "totalExercises": 1,
       "attendedExercisesList": [],
-      "exerciseMode": "numbers"
+      "exerciseMode": "numbers",
+      "archived": true
     }
   ],
   "planTasks": [

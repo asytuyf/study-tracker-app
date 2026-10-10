@@ -36,6 +36,7 @@ export default function PlanPage() {
 
     const {
         courses,
+        activeCourses,
         planTasks,
         mounted,
         handleAddPlanTask,
@@ -361,11 +362,11 @@ export default function PlanPage() {
                                 </div>
 
                                 {/* Course tags */}
-                                {courses.length > 0 && (
+                                {activeCourses.length > 0 && (
                                     <div>
                                         <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2 block">Link to Course</label>
                                         <div className="flex flex-wrap gap-2">
-                                            {courses.map((c: Course) => {
+                                            {activeCourses.map((c: Course) => {
                                                 const isSelected = newTaskCourseIds.includes(c.id);
                                                 return (
                                                     <button

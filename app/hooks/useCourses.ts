@@ -68,54 +68,62 @@ export function getCurrentFocus(course: Course): { type: "midterm" | "final"; mi
     return { type: "midterm", milestone: activeMidterm };
 }
 
-export function getExpectedChapters(course: Course): number {
-    if (course.exerciseMode === "list") return 0;
-    if (!course.startDate) return 0;
-    
-    const weeks = course.currentClassChapter !== undefined 
-                    ? course.currentClassChapter 
-                    : getWeeksSinceStart(course.startDate);
+const WEEK_MS = 1000 * 60 * 60 * 24 * 7;
+
+// Flexible courses aim to finish the material this many weeks before the
+// target date, leaving time for revision.
+const REVIEW_WEEKS = 2;
+
+// How many units (chapters or sheets) should be done by right now, unrounded so
+// the progress-bar marker slides day by day.
+// - Semester courses follow the lecture rhythm: 1 unit per week since start.
+// - Flexible courses spread the material evenly between the start date and
+//   the target date minus the review buffer.
+export function getPacedUnits(course: Course, total: number): number {
+    if (!course.startDate || total <= 0) return 0;
+    const start = new Date(course.startDate).getTime();
+    const now = Date.now();
+    if (isNaN(start) || now <= start) return 0;
 
     if (course.courseType === "current") {
-        const focus = getCurrentFocus(course);
-        if (focus.type === "midterm" && focus.milestone) {
-            return Math.min(weeks, focus.milestone.chapters);
-        }
-        return Math.min(weeks, course.totalChapters);
+        return Math.min((now - start) / WEEK_MS, total);
     }
 
-    if (course.courseType === "self-study") {
-        return Math.min(weeks, course.totalChapters);
-    }
-
-    return 0;
+    const exam = new Date(course.examDate).getTime();
+    if (isNaN(exam) || exam <= start) return total;
+    const buffered = exam - REVIEW_WEEKS * WEEK_MS;
+    const end = buffered > start ? buffered : exam;
+    return Math.min((now - start) / (end - start), 1) * total;
 }
 
-export function getExpectedExercises(course: Course): number {
-    if (course.hasExercises === false) return 0;
+// Manual "where the class is" overrides only apply to semester courses — the
+// fields are hidden for flexible ones, so stale values must not leak through.
+function getExpectedUnits(course: Course, total: number, override: number | undefined, exact: boolean): number {
     if (!course.startDate) return 0;
-    
-    const weeks = course.currentClassExercise !== undefined
-                    ? course.currentClassExercise
-                    : (course.currentClassChapter !== undefined 
-                        ? course.currentClassChapter 
-                        : getWeeksSinceStart(course.startDate));
 
-    const totalEx = course.exerciseMode === "list" ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? course.totalChapters);
+    const isCurrent = course.courseType === "current";
+    let units = isCurrent && override !== undefined ? override : getPacedUnits(course, total);
 
-    if (course.courseType === "current") {
+    if (isCurrent) {
         const focus = getCurrentFocus(course);
         if (focus.type === "midterm" && focus.milestone) {
-            return Math.min(weeks, focus.milestone.chapters);
+            units = Math.min(units, focus.milestone.chapters);
         }
-        return Math.min(weeks, totalEx);
     }
 
-    if (course.courseType === "self-study") {
-        return Math.min(weeks, totalEx);
-    }
+    units = Math.min(units, total);
+    return exact ? units : Math.floor(units);
+}
 
-    return 0;
+export function getExpectedChapters(course: Course, exact = false): number {
+    if (course.exerciseMode === "list") return 0;
+    return getExpectedUnits(course, course.totalChapters, course.currentClassChapter, exact);
+}
+
+export function getExpectedExercises(course: Course, exact = false): number {
+    if (course.hasExercises === false) return 0;
+    const totalEx = course.exerciseMode === "list" ? (course.customExerciseNames?.length || 0) : (course.totalExercises ?? course.totalChapters);
+    return getExpectedUnits(course, totalEx, course.currentClassExercise ?? course.currentClassChapter, exact);
 }
 
 
@@ -386,6 +394,12 @@ export function useCourses() {
         updateCourses((prev: Course[]) => prev.filter((c: Course) => c.id !== id));
     }, [updateCourses]);
 
+    const handleArchiveCourse = useCallback((id: string, archived: boolean) => {
+        updateCourses((prev: Course[]) =>
+            prev.map((c: Course) => (c.id === id ? { ...c, archived } : c))
+        );
+    }, [updateCourses]);
+
     const handleUpdateProgress = useCallback(
         (id: string, newProgress: number, milestoneId?: string, milestoneDone?: boolean) => {
             updateCourses((prev: Course[]) =>
@@ -627,14 +641,24 @@ export function useCourses() {
         });
     }, [updatePlanTasks]);
 
-    const behindCourses = useMemo(
-        () => courses.filter((c: Course) => getStatus(c) === "behind"),
+    const activeCourses = useMemo(
+        () => courses.filter((c: Course) => !c.archived),
         [courses]
+    );
+
+    const archivedCourses = useMemo(
+        () => courses.filter((c: Course) => c.archived),
+        [courses]
+    );
+
+    const behindCourses = useMemo(
+        () => activeCourses.filter((c: Course) => getStatus(c) === "behind"),
+        [activeCourses]
     );
 
     const sortedCourses = useMemo(
         () =>
-            [...courses].sort((a: Course, b: Course) => {
+            [...activeCourses].sort((a: Course, b: Course) => {
                 const typeWeight = (c: Course) => {
                     if (c.itemType === "project") return 1; // Project
                     if (c.courseType === "self-study") return 2; // Flex
@@ -656,18 +680,20 @@ export function useCourses() {
 
                 return getDaysUntil(aDate) - getDaysUntil(bDate);
             }),
-        [courses]
+        [activeCourses]
     );
 
     const overallProgress = useMemo(() => {
-        if (courses.length === 0) return 0;
-        const total = courses.reduce((s: number, c: Course) => s + (c.exerciseMode === "list" ? 0 : c.totalChapters) + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.customExerciseNames?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
-        const done = courses.reduce((s: number, c: Course) => s + (c.exerciseMode === "list" ? 0 : (c.completedChapters || 0)) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
+        if (activeCourses.length === 0) return 0;
+        const total = activeCourses.reduce((s: number, c: Course) => s + (c.exerciseMode === "list" ? 0 : c.totalChapters) + (c.hasExercises !== false ? (c.exerciseMode === "list" ? (c.customExerciseNames?.length || 0) : (c.totalExercises ?? c.totalChapters)) : 0), 0);
+        const done = activeCourses.reduce((s: number, c: Course) => s + (c.exerciseMode === "list" ? 0 : (c.completedChapters || 0)) + (c.hasExercises !== false ? (c.completedExercises || 0) : 0), 0);
         return total === 0 ? 0 : Math.round((done / total) * 100);
-    }, [courses]);
+    }, [activeCourses]);
 
     return {
         courses,
+        activeCourses,
+        archivedCourses,
         planTasks,
         mounted,
         saveStatus,
@@ -677,6 +703,7 @@ export function useCourses() {
         handleAddCourse,
         handleEditCourse,
         handleDeleteCourse,
+        handleArchiveCourse,
         handleUpdateProgress,
         handleQuickUpdate,
         handleLogHours,

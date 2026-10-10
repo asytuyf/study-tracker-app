@@ -20,7 +20,7 @@ interface CourseCardProps {
     onUpdate?: () => void;
     onTasks: () => void;
     onEdit?: () => void;
-    onDelete?: () => void;
+    onArchive?: () => void;
     onQuickUpdate?: (delta: number) => void;
     onToggleChapter?: (id: string, num: number) => void;
     onToggleExercise?: (id: string, num: number) => void;
@@ -34,7 +34,7 @@ export default function CourseCard({
     onUpdate,
     onTasks,
     onEdit,
-    onDelete,
+    onArchive,
     onQuickUpdate,
     onToggleChapter,
     onToggleExercise,
@@ -52,7 +52,9 @@ export default function CourseCard({
     const isProject = course.itemType === "project";
     const isCurrent = course.courseType === "current";
     const isSelfStudy = course.courseType === "self-study";
-    const weeksIn = isCurrent && course.startDate ? getWeeksSinceStart(course.startDate) : null;
+    const weeksIn = !isProject && course.startDate && getDaysUntil(course.startDate) <= 0
+        ? getWeeksSinceStart(course.startDate) + 1
+        : null;
 
     const daysToExam = getDaysUntil(course.examDate);
     const dateLabel = focus.type === "midterm" && focus.milestone
@@ -74,8 +76,9 @@ export default function CourseCard({
 
     // Absolute progress for the bar width
     const absoluteProgressPercent = totalCourseItems > 0 ? Math.min((completedItems / totalCourseItems) * 100, 100) : 0;
-    // Expected progress for the white line position
-    const expectedPercent = totalCourseItems > 0 ? Math.min((expectedItems / totalCourseItems) * 100, 100) : 0;
+    // Expected progress for the white line position — unrounded, so it slides day by day
+    const exactExpectedItems = getExpectedChapters(course, true) + getExpectedExercises(course, true);
+    const expectedPercent = totalCourseItems > 0 ? Math.min((exactExpectedItems / totalCourseItems) * 100, 100) : 0;
 
     // Catch-up percentage for the text indicator
     let catchUpPercent = 0;
@@ -158,7 +161,7 @@ export default function CourseCard({
                     <div className="min-w-0">
                         <h3 className="text-lg font-black text-white truncate leading-tight mb-0.5">{course.name}</h3>
                         <p className="text-[11px] text-zinc-500 truncate leading-none">
-                            {isCurrent && weeksIn !== null ? `Wk ${weeksIn} · ` : ""}
+                            {weeksIn !== null ? `Wk ${weeksIn} · ` : ""}
                             {dateLabel}
                         </p>
                         {course.description && (
@@ -319,6 +322,17 @@ export default function CourseCard({
                         >
                             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </button>
+                    )}
+                    {isAdmin && onArchive && (
+                        <button
+                            onClick={onArchive}
+                            title="Archive"
+                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-amber-500/10 text-zinc-500 hover:text-amber-400 transition-all border border-white/5 hover:border-amber-500/20"
+                        >
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
                             </svg>
                         </button>
                     )}
