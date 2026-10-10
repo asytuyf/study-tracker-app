@@ -6,7 +6,7 @@
       "startDate": "2026-09-15",
       "examDate": "2027-01-18",
       "totalChapters": 13,
-      "completedChapters": 2,
+      "completedChapters": 3,
       "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
       "color": "from-blue-500 to-cyan-400",
       "notionLink": "https://www.notion.so/Linear-algebra-2-27cedf02476080e8b5d9dd4eec514728",
@@ -20,7 +20,8 @@
       "completedExercises": 0,
       "attendedChaptersList": [
         1,
-        2
+        2,
+        3
       ],
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=2456",
       "hasExercises": true,
