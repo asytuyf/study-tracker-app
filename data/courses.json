@@ -252,7 +252,13 @@
       "notionLink": "https://app.notion.com/p/Portugais-A1-3ebedf0247608025a810d18257f46d0c",
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=3354",
       "id": "f9d2aefe-ec93-4766-ab51-9e9b1c9a56cb",
-      "color": "from-purple-500 to-indigo-400"
+      "color": "from-purple-500 to-indigo-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "attendedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedExercisesList": []
     },
     {
       "name": "Nederlandse taal en cultuur – Dutch language and culture",
@@ -270,7 +276,13 @@
       "notionLink": "https://app.notion.com/p/Nederlandse-taal-en-cultuur-Dutch-language-and-culture-3ebedf02476080fbafebc9bae04b58d1",
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=8632",
       "id": "bded4b29-1d73-47e6-bb61-b79e19f315a9",
-      "color": "from-blue-500 to-cyan-400"
+      "color": "from-blue-500 to-cyan-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "attendedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedExercisesList": []
     },
     {
       "name": "Introduction to Data Science for Actuaries",
@@ -288,7 +300,20 @@
       "notionLink": "https://app.notion.com/p/Introduction-to-Data-Science-for-Actuaries-Open-course-3e5edf0247608041923bc1cf33043a7f",
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=9140",
       "id": "16bd7cad-e67a-4549-8cb4-59e64117f419",
-      "color": "from-violet-500 to-purple-400"
+      "color": "from-violet-500 to-purple-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "attendedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedExercisesList": [],
+      "deliverables": [
+        {
+          "id": "b8a7a7b6-62bf-4acf-9754-7736b2d9c25a",
+          "name": "Ask about project form asap",
+          "completed": false
+        }
+      ]
     },
     {
       "name": "Chinese A1.1",
@@ -305,7 +330,13 @@
       "description": "- Doesn't have moodle\n- Summarise information from emails & onedrive from them",
       "notionLink": "https://app.notion.com/p/Chinese-A1-1-3ebedf02476080009cfcfcbd07145471",
       "id": "4472c044-5a4f-4814-a3eb-ca8cbfcea3ca",
-      "color": "from-sky-500 to-blue-400"
+      "color": "from-sky-500 to-blue-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "attendedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedExercisesList": []
     }
   ],
   "planTasks": [
