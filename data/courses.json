@@ -269,6 +269,24 @@
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=8632",
       "id": "bded4b29-1d73-47e6-bb61-b79e19f315a9",
       "color": "from-blue-500 to-cyan-400"
+    },
+    {
+      "name": "Introduction to Data Science for Actuaries",
+      "itemType": "course",
+      "courseType": "current",
+      "startDate": "2026-09-23",
+      "examDate": "2026-12-09",
+      "totalChapters": 0,
+      "completedChapters": 0,
+      "hasExercises": true,
+      "exerciseMode": "numbers",
+      "totalExercises": 0,
+      "midterms": [],
+      "description": "- The final exam is a 2-hour closed-book written exam covering all course material.\n- It assesses both theoretical understanding and the ability to interpret\nmodelling output.\n+ Project (needs to ask teacher about asap)",
+      "notionLink": "https://app.notion.com/p/Introduction-to-Data-Science-for-Actuaries-Open-course-3e5edf0247608041923bc1cf33043a7f",
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=9140",
+      "id": "16bd7cad-e67a-4549-8cb4-59e64117f419",
+      "color": "from-violet-500 to-purple-400"
     }
   ],
   "planTasks": [
