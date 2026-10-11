@@ -251,6 +251,24 @@
       "moodleLink": "https://moodle.uni.lu/course/view.php?id=3354",
       "id": "f9d2aefe-ec93-4766-ab51-9e9b1c9a56cb",
       "color": "from-purple-500 to-indigo-400"
+    },
+    {
+      "name": "Nederlandse taal en cultuur – Dutch language and culture",
+      "itemType": "course",
+      "courseType": "current",
+      "startDate": "2026-10-06",
+      "examDate": "2026-12-15",
+      "totalChapters": 6,
+      "completedChapters": 0,
+      "hasExercises": true,
+      "exerciseMode": "numbers",
+      "totalExercises": 0,
+      "midterms": [],
+      "description": "Summarize from moodle",
+      "notionLink": "https://app.notion.com/p/Nederlandse-taal-en-cultuur-Dutch-language-and-culture-3ebedf02476080fbafebc9bae04b58d1",
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=8632",
+      "id": "bded4b29-1d73-47e6-bb61-b79e19f315a9",
+      "color": "from-blue-500 to-cyan-400"
     }
   ],
   "planTasks": [
