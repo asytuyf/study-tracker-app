@@ -124,6 +124,9 @@ export interface Course {
 
   // Archived courses are hidden from the dashboard, plan, and stats (data is kept)
   archived?: boolean;
+
+  // Must-pass course (e.g. final retake attempt) — pinned first with a warning
+  lastAttempt?: boolean;
 }
 
 export type CourseStatus = "ahead" | "on-track" | "behind";

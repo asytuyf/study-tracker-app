@@ -115,12 +115,20 @@ export default function CourseCard({
 
     return (
         <div
-            className={`h-full rounded-2xl p-6 animate-fade-in transition-all duration-300 relative overflow-hidden group border border-white/10 backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.05] shadow-2xl ${isComplete
-                ? "ring-1 ring-emerald-500/20"
-                : "ring-1 ring-white/5"
+            className={`h-full rounded-2xl p-6 animate-fade-in transition-all duration-300 relative overflow-hidden group border backdrop-blur-xl bg-white/[0.03] hover:bg-white/[0.05] shadow-2xl ${isComplete
+                ? "border-white/10 ring-1 ring-emerald-500/20"
+                : course.lastAttempt
+                    ? "border-red-500/30 ring-1 ring-red-500/20 shadow-[0_0_40px_rgba(239,68,68,0.12)]"
+                    : "border-white/10 ring-1 ring-white/5"
                 }`}
             style={{ animationDelay: `${index * 80}ms` }}
         >
+            {course.lastAttempt && !isComplete && (
+                <>
+                    <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-red-500 via-orange-400 to-red-500" />
+                    <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-red-500/10 blur-3xl pointer-events-none" />
+                </>
+            )}
             <div className="relative z-10">
                 {/* Top row */}
                 <div className="flex justify-between items-center mb-3">
@@ -135,6 +143,11 @@ export default function CourseCard({
                         >
                             {isProject ? "Project" : isCurrent ? "Sem" : "Flex"}
                         </span>
+                        {course.lastAttempt && (
+                            <span className="px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 text-[10px] font-black border border-red-500/30 uppercase tracking-wider">
+                                ⚠️ Last try
+                            </span>
+                        )}
                     </div>
 
                     <div className="flex gap-1.5">

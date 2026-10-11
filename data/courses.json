@@ -23,7 +23,8 @@
       "hasExercises": true,
       "totalExercises": 14,
       "attendedExercisesList": [],
-      "exerciseMode": "numbers"
+      "exerciseMode": "numbers",
+      "lastAttempt": true
     },
     {
       "name": "Theoritical computer science",
@@ -50,7 +51,8 @@
       "hasExercises": true,
       "totalExercises": 13,
       "attendedExercisesList": [],
-      "exerciseMode": "numbers"
+      "exerciseMode": "numbers",
+      "lastAttempt": true
     },
     {
       "name": "Analysis 1 (waiting for grade)",

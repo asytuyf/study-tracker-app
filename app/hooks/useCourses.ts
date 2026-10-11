@@ -659,6 +659,9 @@ export function useCourses() {
     const sortedCourses = useMemo(
         () =>
             [...activeCourses].sort((a: Course, b: Course) => {
+                // Must-pass courses always come first
+                if (!!a.lastAttempt !== !!b.lastAttempt) return a.lastAttempt ? -1 : 1;
+
                 const typeWeight = (c: Course) => {
                     if (c.itemType === "project") return 1; // Project
                     if (c.courseType === "self-study") return 2; // Flex

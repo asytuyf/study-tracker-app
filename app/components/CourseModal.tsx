@@ -33,6 +33,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
         course?.totalExercises?.toString() || course?.totalChapters?.toString() || ""
     );
     const [unitName, setUnitName] = useState(course?.unitName || "");
+    const [lastAttempt, setLastAttempt] = useState(course?.lastAttempt ?? false);
 
     const [currentClassChapter, setCurrentClassChapter] = useState(
         course?.currentClassChapter?.toString() || ""
@@ -88,6 +89,7 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             notionLink: notionLink.trim() || undefined,
             moodleLink: moodleLink.trim() || undefined,
             unitName: unitName.trim() || undefined,
+            lastAttempt: lastAttempt || undefined,
             // Overrides are only editable (and only meaningful) for semester courses
             currentClassChapter: courseType === "current" && currentClassChapter ? parseInt(currentClassChapter) : undefined,
             currentClassExercise: courseType === "current" && currentClassExercise ? parseInt(currentClassExercise) : undefined,
@@ -127,6 +129,25 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             required
                         />
                     </div>
+
+                    {/* Last attempt flag */}
+                    <label
+                        className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${lastAttempt
+                            ? "border-red-500/40 bg-red-500/10"
+                            : "border-zinc-700 hover:border-zinc-600"
+                            }`}
+                    >
+                        <input
+                            type="checkbox"
+                            checked={lastAttempt}
+                            onChange={(e) => setLastAttempt(e.target.checked)}
+                            className="w-5 h-5 rounded border-zinc-600 bg-zinc-800 text-red-500 focus:ring-red-500 focus:ring-offset-zinc-900"
+                        />
+                        <div>
+                            <p className={`text-sm font-medium ${lastAttempt ? "text-red-300" : "text-zinc-300"}`}>⚠️ Last try — must pass</p>
+                            <p className="text-[11px] text-zinc-500 leading-tight">Pinned to the top with a warning</p>
+                        </div>
+                    </label>
 
                     {/* Item type */}
                     <div>
