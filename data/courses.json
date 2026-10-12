@@ -326,8 +326,7 @@
       "totalChapters": 12,
       "completedChapters": 0,
       "hasExercises": true,
-      "exerciseMode": "numbers",
-      "totalExercises": 0,
+      "exerciseMode": "list",
       "midterms": [],
       "description": "- Doesn't have moodle\n- Summarise information from emails & onedrive from them",
       "notionLink": "https://app.notion.com/p/Chinese-A1-1-3ebedf02476080009cfcfcbd07145471",
@@ -339,7 +338,9 @@
       "attendedChaptersList": [],
       "completedExercisesList": [],
       "attendedExercisesList": [],
-      "isLanguageCourse": true
+      "isLanguageCourse": true,
+      "customExerciseNames": [],
+      "driveLink": "https://uniluxembourg-my.sharepoint.com/:f:/r/personal/yuhan_liu_uni_lu/Documents/Chinese%20-%20A1.1.1%20-%202026%20Fall?e=5%3abe46b13ed34242e98710c1bdc348c7de&sharingv2=true&fromShare=true&at=9&xsdata=MDV8MDJ8YWJkZWxqYWxpbC5uYWJhb3VpLjAwMUBzdHVkZW50LnVuaS5sdXxlMTUxMDgwZWUwOWE0Y2I2ZWMxOTA4ZGYxYTE1YWMxZXw0NDVhOWM5NTBmOWQ0OTUzOWRiMWJjNGE0NWRkMTIyMHwwfDB8NjM5MjU4MzUyODAxMzUxODczfFVua25vd258VFdGcGJHWnNiM2Q4ZXlKRmJYQjBlVTFoY0draU9uUnlkV1VzSWxZaU9pSXdMakF1TURBd01DSXNJbEFpT2lKWGFXNHpNaUlzSWtGT0lqb2lUV0ZwYkNJc0lsZFVJam95ZlE9PXwwfHx8&sdata=RlUraGE4MFNpd2g0VEdDNmZueWZ5enpsY1FIR3A3RCtDMHhleGtJOFkzND0%3d"
     }
   ],
   "planTasks": [
