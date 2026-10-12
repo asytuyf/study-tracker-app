@@ -258,7 +258,8 @@
       "completedChaptersList": [],
       "attendedChaptersList": [],
       "completedExercisesList": [],
-      "attendedExercisesList": []
+      "attendedExercisesList": [],
+      "isLanguageCourse": true
     },
     {
       "name": "Nederlandse taal en cultuur – Dutch language and culture",
@@ -282,7 +283,8 @@
       "completedChaptersList": [],
       "attendedChaptersList": [],
       "completedExercisesList": [],
-      "attendedExercisesList": []
+      "attendedExercisesList": [],
+      "isLanguageCourse": true
     },
     {
       "name": "Introduction to Data Science for Actuaries",
@@ -336,7 +338,8 @@
       "completedChaptersList": [],
       "attendedChaptersList": [],
       "completedExercisesList": [],
-      "attendedExercisesList": []
+      "attendedExercisesList": [],
+      "isLanguageCourse": true
     }
   ],
   "planTasks": [

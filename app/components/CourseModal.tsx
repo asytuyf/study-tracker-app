@@ -47,6 +47,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
     const [notebookLMLink, setNotebookLMLink] = useState(course?.notebookLMLink || "");
     const [notionLink, setNotionLink] = useState(course?.notionLink || "");
     const [moodleLink, setMoodleLink] = useState(course?.moodleLink || "");
+    const [isLanguageCourse, setIsLanguageCourse] = useState(course?.isLanguageCourse ?? false);
+    const [driveLink, setDriveLink] = useState(course?.driveLink || "");
 
     const handleAddMidterm = () => {
         const newMidterm: Milestone = {
@@ -88,6 +90,8 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
             notebookLMLink: notebookLMLink.trim() || undefined,
             notionLink: notionLink.trim() || undefined,
             moodleLink: moodleLink.trim() || undefined,
+            isLanguageCourse: isLanguageCourse || undefined,
+            driveLink: isLanguageCourse ? driveLink.trim() || undefined : undefined,
             unitName: unitName.trim() || undefined,
             lastAttempt: lastAttempt || undefined,
             // Overrides are only editable (and only meaningful) for semester courses
@@ -541,6 +545,47 @@ export default function CourseModal({ course, onSave, onClose }: CourseModalProp
                             </div>
                         </div>
                     </div>
+
+                    {/* Language course + drive link */}
+                    {itemType === "course" && (
+                        <div className={`p-4 rounded-xl border space-y-3 transition-all ${isLanguageCourse ? "bg-teal-500/5 border-teal-500/20" : "bg-zinc-800/50 border-zinc-700/50"}`}>
+                            <label className="flex items-center gap-3 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={isLanguageCourse}
+                                    onChange={(e) => setIsLanguageCourse(e.target.checked)}
+                                    className="w-5 h-5 rounded border-zinc-600 bg-zinc-800 text-teal-500 focus:ring-teal-500 focus:ring-offset-zinc-900"
+                                />
+                                <div>
+                                    <p className="text-sm text-zinc-300 font-medium">🌐 Language course</p>
+                                    <p className="text-[11px] text-zinc-500 leading-tight">Adds a drive link for books & exercises</p>
+                                </div>
+                            </label>
+
+                            {isLanguageCourse && (
+                                <div className="overflow-hidden">
+                                    <label className="block text-xs text-zinc-400 mb-1.5">
+                                        Course Drive Link
+                                        <span className="text-zinc-600 ml-2">(OneDrive, Google Drive…)</span>
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 bg-sky-500 rounded flex items-center justify-center">
+                                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                                            </svg>
+                                        </div>
+                                        <input
+                                            type="url"
+                                            value={driveLink}
+                                            onChange={(e) => setDriveLink(e.target.value)}
+                                            placeholder="onedrive.live.com/..."
+                                            className="w-full pl-9 pr-3 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-teal-500 transition-colors text-sm"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {/* Buttons */}
                     <div className="flex gap-3 pt-2">

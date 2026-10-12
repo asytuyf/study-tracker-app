@@ -83,8 +83,8 @@ export default function DeliverablesModal({
                 )}
 
                 {/* Link buttons */}
-                {(course.notebookLMLink || course.notionLink || course.moodleLink) && (
-                    <div className={`mb-6 grid gap-2 ${[course.notebookLMLink, course.notionLink, course.moodleLink].filter(Boolean).length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                {(course.notebookLMLink || course.notionLink || course.moodleLink || course.driveLink) && (
+                    <div className={`mb-6 grid gap-2 ${[course.notebookLMLink, course.notionLink, course.moodleLink, course.driveLink].filter(Boolean).length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
                         {/* NotebookLM Link */}
                         {course.notebookLMLink && (
                             <a
@@ -149,6 +149,26 @@ export default function DeliverablesModal({
                                 <div className="flex-1 min-w-0">
                                     <p className="text-white font-semibold text-xs">Moodle</p>
                                     <p className="text-zinc-500 text-[10px] truncate">Course page</p>
+                                </div>
+                            </a>
+                        )}
+
+                        {/* Course Drive Link (language courses) */}
+                        {course.driveLink && (
+                            <a
+                                href={course.driveLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 p-3 rounded-xl bg-sky-950/40 border border-sky-900/50 hover:border-sky-700/60 transition-all group"
+                            >
+                                <div className="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center group-hover:scale-105 transition-transform flex-shrink-0">
+                                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                                    </svg>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-white font-semibold text-xs">Course Drive</p>
+                                    <p className="text-zinc-500 text-[10px] truncate">Books & exercises</p>
                                 </div>
                             </a>
                         )}

@@ -122,6 +122,10 @@ export interface Course {
   // Moodle link for course platform
   moodleLink?: string;
 
+  // Language courses (run outside Moodle) can link a shared drive with books & exercises
+  isLanguageCourse?: boolean;
+  driveLink?: string;
+
   // Archived courses are hidden from the dashboard, plan, and stats (data is kept)
   archived?: boolean;
 

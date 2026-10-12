@@ -143,6 +143,11 @@ export default function CourseCard({
                         >
                             {isProject ? "Project" : isCurrent ? "Sem" : "Flex"}
                         </span>
+                        {course.isLanguageCourse && (
+                            <span className="px-1.5 py-0.5 rounded bg-teal-500/10 text-teal-400 text-[10px] font-bold border border-teal-500/20 uppercase tracking-wider">
+                                Lang
+                            </span>
+                        )}
                         {course.lastAttempt && (
                             <span className="px-1.5 py-0.5 rounded bg-red-500/15 text-red-400 text-[10px] font-black border border-red-500/30 uppercase tracking-wider">
                                 ⚠️ Last try
