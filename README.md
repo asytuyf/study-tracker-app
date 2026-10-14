@@ -1,5 +1,7 @@
 # Study Tracker
 
+**Links:** [Live site](https://study-tracker-app-smoky.vercel.app) · [Vercel dashboard](https://vercel.com/asytuyfs-projects/study-tracker-app) · [Deployments](https://vercel.com/asytuyfs-projects/study-tracker-app/deployments) · [Logs](https://vercel.com/asytuyfs-projects/study-tracker-app/logs) · [Env vars](https://vercel.com/asytuyfs-projects/study-tracker-app/settings/environment-variables)
+
 A simple tool to help me keep track of my university courses and exams.
 
 It helps me visualize:
