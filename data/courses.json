@@ -273,7 +273,7 @@
       "startDate": "2026-10-06",
       "examDate": "2026-12-15",
       "totalChapters": 6,
-      "completedChapters": 0,
+      "completedChapters": 1,
       "hasExercises": true,
       "exerciseMode": "numbers",
       "totalExercises": 0,
@@ -286,7 +286,9 @@
       "weeklyLogs": [],
       "chapterSchedule": [],
       "completedChaptersList": [],
-      "attendedChaptersList": [],
+      "attendedChaptersList": [
+        2
+      ],
       "completedExercisesList": [],
       "attendedExercisesList": [],
       "isLanguageCourse": true
