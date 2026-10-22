@@ -1,1 +1,694 @@
-{}
+{
+  "courses": [
+    {
+      "name": "Linear Algebra 2",
+      "courseType": "self-study",
+      "startDate": "2026-09-15",
+      "examDate": "2027-01-18",
+      "totalChapters": 13,
+      "completedChapters": 0,
+      "id": "934da421-d4ab-4b28-9d4b-4207e05f4dee",
+      "color": "from-blue-500 to-cyan-400",
+      "notionLink": "https://www.notion.so/Linear-algebra-2-27cedf02476080e8b5d9dd4eec514728",
+      "description": "- 6 sheets (12 pages) (Handwritten or not).\n- There should be name and surname on all submitted sheets of papers.",
+      "notebookLMLink": "https://notebooklm.google.com/notebook/fe531655-e687-4c8a-b282-628b1c8704ed",
+      "itemType": "course",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "completedExercisesList": [],
+      "completedExercises": 0,
+      "attendedChaptersList": [],
+      "moodleLink": "https://moodle2526.uni.lu/course/view.php?id=2456",
+      "hasExercises": true,
+      "totalExercises": 14,
+      "attendedExercisesList": [],
+      "exerciseMode": "numbers",
+      "lastAttempt": true
+    },
+    {
+      "name": "Theoritical computer science",
+      "courseType": "self-study",
+      "startDate": "2026-09-15",
+      "examDate": "2027-01-18",
+      "totalChapters": 9,
+      "completedChapters": 0,
+      "hasMidterm": false,
+      "midtermCompleted": false,
+      "id": "f3be84a4-c578-42e7-b59b-839fc9ddb8a6",
+      "color": "from-violet-500 to-purple-400",
+      "notionLink": "https://www.notion.so/Theoretical-computer-science-30cedf02476080278f7ff786d3a30077",
+      "description": "- I need a 9.1 with my old homework grades and don't forget to add a note with the year so they count your homework : 22-23.\n- http://www.jflap.org : for cfgs and drawing DFA’s.\n- https://www.automatatutor.com : for more interactive exercises about automata's.",
+      "notebookLMLink": "https://notebooklm.google.com/notebook/29ae3cec-7404-4cb5-8e56-9194205a19e2",
+      "itemType": "course",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "completedExercisesList": [],
+      "completedExercises": 0,
+      "attendedChaptersList": [],
+      "moodleLink": "https://moodle2526.uni.lu/course/view.php?id=2454",
+      "hasExercises": true,
+      "totalExercises": 13,
+      "attendedExercisesList": [],
+      "exerciseMode": "numbers",
+      "lastAttempt": true
+    },
+    {
+      "name": "Analysis 1 (waiting for grade)",
+      "courseType": "self-study",
+      "startDate": "2026-02-16",
+      "examDate": "2026-06-11",
+      "totalChapters": 14,
+      "completedChapters": 14,
+      "hasMidterm": false,
+      "midtermCompleted": false,
+      "id": "9b5f2488-a5ae-437e-9878-46a6464f89b7",
+      "color": "from-sky-500 to-blue-400",
+      "notionLink": "https://www.notion.so/Analysis-1-277edf024760808e8aa3f781fa321348",
+      "description": "14 Ex sheets + Exam prep sheet",
+      "itemType": "course",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "completedExercisesList": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "completedExercises": 14,
+      "notebookLMLink": "https://notebooklm.google.com/notebook/6538267c-7cd7-441b-9f8a-acb27c83e60c",
+      "attendedChaptersList": [],
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=322",
+      "hasExercises": true,
+      "totalExercises": 14,
+      "attendedExercisesList": [
+        14
+      ],
+      "exerciseMode": "numbers",
+      "archived": true
+    },
+    {
+      "name": "Discrete mathematics 2 (✅)",
+      "courseType": "self-study",
+      "startDate": "2026-02-16",
+      "examDate": "2026-06-16",
+      "totalChapters": 5,
+      "completedChapters": 0,
+      "hasMidterm": false,
+      "midtermCompleted": false,
+      "id": "e1105728-ad9a-4b8d-8764-3a438724e26c",
+      "color": "from-indigo-500 to-violet-400",
+      "notionLink": "https://www.notion.so/Discrete-math-2-27cedf02476080a38257e30e9ff98a31",
+      "itemType": "course",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "completedExercisesList": [
+        2,
+        1,
+        3,
+        4,
+        6,
+        5
+      ],
+      "description": "- Prof will give me exercises to solve and we will discuss the solutions I'll bring in the exam\n- Mostly following the online notes from MIT (see moodle). (PartsIII&IV)",
+      "notebookLMLink": "https://notebooklm.google.com/notebook/76c94db4-2bcd-437a-9841-7bf2806dcaa3",
+      "attendedChaptersList": [],
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=3329",
+      "hasExercises": true,
+      "attendedExercisesList": [],
+      "exerciseMode": "list",
+      "deliverables": [],
+      "customExerciseNames": [
+        "15.12",
+        "15.28",
+        "16.14",
+        "18.33",
+        "19.16",
+        "20.2"
+      ],
+      "completedExercises": 6,
+      "archived": true
+    },
+    {
+      "name": "BSP 6 (🟡)",
+      "itemType": "project",
+      "courseType": "self-study",
+      "startDate": "2026-02-16",
+      "examDate": "2026-07-04",
+      "totalChapters": 1,
+      "completedChapters": 0,
+      "weeklyHourGoal": 15,
+      "description": "Midterm prognosis of geomagnetic storms",
+      "notionLink": "https://www.notion.so/BSP-6-Midterm-prognosis-of-geomagnetic-storms-32eedf02476080929b92f3471069942c?source=copy_link",
+      "id": "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6",
+      "color": "from-cyan-500 to-sky-400",
+      "weeklyLogs": [
+        {
+          "id": "3476cde6-039a-4f0c-87d9-f4afb35f0543",
+          "date": "2026-04-12",
+          "hours": 1
+        },
+        {
+          "id": "f05a7e49-e843-4101-83c7-9c869a86ac52",
+          "date": "2026-04-13",
+          "hours": 10
+        },
+        {
+          "id": "93a81391-b6fb-409f-b52b-c96d1c6fcbb3",
+          "date": "2026-04-20",
+          "hours": 7
+        },
+        {
+          "id": "5041d6d7-37c0-4c03-936d-19b79de61b3e",
+          "date": "2026-05-04",
+          "hours": 0
+        },
+        {
+          "id": "48b2f9e0-d2ac-475a-b925-55451dd38090",
+          "date": "2026-05-11",
+          "hours": 1.5
+        },
+        {
+          "id": "736c5664-4523-42b8-bae7-1170e705fecc",
+          "date": "2026-05-18",
+          "hours": 3
+        },
+        {
+          "id": "eb5e76dd-088e-47d0-af4c-c0840e052b46",
+          "date": "2026-05-25",
+          "hours": 5
+        },
+        {
+          "id": "d70efc60-1986-4121-9a42-030af40c5a8f",
+          "date": "2026-06-01",
+          "hours": 1
+        }
+      ],
+      "chapterSchedule": [],
+      "deliverables": [
+        {
+          "id": "a65178d7-8880-4e52-a134-5579ca1b1223",
+          "name": "Start phase 2 of coding",
+          "completed": false,
+          "category": "implementation"
+        },
+        {
+          "id": "8f416d1f-271c-480e-9545-179cfbdbd032",
+          "name": "Fix presentation for end of june",
+          "completed": false,
+          "category": "scientific"
+        }
+      ],
+      "completedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedChaptersList": [],
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=4197",
+      "hasExercises": true,
+      "totalExercises": 1,
+      "attendedExercisesList": [],
+      "exerciseMode": "numbers",
+      "archived": true
+    },
+    {
+      "name": "Portugais A1",
+      "itemType": "course",
+      "courseType": "current",
+      "startDate": "2026-09-23",
+      "examDate": "2026-12-16",
+      "totalChapters": 13,
+      "completedChapters": 4,
+      "hasExercises": true,
+      "exerciseMode": "list",
+      "customExerciseNames": [],
+      "midterms": [],
+      "description": "- Summarize from moodle to pass\n- Mixed notes ; notion & paper",
+      "notionLink": "https://app.notion.com/p/Portugais-A1-3ebedf0247608025a810d18257f46d0c",
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=3354",
+      "id": "f9d2aefe-ec93-4766-ab51-9e9b1c9a56cb",
+      "color": "from-purple-500 to-indigo-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "attendedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedExercisesList": [],
+      "isLanguageCourse": true
+    },
+    {
+      "name": "Nederlandse taal en cultuur – Dutch language and culture",
+      "itemType": "course",
+      "courseType": "current",
+      "startDate": "2026-10-06",
+      "examDate": "2026-12-15",
+      "totalChapters": 6,
+      "completedChapters": 1,
+      "hasExercises": true,
+      "exerciseMode": "numbers",
+      "totalExercises": 0,
+      "midterms": [],
+      "description": "Summarize from moodle",
+      "notionLink": "https://app.notion.com/p/Nederlandse-taal-en-cultuur-Dutch-language-and-culture-3ebedf02476080fbafebc9bae04b58d1",
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=8632",
+      "id": "bded4b29-1d73-47e6-bb61-b79e19f315a9",
+      "color": "from-blue-500 to-cyan-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "attendedChaptersList": [
+        2
+      ],
+      "completedExercisesList": [],
+      "attendedExercisesList": [],
+      "isLanguageCourse": true
+    },
+    {
+      "name": "Introduction to Data Science for Actuaries",
+      "itemType": "course",
+      "courseType": "current",
+      "startDate": "2026-09-22",
+      "examDate": "2026-12-18",
+      "totalChapters": 13,
+      "completedChapters": 0,
+      "hasExercises": true,
+      "exerciseMode": "list",
+      "customExerciseNames": [],
+      "midterms": [],
+      "description": "- The final exam is a 2-hour closed-book written exam covering all course material.\n- It assesses both theoretical understanding and the ability to interpret\nmodelling output.\n+ Project (needs to ask teacher about asap)\n- I'm not sure how many chapters for this course",
+      "notionLink": "https://app.notion.com/p/Introduction-to-Data-Science-for-Actuaries-Open-course-3e5edf0247608041923bc1cf33043a7f",
+      "moodleLink": "https://moodle.uni.lu/course/view.php?id=9140",
+      "id": "16bd7cad-e67a-4549-8cb4-59e64117f419",
+      "color": "from-violet-500 to-purple-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [],
+      "attendedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedExercisesList": [],
+      "deliverables": [
+        {
+          "id": "b8a7a7b6-62bf-4acf-9754-7736b2d9c25a",
+          "name": "Ask about project form asap",
+          "completed": false
+        }
+      ]
+    },
+    {
+      "name": "Chinese A1.1",
+      "itemType": "course",
+      "courseType": "current",
+      "startDate": "2026-09-23",
+      "examDate": "2026-12-09",
+      "totalChapters": 12,
+      "completedChapters": 4,
+      "hasExercises": true,
+      "exerciseMode": "list",
+      "midterms": [],
+      "description": "- Summarise information from emails & onedrive for passing\n- Mixed notes with notion & paper",
+      "notionLink": "https://app.notion.com/p/Chinese-A1-1-3ebedf02476080009cfcfcbd07145471",
+      "id": "4472c044-5a4f-4814-a3eb-ca8cbfcea3ca",
+      "color": "from-sky-500 to-blue-400",
+      "weeklyLogs": [],
+      "chapterSchedule": [],
+      "completedChaptersList": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "attendedChaptersList": [],
+      "completedExercisesList": [],
+      "attendedExercisesList": [],
+      "isLanguageCourse": true,
+      "customExerciseNames": [],
+      "driveLink": "https://uniluxembourg-my.sharepoint.com/:f:/r/personal/yuhan_liu_uni_lu/Documents/Chinese%20-%20A1.1.1%20-%202026%20Fall?e=5%3abe46b13ed34242e98710c1bdc348c7de&sharingv2=true&fromShare=true&at=9&xsdata=MDV8MDJ8YWJkZWxqYWxpbC5uYWJhb3VpLjAwMUBzdHVkZW50LnVuaS5sdXxlMTUxMDgwZWUwOWE0Y2I2ZWMxOTA4ZGYxYTE1YWMxZXw0NDVhOWM5NTBmOWQ0OTUzOWRiMWJjNGE0NWRkMTIyMHwwfDB8NjM5MjU4MzUyODAxMzUxODczfFVua25vd258VFdGcGJHWnNiM2Q4ZXlKRmJYQjBlVTFoY0draU9uUnlkV1VzSWxZaU9pSXdMakF1TURBd01DSXNJbEFpT2lKWGFXNHpNaUlzSWtGT0lqb2lUV0ZwYkNJc0lsZFVJam95ZlE9PXwwfHx8&sdata=RlUraGE4MFNpd2g0VEdDNmZueWZ5enpsY1FIR3A3RCtDMHhleGtJOFkzND0%3d"
+    }
+  ],
+  "planTasks": [
+    {
+      "id": "95a5e607-cadf-43ce-8363-a3f39a8e9ede",
+      "text": "Slides 5 & 6 + Exsheet 6",
+      "done": true,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-04-13",
+      "taskType": "weekly",
+      "subtasks": [
+        {
+          "id": "25df9025-3f04-45de-8afd-8cc73c515bbf",
+          "text": "Slides",
+          "done": true
+        },
+        {
+          "id": "6708c0bc-f1fc-42e7-8371-eaf4b2ec71c6",
+          "text": "Exsheet 6 (stopped at ex 4)",
+          "done": true
+        }
+      ]
+    },
+    {
+      "id": "a5f163d9-5521-49c1-9c89-d3d3a8dfc339",
+      "text": "Tuesday + Wednesday grind",
+      "done": true,
+      "courseIds": [
+        "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
+      ],
+      "weekDate": "2026-04-13",
+      "subtasks": [
+        {
+          "id": "ad849e43-0d6b-4216-b9cb-3c5e37c4f9dc",
+          "text": "Read both papers that's for geomagnetic storms phases",
+          "done": true
+        },
+        {
+          "id": "025e5c1a-53bd-4e05-af5b-0bcde17dfb9c",
+          "text": "Understand and improve code for storm detection (different ways of Start and end + recovery)",
+          "done": true
+        }
+      ]
+    },
+    {
+      "id": "224f2dc1-77c2-4894-af28-86f41c20c832",
+      "text": "2 tutor sessions",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-04-13",
+      "subtasks": [
+        {
+          "id": "5a872748-93e4-48be-beb1-cf7f0234703a",
+          "text": "Session 1",
+          "done": true
+        },
+        {
+          "id": "faffc9f9-4a9a-4bba-a9a7-1ed71b4ab0bd",
+          "text": "Session 2",
+          "done": false
+        }
+      ],
+      "description": "Tutor will send me solution for exercise sheets then I have to look at the old ones (small revision)"
+    },
+    {
+      "id": "8b60c205-9dbf-4955-adec-2d036eeba3b0",
+      "text": "Catch up to midterm material (book + exercises)",
+      "done": false,
+      "courseIds": [
+        "f3be84a4-c578-42e7-b59b-839fc9ddb8a6"
+      ],
+      "weekDate": "2026-04-20",
+      "subtasks": [
+        {
+          "id": "3fb17bd1-7e44-4352-ac00-f08fd96412db",
+          "text": "Book page 50",
+          "done": false
+        },
+        {
+          "id": "fd6018d0-14a7-4cbe-8cd9-960758045f3d",
+          "text": "6 hw's",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "999f799c-36eb-4b23-8a96-518263641dbe",
+      "text": "Weekend sheet cheat",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-04-13",
+      "description": "Create second cheat sheet for second midterm using the template"
+    },
+    {
+      "id": "15159b0f-78cb-4084-80a9-de5cdd45619e",
+      "text": "1 ch + exercises",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7",
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-04-20",
+      "subtasks": [
+        {
+          "id": "3c026dbb-eef8-4b67-922a-8cb839444340",
+          "text": "Ch 1 & Ex 1 (analysis)",
+          "done": false
+        },
+        {
+          "id": "adc4fb9c-45ae-463f-ab60-705f117790b9",
+          "text": "Discrete math I'm confused what to expect from the oral exam (ask please)",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "3603c414-5d4a-42b3-8ecf-0a5fc17c4f0b",
+      "text": "2 ch + exercises",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7",
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-04-27"
+    },
+    {
+      "id": "64ca1391-f9a9-4538-a2e3-e16581e5f90a",
+      "text": "Analysis hw #2 + Ch #3",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7",
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-05-04",
+      "taskType": "weekly",
+      "subtasks": []
+    },
+    {
+      "id": "6f29370f-3140-41ac-8edc-ed02436f64de",
+      "text": "DM2 ch#1",
+      "done": false,
+      "courseIds": [
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-05-04",
+      "taskType": "weekly",
+      "description": "Prep for when I get sent the exercises but you might find notes from the book already in notion, only later chapters are not well done",
+      "subtasks": []
+    },
+    {
+      "id": "bd72e26f-dd6e-4d00-b473-da9abc7fd8a5",
+      "text": "CH 3 & 4 + exsheets",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-05-11",
+      "taskType": "weekly",
+      "subtasks": []
+    },
+    {
+      "id": "ed26f67b-df38-4541-a31b-20c2c32b4e3d",
+      "text": "1 chapter",
+      "done": false,
+      "courseIds": [
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-05-11",
+      "taskType": "weekly",
+      "subtasks": []
+    },
+    {
+      "id": "e499c1f9-052a-4e13-a61e-6395b2cc0a19",
+      "text": "Ex sheet 9 ✅ & 10 ✅ (6th June) Analysis",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-06-01",
+      "taskType": "weekly",
+      "subtasks": []
+    },
+    {
+      "id": "34c543a9-b928-4245-8461-febf2d117bbb",
+      "text": "Analysis L12 & Exsheet 11 (6th June)",
+      "done": false,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-06-01",
+      "taskType": "weekly",
+      "subtasks": []
+    },
+    {
+      "id": "1ef2449a-d017-49ce-b6bb-a5ea12782c75",
+      "text": "BSP (3h) + BSP meeting 4pm (MSA 3rd floor) (5th June)",
+      "done": false,
+      "courseIds": [
+        "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
+      ],
+      "weekDate": "2026-06-01",
+      "taskType": "weekly",
+      "description": "Tasks before meeting then in the meeting push to have future tasks so I can complete the project in time like coding wise not graphs",
+      "subtasks": [
+        {
+          "id": "be666b97-76e1-432e-8291-c925ae49fe00",
+          "text": "Do 2024 exam without looking at solution",
+          "done": false
+        },
+        {
+          "id": "525433e0-fdf6-4c97-9fd6-4efeca157300",
+          "text": "Set up tutor session for seeing the exercises I struggled with (11 June)",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "9ca6c4e4-82a6-48fd-b2d9-4516e7a09c0a",
+      "text": "Analysis Exam plan",
+      "done": true,
+      "courseIds": [
+        "9b5f2488-a5ae-437e-9878-46a6464f89b7"
+      ],
+      "weekDate": "2026-06-08",
+      "taskType": "weekly",
+      "description": "Pass that 🧠",
+      "subtasks": [
+        {
+          "id": "9cc4eb26-c029-403c-ac17-91c012f27ee4",
+          "text": "Do the last 2 exercises for exam with tutor (10 June)",
+          "done": true
+        },
+        {
+          "id": "2f057c55-906f-4e43-b9a5-ca5843488886",
+          "text": "Write the solutions more formally this weekend and send them to the teacher before Monday",
+          "done": true
+        }
+      ]
+    },
+    {
+      "id": "81a8dd4c-4984-4958-9c2b-817182e42328",
+      "text": "DM2 exam plan",
+      "done": false,
+      "courseIds": [
+        "e1105728-ad9a-4b8d-8764-3a438724e26c"
+      ],
+      "weekDate": "2026-06-08",
+      "taskType": "weekly",
+      "subtasks": [
+        {
+          "id": "723c2c48-12ca-4783-a783-278aba7e70a1",
+          "text": "Make cheat sheet",
+          "done": false
+        },
+        {
+          "id": "c597c4ba-6f02-4c41-a631-bba1a4d3110d",
+          "text": "Watch all videos as a quick revision",
+          "done": false
+        },
+        {
+          "id": "b11887b4-e3bc-40c0-9a5a-ef8032cf6962",
+          "text": "Solve Exsheets as they have notes for exercises that will be in the exam",
+          "done": false
+        },
+        {
+          "id": "f7291757-ca38-48e1-b17c-31665dd18ea3",
+          "text": "Schedule tutor sessions (0 / 3)",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "90036a87-f08e-4631-b205-e48663f19f0f",
+      "text": "LA 2 exam",
+      "done": false,
+      "courseIds": [
+        "934da421-d4ab-4b28-9d4b-4207e05f4dee"
+      ],
+      "weekDate": "2026-06-15",
+      "taskType": "weekly",
+      "description": "Find where did midterm 1 ended because I have a good cheat sheet for that then make a complete one for all chapter from there, remember no algorithms and theoretically solved exercises",
+      "subtasks": [
+        {
+          "id": "421bb3a3-9ee4-4bf2-b1ab-419c1cce8501",
+          "text": "Watch videos as a quick recap",
+          "done": false
+        },
+        {
+          "id": "fa5ed4dd-37dd-4f1d-8afb-1d63625813f7",
+          "text": "Redo important exercises from the Exsheets",
+          "done": false
+        },
+        {
+          "id": "b3ffff47-1962-4e50-a7ad-f5d217fe130c",
+          "text": "Make cheat sheet for all lecture 🟡",
+          "done": true
+        },
+        {
+          "id": "084cdd95-9745-4238-ac24-4342c0b781b4",
+          "text": "Schedule LA tutoring sessions (1/3 - Saturday 20th ; Schedule it before 21h)",
+          "done": false
+        }
+      ]
+    },
+    {
+      "id": "aa4d9372-41cc-4565-8f9e-6d86effc8fdd",
+      "text": "BSP",
+      "done": false,
+      "courseIds": [
+        "7e92e79d-7aae-4728-9b6e-70af8a7d4ea6"
+      ],
+      "weekDate": "2026-06-15",
+      "taskType": "weekly",
+      "subtasks": [
+        {
+          "id": "fdffe128-9336-4d19-a886-329ffd0f6386",
+          "text": "Write 2 or 3 sections of the report",
+          "done": false
+        },
+        {
+          "id": "a931b154-b308-4704-b56f-0940c7f5f6cf",
+          "text": "Make graphs for the report",
+          "done": false
+        },
+        {
+          "id": "b80d532a-e3ff-40db-9aa3-97f5a38c29d9",
+          "text": "Histogram & correct scatter plot",
+          "done": true
+        }
+      ]
+    }
+  ]
+}
