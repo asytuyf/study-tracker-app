@@ -200,11 +200,16 @@ export function useCourses() {
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const coursesRef = useRef<Course[]>(courses);
     const planTasksRef = useRef<WeeklyPlanTask[]>(planTasks);
+    const saveStatusRef = useRef<SaveStatus>(saveStatus);
 
     // Keep refs in sync
     useEffect(() => {
         coursesRef.current = courses;
     }, [courses]);
+
+    useEffect(() => {
+        saveStatusRef.current = saveStatus;
+    }, [saveStatus]);
 
     useEffect(() => {
         planTasksRef.current = planTasks;
@@ -251,12 +256,12 @@ export function useCourses() {
         }
 
         // 2. Fetch from API in background to pick up any server-side changes
-        fetch("/api/courses")
+        const loadFromApi = () => fetch("/api/courses")
             .then((res) => res.json())
             .then((data) => {
-                // If the save queue is pending/saving, skip API override to avoid
+                // If the save queue is pending/saving/failed, skip API override to avoid
                 // overwriting local changes that haven't reached the server yet
-                if (saveTimeoutRef.current) return;
+                if (saveTimeoutRef.current || saveStatusRef.current !== "saved") return;
 
                 // Support both old array format and new object format { courses, planTasks }
                 const rawCourses: any[] = Array.isArray(data) ? data : (data.courses || []);
@@ -314,6 +319,17 @@ export function useCourses() {
                     console.error("No local data either:", err);
                 }
             });
+
+        loadFromApi();
+
+        // An installed PWA can sit in the background for days without reloading, so
+        // re-fetch whenever it comes back to the foreground — otherwise a stale phone
+        // copy could be saved over changes made on another device
+        const onVisible = () => {
+            if (document.visibilityState === "visible") loadFromApi();
+        };
+        document.addEventListener("visibilitychange", onVisible);
+        return () => document.removeEventListener("visibilitychange", onVisible);
     }, []);
 
     // Debounced save function
@@ -327,6 +343,7 @@ export function useCourses() {
 
         // Schedule new save
         saveTimeoutRef.current = setTimeout(async () => {
+            saveTimeoutRef.current = null;
             setSaveStatus("saving");
 
             try {

@@ -21,6 +21,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#09090b",
+  // Stops iOS from zooming in when you tap a small input (pinch-zoom still works on iOS)
+  maximumScale: 1,
 };
 
 

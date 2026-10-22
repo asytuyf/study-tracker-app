@@ -12,6 +12,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark behind iOS overscroll bounce, no grey flash when tapping buttons */
+html {
+  background: #09090b;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
