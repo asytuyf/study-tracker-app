@@ -33,6 +33,11 @@ export const authOptions: NextAuthOptions = {
             return session;
         },
     },
+    // Stay signed in on the phone: the session lasts a year and is renewed every time the app opens
+    session: {
+        strategy: "jwt",
+        maxAge: 365 * 24 * 60 * 60,
+    },
     pages: {
         signIn: "/", // Redirect to home page
         error: "/",  // Redirect errors to home page
