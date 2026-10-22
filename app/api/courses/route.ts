@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 // GitHub API configuration
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
@@ -108,6 +110,12 @@ export async function GET() {
 
 // POST - save all courses (replaces entire file)
 export async function POST(request: NextRequest) {
+    // Only the signed-in admin may write — the UI hides edit controls, but the endpoint must enforce it
+    const session = await getServerSession(authOptions);
+    if (!(session?.user as { isAdmin?: boolean } | undefined)?.isAdmin) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     try {
         const courses = await request.json();
 
