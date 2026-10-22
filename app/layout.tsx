@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./components/Providers";
@@ -12,8 +12,16 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Study Tracker",
   description: "Stay on track for your exams",
+  appleWebApp: {
+    capable: true,
+    title: "Study Tracker",
+    statusBarStyle: "black",
+  },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#09090b",
+};
 
 
 export default function RootLayout({
